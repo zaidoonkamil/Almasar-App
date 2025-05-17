@@ -32,4 +32,8 @@ class GetOrderLoadingState extends DeliveryStates {}
 class GetOrderSuccessState extends DeliveryStates {}
 class GetOrderErrorState extends DeliveryStates {}
 
+class GetActiveOrderLoadingState extends DeliveryStates {}
+class GetActiveOrderSuccessState extends DeliveryStates {}
+class GetActiveOrderErrorState extends DeliveryStates {}
+
 class SocketGetOrderSuccessState extends DeliveryStates {}

@@ -1,6 +1,8 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-String urlSocket='http://168.231.111.44:3000';
+import '../../widgets/constant.dart';
+
+final urlSocket = "https://backendalmasar.khayrat-alrahman.com";
 
 class SocketHelper {
   static IO.Socket? _socket;
@@ -19,6 +21,8 @@ class SocketHelper {
         'reconnection': true,
         'reconnectionDelay': 2000,
         'reconnectionAttempts': 5,
+        'rejectUnauthorized': false,
+        'secure': true,
       },
     );
 

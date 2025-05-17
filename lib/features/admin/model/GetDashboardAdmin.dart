@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final getDashboardAdmin = getDashboardAdminFromJson(jsonString);
-
 import 'dart:convert';
 
 GetDashboardAdmin getDashboardAdminFromJson(String str) => GetDashboardAdmin.fromJson(json.decode(str));

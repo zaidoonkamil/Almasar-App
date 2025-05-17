@@ -9,19 +9,17 @@ import '../../../core/styles/themes.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-class AllOrdersDelivery extends StatelessWidget {
-  const AllOrdersDelivery({super.key, required this.id});
-
-  final String id;
+class AllOrdersAdmin extends StatelessWidget {
+  const AllOrdersAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => DeliveryCubit()..getOrder(page: '1',context: context, id: id),
-      child: BlocConsumer<DeliveryCubit,DeliveryStates>(
+      create: (BuildContext context) => AdminCubit()..allOrder(page: '1',context: context,),
+      child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){},
         builder: (context,state){
-          var cubit=DeliveryCubit.get(context);
+          var cubit=AdminCubit.get(context);
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color(0xFFF5F5F8),
@@ -52,21 +50,21 @@ class AllOrdersDelivery extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   ConditionalBuilder(
-                    condition: cubit.orderModel != null,
+                    condition: cubit.allOrderModel != null,
                     builder: (c){
                       return ConditionalBuilder(
-                          condition: cubit.orderModel!.pagination.totalPages != 0,
+                          condition: cubit.allOrderModel!.pagination.totalPages != 0,
                           builder: (c){
                             return Expanded(
                               child: ListView.builder(
                                   physics: AlwaysScrollableScrollPhysics(),
                                   itemCount: cubit.orders.length,
                                   itemBuilder: (context,index){
-                                    DateTime dateTime = DateTime.parse(cubit.orderModel!.orders[index].createdAt.toString());
+                                    DateTime dateTime = DateTime.parse(cubit.allOrderModel!.orders[index].createdAt.toString());
                                     String formattedDate = DateFormat('yyyy/M/d').format(dateTime);
                                     String formattedTime = DateFormat('h:mm a').format(dateTime);
                                     if (index == cubit.orders.length - 1 && !cubit.isLastPage) {
-                                      cubit.getOrder(page: (cubit.currentPage + 1).toString(), id: id);
+                                      cubit.allOrder(page: (cubit.currentPage + 1).toString(),context:context);
                                     }
                                     return  Container(
                                       margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
@@ -93,18 +91,18 @@ class AllOrdersDelivery extends StatelessWidget {
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color:cubit.orderModel!.orders[index].status == 'تم الاستلام'?
-                                                    Colors.blue.withOpacity(0.1):cubit.orderModel!.orders[index].status == 'تم التسليم'?
-                                                    Colors.green.withOpacity(0.1):cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
+                                                    color:cubit.allOrderModel!.orders[index].status == 'تم الاستلام'?
+                                                    Colors.blue.withOpacity(0.1):cubit.allOrderModel!.orders[index].status == 'تم التسليم'?
+                                                    Colors.green.withOpacity(0.1):cubit.allOrderModel!.orders[index].status == 'استرجاع الطلب'?
                                                     Colors.red.withOpacity(0.1):Colors.yellowAccent.withOpacity(0.1),
                                                     borderRadius: BorderRadius.circular(12),
                                                   ),
                                                   child: Text(
-                                                    cubit.orderModel!.orders[index].status,
+                                                    cubit.allOrderModel!.orders[index].status,
                                                     style: TextStyle(
-                                                      color: cubit.orderModel!.orders[index].status == 'تم الاستلام'?
-                                                      Colors.blue:cubit.orderModel!.orders[index].status == 'تم التسليم'?
-                                                      Colors.green:cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
+                                                      color: cubit.allOrderModel!.orders[index].status == 'تم الاستلام'?
+                                                      Colors.blue:cubit.allOrderModel!.orders[index].status == 'تم التسليم'?
+                                                      Colors.green:cubit.allOrderModel!.orders[index].status == 'استرجاع الطلب'?
                                                       Colors.red:Colors.yellowAccent,
                                                       fontWeight: FontWeight.w600,
                                                       fontSize: 13,
@@ -143,7 +141,7 @@ class AllOrdersDelivery extends StatelessWidget {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Text( cubit.orderModel!.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text( cubit.allOrderModel!.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.phone_outlined, color: Colors.grey),
                                                   ],
@@ -163,7 +161,7 @@ class AllOrdersDelivery extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text(cubit.orderModel!.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
+                                                    Text(cubit.allOrderModel!.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.location_on_outlined, color: Colors.grey),
                                                   ],
@@ -185,7 +183,7 @@ class AllOrdersDelivery extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Text(
-                                                      cubit.orderModel!.orders[index].deliveryFee.toString(),
+                                                      cubit.allOrderModel!.orders[index].deliveryFee.toString(),
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
                                                         fontSize: 18,
@@ -208,7 +206,7 @@ class AllOrdersDelivery extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Text(
-                                                      cubit.orderModel!.orders[index].orderAmount.toString(),
+                                                      cubit.allOrderModel!.orders[index].orderAmount.toString(),
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
                                                         fontSize: 18,
@@ -239,7 +237,7 @@ class AllOrdersDelivery extends StatelessWidget {
                                             ),
                                             Row(
                                               children: [
-                                                cubit.orderModel!.orders[index].notes == ''? Expanded(
+                                                cubit.allOrderModel!.orders[index].notes == ''? Expanded(
                                                   child: Text(
                                                     'لا يوجد',
                                                     textAlign: TextAlign.end,
@@ -251,7 +249,7 @@ class AllOrdersDelivery extends StatelessWidget {
                                                   ),
                                                 ):Expanded(
                                                   child: Text(
-                                                    cubit.orderModel!.orders[index].notes,
+                                                    cubit.allOrderModel!.orders[index].notes,
                                                     textAlign: TextAlign.end,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
@@ -268,7 +266,14 @@ class AllOrdersDelivery extends StatelessWidget {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Text( cubit.orderModel!.orders[index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                Text(': المستخدم',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text( cubit.allOrderModel!.orders[index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                                 const SizedBox(width: 6),
                                                 const Icon(Icons.person_outline, color: Colors.grey),
                                               ],
@@ -277,12 +282,62 @@ class AllOrdersDelivery extends StatelessWidget {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Text( cubit.orderModel!.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                Text( cubit.allOrderModel!.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                                 const SizedBox(width: 6),
                                                 const Icon(Icons.phone_outlined, color: Colors.grey),
                                               ],
                                             ),
                                             const SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text( cubit.allOrderModel!.orders[index].user.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                const SizedBox(width: 6),
+                                                const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            cubit.allOrderModel!.orders[index].delivery != null ?Column(
+                                              children: [
+                                                const SizedBox(height: 6),
+                                                Container(width: double.maxFinite,height: 1,color: Colors.black45,),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(': الدليفري',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].delivery!.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.person_outline, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].delivery!.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].delivery!.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                              ],
+                                            ):Container(),
                                           ],
                                         ),
                                       ),

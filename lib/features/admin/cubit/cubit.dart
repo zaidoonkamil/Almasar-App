@@ -1,4 +1,5 @@
 import 'package:delivery_app/features/admin/cubit/states.dart';
+import 'package:delivery_app/features/admin/model/AllOrder.dart';
 import 'package:delivery_app/features/delivery/model/GetChangeOrders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/network/remote/socket_helper.dart';
@@ -161,47 +163,6 @@ class AdminCubit extends Cubit<AdminStates> {
     });
   }
 
-  // GetDashboard? getDashboard;
-  // void getDashboardDelivery({BuildContext? context,}) {
-  //   emit(GetDashboardDeliveryLoadingState());
-  //   DioHelper.getData(
-  //     url: '/delivery/$id/dashboard',
-  //   ).then((value) {
-  //     getDashboard = GetDashboard.fromJson(value.data);
-  //     emit(GetDashboardDeliverySuccessState());
-  //   }).catchError((error) {
-  //     if (error is DioError) {
-  //       showToastError(text: error.toString(),
-  //         context: context!,);
-  //       print(error.toString());
-  //       emit(GetDashboardDeliveryErrorStates());
-  //     }else {
-  //       print("Unknown Error: $error");
-  //     }
-  //   });
-  // }
-  //
-  // GetTodayDashboard? getTodayDashboard;
-  // void getTodayDashboardDelivery({BuildContext? context,}) {
-  //   emit(GetTodayDashboardDeliveryLoadingState());
-  //   DioHelper.getData(
-  //     url: '/delivery/$id/today-dashboard',
-  //   ).then((value) {
-  //     getTodayDashboard = GetTodayDashboard.fromJson(value.data);
-  //     emit(GetTodayDashboardDeliverySuccessState());
-  //   }).catchError((error) {
-  //     if (error is DioError) {
-  //       showToastError(text: error.toString(),
-  //         context: context!,);
-  //       print(error.toString());
-  //       emit(GetTodayDashboardDeliveryErrorStates());
-  //     }else {
-  //       print("Unknown Error: $error");
-  //     }
-  //   });
-  // }
-
-
   addPerson({
     required String name,
     required String phone,
@@ -278,38 +239,72 @@ class AdminCubit extends Cubit<AdminStates> {
     });
   }
 
+  String? lat;
+  String? long;
+  void getLatAndLong({required BuildContext context,required String id}) {
+    emit(GetLatAndLongLoadingState());
+    DioHelper.getData(
+      url: '/delivery-locations/$id',
+    ).then((value) {
+      lat =  value.data[0]['latitude'];
+      long =  value.data[0]['longitude'];
+      emit(GetLatAndLongSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: 'خطأ في جلب الموقع',
+          context: context!,);
+        print(error.toString());
+        emit(GetLatAndLongErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
 
-  //
-  // deliveryStatus({required BuildContext context, required bool isActive,}){
-  //   emit(DeliveryStatusLoadingState());
-  //   DioHelper.putData(
-  //     url: '/delivery/$id/status',
-  //     token: token,
-  //     data:
-  //     {
-  //       'isActive': isActive,
-  //     },
-  //   ).then((value) {
-  //     profileModel = profileModel!.copyWith(isActive: !profileModel!.isActive);
-  //     showToastSuccess(
-  //       text:"تم تحديث الحالة بنجاح",
-  //       context: context,
-  //     );
-  //     emit(DeliveryStatusSuccessState());
-  //   }).catchError((error)
-  //   {
-  //     if (error is DioError) {
-  //       showToastError(
-  //         text:"حدث خطأ",
-  //         context: context,
-  //       );
-  //       emit(DeliveryStatusErrorState());
-  //     }else {
-  //       print("Unknown Error: $error");
-  //     }
-  //   });
-  // }
+  void openMap({required BuildContext context,}) async {
+    if (lat != null && long != null) {
+      String googleMapUrl = 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+      await launchUrl(
+        Uri.parse(googleMapUrl),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      showToastError(
+        text: 'لا يمكن فتح الخريطة',
+        context: context,
+      );
+    }
+  }
 
+  List<Order> orders = [];
+  Pagination? pagination;
+  int currentPage = 1;
+  bool isLastPage = false;
+  AllOrder? allOrderModel;
+  void allOrder({required String page,required BuildContext context,}) {
+    emit(GetAllOrderLoadingState());
+    DioHelper.getData(
+      url: '/admin/all-orders?$page',
+    ).then((value) {
+      allOrderModel = AllOrder.fromJson(value.data);
+      orders.addAll(allOrderModel!.orders);
+      pagination = allOrderModel!.pagination;
+      currentPage = pagination!.currentPage;
+      if (currentPage >= pagination!.totalPages) {
+        isLastPage = true;
+      }
+      emit(GetAllOrderSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        print(error.toString());
+        emit(GetAllOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
 
 
 }

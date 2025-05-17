@@ -38,4 +38,11 @@ class GetNameUserLoadingState extends AdminStates {}
 class GetNameUserSuccessState extends AdminStates {}
 class GetNameUserErrorState extends AdminStates {}
 
+class GetLatAndLongLoadingState extends AdminStates {}
+class GetLatAndLongSuccessState extends AdminStates {}
+class GetLatAndLongErrorState extends AdminStates {}
+
+class GetAllOrderLoadingState extends AdminStates {}
+class GetAllOrderSuccessState extends AdminStates {}
+class GetAllOrderErrorState extends AdminStates {}
 

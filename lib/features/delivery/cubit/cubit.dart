@@ -1,4 +1,5 @@
 import 'package:delivery_app/features/delivery/cubit/states.dart';
+import 'package:delivery_app/features/delivery/model/GetActiveOrders.dart';
 import 'package:delivery_app/features/delivery/model/GetChangeOrders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -97,31 +98,31 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
 
     print('الموقع الحالي: ${position.latitude}, ${position.longitude}');
 
-      DioHelper.postData(
-        url: '/delivery-locations',
-        data:
-        {
-          'deliveryId': id,
-          'latitude': position.latitude.toString(),
-          'longitude': position.longitude.toString(),
-        },
-      ).then((value) {
-        showToastSuccess(
-          text: "تم تحديد الموقع بنجاح",
+    DioHelper.postData(
+      url: '/delivery-locations',
+      data:
+      {
+        'deliveryId': id,
+        'latitude': position.latitude.toString(),
+        'longitude': position.longitude.toString(),
+      },
+    ).then((value) {
+      showToastSuccess(
+        text: "تم تحديد الموقع بنجاح",
+        context: context,
+      );
+      emit(AddLocationSuccessState());
+    }).catchError((error)
+    {
+      if (error is DioError) {
+        print('Dio Error Status Code: ${error.response?.statusCode}');
+        print('Dio Error Data: ${error.response?.data}');
+        showToastError(
+          text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
           context: context,
         );
-        emit(AddLocationSuccessState());
-      }).catchError((error)
-      {
-        if (error is DioError) {
-          print('Dio Error Status Code: ${error.response?.statusCode}');
-          print('Dio Error Data: ${error.response?.data}');
-          showToastError(
-            text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
-            context: context,
-          );
-        }
-      });
+      }
+    });
   }
 
 
@@ -213,7 +214,7 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   int currentPage = 1;
   bool isLastPage = false;
   GetAllOrders? orderModel;
-  void getOrder({required String page, BuildContext? context,}) {
+  void getOrder({required String page, BuildContext? context,required String id}) {
     emit(GetOrderLoadingState());
     DioHelper.getData(
       url: '/delivery/$id/all-orders-delivery?$page',
@@ -239,45 +240,64 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   }
 
 
-
-
-
-
-
-  void connectToSocket() {
-    SocketHelper.connect();
-
-    SocketHelper.onEvent("connect", (_) {
-      print('✅ Socket Connected');
-      SocketHelper.emitEvent("test", {"message": "Hello from Flutter"});
-
-      listenToOrders();
-    });
-
-    // الاستماع للأحداث
-    SocketHelper.onEvent("test", (data) {
-      print("📩 Received from server: $data");
-    });
-  }
-
-  List<GetChangeOrders> orderChangeModel = [];
-
-  void listenToOrders() {
-    print("Attempting to listen to deliveryOrders_$id");
-    SocketHelper.onEvent("deliveryOrders_$id", (data) {
-      print("📥 New Orders: $data");
-      if (data != null && data.isNotEmpty) {
-        // تحويل البيانات إلى قائمة موديلات
-        List<GetChangeOrders> orders = List<GetChangeOrders>.from(
-            data.map((orderJson) => GetChangeOrders.fromJson(orderJson))
-        );
-        orderChangeModel = orders;
-        emit(SocketGetOrderSuccessState());
-      } else {
-        print("❌ No data received or data is empty.");
+  List<GetActiveOrders>? getActiveOrdersModel;
+  void getActiveOrder({required BuildContext context}) {
+    emit(GetActiveOrderLoadingState());
+    DioHelper.getData(
+      url: '/delivery/$id/firststatus-orders-delivery',
+    ).then((value) {
+      getActiveOrdersModel = (value.data as List)
+          .map((item) => GetActiveOrders.fromJson
+        (item as Map<String, dynamic>)).toList();
+      emit(GetActiveOrderSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context!,);
+        print(error.toString());
+        emit(GetActiveOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
       }
     });
   }
+
+
+  // void connectToSocket() {
+  //   SocketHelper.connect();
+  //
+  //   SocketHelper.onEvent("connect", (_) {
+  //     print('✅ Socket Connected');
+  //     SocketHelper.emitEvent("test",
+  //         {"message": "Hello from Flutter"});
+  //
+  //     listenToOrders();
+  //   });
+  //
+  //   // الاستماع للأحداث
+  //   SocketHelper.onEvent("test", (data) {
+  //     print("📩 Received from server: $data");
+  //   });
+  // }
+  //
+  // List<GetChangeOrders> orderChangeModel = [];
+  //
+  // void listenToOrders() {
+  //   print("Attempting to listen to deliveryOrders_$id");
+  //   SocketHelper.onEvent("deliveryOrders_$id", (data) {
+  //     print("📥 New Orders: $data");
+  //     if (data != null && data.isNotEmpty) {
+  //       // تحويل البيانات إلى قائمة موديلات
+  //       List<GetChangeOrders> orders = List<GetChangeOrders>.from(
+  //           data.map((orderJson) => GetChangeOrders.fromJson(orderJson))
+  //       );
+  //       orderChangeModel = orders;
+  //       emit(SocketGetOrderSuccessState());
+  //     } else {
+  //       print("❌ No data received or data is empty.");
+  //     }
+  //   });
+  // }
 
 
 

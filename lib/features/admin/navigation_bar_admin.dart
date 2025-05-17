@@ -1,5 +1,6 @@
 import 'package:delivery_app/features/admin/view/HomeAdmin.dart';
 import 'package:delivery_app/features/admin/view/add_person.dart';
+import 'package:delivery_app/features/admin/view/order.dart';
 import 'package:delivery_app/features/admin/view/person.dart';
 import 'package:delivery_app/features/admin/view/profile.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +15,12 @@ class BottomNavBarAdmin extends StatefulWidget {
 }
 
 class _BottomNavBarAdminState extends State<BottomNavBarAdmin> {
-  int currentIndex = 2;
+  int currentIndex = 3;
   List<Widget> screens = [
     ProfileAdmin(),
     AddPerson(),
     Person(),
-    ProfileAdmin(),
+    OrderAdmin(),
     HomeAdmin(),
   ];
 

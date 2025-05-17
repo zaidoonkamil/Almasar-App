@@ -1,32 +1,23 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:delivery_app/core/%20navigation/navigation.dart';
-import 'package:delivery_app/core/widgets/circular_progress.dart';
-import 'package:delivery_app/core/widgets/constant.dart';
-import 'package:delivery_app/features/delivery/view/changing_order.dart';
-import 'package:delivery_app/features/delivery/view/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 import '../../../../core/styles/themes.dart';
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/widgets/StatCard.dart';
+import '../../../core/ navigation/navigation.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'all_order.dart';
 
-class OrderDelivery extends StatelessWidget {
-  const OrderDelivery({super.key});
+class OrderAdmin extends StatelessWidget {
+  const OrderAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => DeliveryCubit(),
-      child: BlocConsumer<DeliveryCubit,DeliveryStates>(
+      create: (BuildContext context) => AdminCubit(),
+      child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){},
         builder: (context,state){
-          var cubit=DeliveryCubit.get(context);
+          var cubit=AdminCubit.get(context);
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color(0xFFF2F2F7),
@@ -73,7 +64,7 @@ class OrderDelivery extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                        navigateTo(context, ChangingOrdersDelivery());
+                      //  navigateTo(context, ChangingOrdersDelivery());
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),
@@ -102,7 +93,7 @@ class OrderDelivery extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                        navigateTo(context, AllOrdersDelivery(id: id,));
+                       navigateTo(context, AllOrdersAdmin());
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),
