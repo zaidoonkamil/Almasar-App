@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:delivery_app/features/admin/cubit/states.dart';
 import 'package:delivery_app/features/admin/model/AllOrder.dart';
+import 'package:delivery_app/features/delivery/model/GetActiveOrders.dart';
 import 'package:delivery_app/features/delivery/model/GetChangeOrders.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,6 +19,7 @@ import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../../user/model/GetAdsModel.dart';
 import '../../user/model/ProfileModel.dart';
+import '../model/GetActiveDeliveryModel.dart';
 import '../model/GetDashboardAdmin.dart';
 import '../model/GetTodayDashboardAdmin.dart';
 import '../model/getNameUser.dart';
@@ -300,6 +305,140 @@ class AdminCubit extends Cubit<AdminStates> {
           context: context,);
         print(error.toString());
         emit(GetAllOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+
+  void startAutoRefresh({required BuildContext context}) {
+    getActiveOrder(context: context);
+    Timer.periodic(Duration(minutes: 3), (timer) {
+      getActiveOrder(context: context);
+    });
+  }
+
+  List<GetActiveOrders>? getActiveOrdersModel;
+  void getActiveOrder({required BuildContext context}) {
+    emit(GetActiveOrderLoadingState());
+    DioHelper.getData(
+      url: '/admin/order-pending',
+    ).then((value) {
+      List<GetActiveOrders> newData = (value.data as List)
+          .map((item) => GetActiveOrders.fromJson(item))
+          .toList();
+      if (!listEquals(getActiveOrdersModel, newData)) {
+        getActiveOrdersModel = newData;
+        emit(GetActiveOrderSuccessState());
+      }
+      emit(GetActiveOrderSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        print(error.toString());
+        emit(GetActiveOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+  changeStatusOrder({required BuildContext context, required String status, required String idOrder,}){
+    emit(ChangeStatusOrderLoadingState());
+    DioHelper.putData(
+      url: '/orders/$idOrder/status',
+      token: token,
+      data:
+      {
+        'status': status,
+      },
+    ).then((value) {
+      getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
+      showToastSuccess(
+        text:"تمت العملية بنجاح",
+        context: context,
+      );
+      emit(ChangeStatusOrderSuccessState());
+    }).catchError((error)
+    {
+      if (error is DioError) {
+        print("Unknown Error: $error");
+
+        showToastError(
+          text:"حدث خطأ",
+          context: context,
+        );
+        emit(ChangeStatusOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+
+  void startAutoRefreshActiveDelivery({required BuildContext context}) {
+    getActiveDelivery(context: context);
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      getActiveDelivery(context: context);
+    });
+  }
+
+  List<GetActiveDeliveryModel>? getActiveDeliveryModel;
+  void getActiveDelivery({required BuildContext context}) {
+    emit(GetActiveDeliveryLoadingState());
+    DioHelper.getData(
+      url: '/admin/delivery-active',
+    ).then((value) {
+      List<GetActiveDeliveryModel> newData = (value.data as List)
+          .map((item) => GetActiveDeliveryModel.fromJson(item))
+          .toList();
+      if (!listEquals(getActiveDeliveryModel, newData)) {
+        getActiveDeliveryModel = newData;
+        emit(GetActiveDeliverySuccessState());
+      }
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        print(error.toString());
+        emit(GetActiveDeliveryErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+  deliveriesAssignOrder({required BuildContext context, required String idOrder,required String deliveryId,}){
+    emit(DeliveriesAssignOrderLoadingState());
+    DioHelper.putData(
+      url: '/order/$idOrder/assign',
+      token: token,
+      data:
+      {
+        'deliveryId': deliveryId,
+      },
+    ).then((value) {
+      getActiveOrdersModel?.firstWhere(
+            (order) => order.id.toString() == idOrder,
+      ).assignedDeliveryId = 0;
+
+      showToastSuccess(
+        text:"تم توجيه الطلب بنجاح",
+        context: context,
+      );
+      emit(DeliveriesAssignOrderSuccessState());
+    }).catchError((error)
+    {
+      if (error is DioError) {
+        print("Unknown Error: $error");
+
+        showToastError(
+          text:"حدث خطأ",
+          context: context,
+        );
+        emit(DeliveriesAssignOrderErrorState());
       }else {
         print("Unknown Error: $error");
       }

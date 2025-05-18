@@ -86,29 +86,8 @@ class Orders extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                                  decoration: BoxDecoration(
-                                                    color:cubit.orderModel!.orders[index].status == 'تم الاستلام'?
-                                                    Colors.blue.withOpacity(0.1):cubit.orderModel!.orders[index].status == 'تم التسليم'?
-                                                    Colors.green.withOpacity(0.1):cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
-                                                    Colors.red.withOpacity(0.1):Colors.yellowAccent.withOpacity(0.1),
-                                                    borderRadius: BorderRadius.circular(12),
-                                                  ),
-                                                  child: Text(
-                                                    cubit.orderModel!.orders[index].status,
-                                                    style: TextStyle(
-                                                      color: cubit.orderModel!.orders[index].status == 'تم الاستلام'?
-                                                      Colors.blue:cubit.orderModel!.orders[index].status == 'تم التسليم'?
-                                                      Colors.green:cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
-                                                      Colors.red:Colors.yellowAccent,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 13,
-                                                    ),
-                                                  ),
-                                                ),
                                                 Row(
                                                   children: [
                                                     Text(
@@ -128,6 +107,30 @@ class Orders extends StatelessWidget {
                                                   ],
                                                 ),
                                               ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Container(
+                                              width: double.maxFinite,
+                                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                              decoration: BoxDecoration(
+                                                color:cubit.orderModel!.orders[index].status == 'تم الاستلام'?
+                                                Colors.blue.withOpacity(0.1):cubit.orderModel!.orders[index].status == 'تم التسليم'?
+                                                Colors.green.withOpacity(0.1):cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
+                                                Colors.red.withOpacity(0.1):Colors.orange.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              child: Text(
+                                                cubit.orderModel!.orders[index].status,
+                                                style: TextStyle(
+                                                  color: cubit.orderModel!.orders[index].status == 'تم الاستلام'?
+                                                  Colors.blue:cubit.orderModel!.orders[index].status == 'تم التسليم'?
+                                                  Colors.green:cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
+                                                  Colors.red:Colors.orange,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
                                             ),
                                             const SizedBox(height: 12),
                                             Row(

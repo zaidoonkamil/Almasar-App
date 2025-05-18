@@ -6,6 +6,7 @@ import '../../../core/ navigation/navigation.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'all_order.dart';
+import 'changing_order.dart';
 
 class OrderAdmin extends StatelessWidget {
   const OrderAdmin({super.key});
@@ -64,7 +65,7 @@ class OrderAdmin extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                      //  navigateTo(context, ChangingOrdersDelivery());
+                       navigateTo(context, ChangingOrdersAdmin());
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),

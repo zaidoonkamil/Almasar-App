@@ -15,9 +15,17 @@ class ChangingOrdersDelivery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => DeliveryCubit()..getActiveOrder(context: context,),
+      create: (context) {
+        final cubit = DeliveryCubit();
+        cubit.startAutoRefresh(context: context);
+        return cubit;
+      },
       child: BlocConsumer<DeliveryCubit,DeliveryStates>(
-        listener: (context,state){},
+        listener: (context,state){
+          if(state is ChangeStatusOrderSuccessState){
+            navigateBack(context);
+          }
+        },
         builder: (context,state){
           var cubit=DeliveryCubit.get(context);
           return SafeArea(
@@ -53,7 +61,7 @@ class ChangingOrdersDelivery extends StatelessWidget {
                     condition: cubit.getActiveOrdersModel != null,
                     builder: (c){
                       return ConditionalBuilder(
-                          condition: true,
+                          condition: cubit.getActiveOrdersModel!.isNotEmpty,
                           builder: (c){
                             return Expanded(
                               child: ListView.builder(
@@ -113,7 +121,7 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 color:cubit.getActiveOrdersModel![index].status == 'تم الاستلام'?
                                                 Colors.blue.withOpacity(0.1):cubit.getActiveOrdersModel![index].status == 'تم التسليم'?
                                                 Colors.green.withOpacity(0.1):cubit.getActiveOrdersModel![index].status == 'استرجاع الطلب'?
-                                                Colors.red.withOpacity(0.1):Colors.yellowAccent.withOpacity(0.1),
+                                                Colors.red.withOpacity(0.1):Colors.orange.withOpacity(0.2),
                                                 borderRadius: BorderRadius.circular(12),
                                               ),
                                               child: Text(
@@ -122,7 +130,7 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                   color: cubit.getActiveOrdersModel![index].status == 'تم الاستلام'?
                                                   Colors.blue:cubit.getActiveOrdersModel![index].status == 'تم التسليم'?
                                                   Colors.green:cubit.getActiveOrdersModel![index].status == 'استرجاع الطلب'?
-                                                  Colors.red:Colors.yellowAccent,
+                                                  Colors.red:Colors.orange,
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 16,
                                                 ),
@@ -284,34 +292,75 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                Container(
-                                                  width: 100,
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.green.withOpacity(0.8),
-                                                    borderRadius: BorderRadius.circular(12),
-                                                  ),
-                                                  child: Text(
-                                                    'قبول',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 16,
+                                                ConditionalBuilder(
+                                                  condition: state is! DeliveryAcceptLoadingState,
+                                                    builder: (c)=> GestureDetector(
+                                                      onTap:(){
+                                                        cubit.deliveryAccept(
+                                                            context: context,
+                                                            accept: true,
+                                                            idOrder: cubit.getActiveOrdersModel![index].id.toString());
+                                                      },
+                                                      child: Container(
+                                                        width: 100,
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.green.withOpacity(0.8),
+                                                          borderRadius: BorderRadius.circular(12),
+                                                        ),
+                                                        child:Text(
+                                                          'قبول',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 16,
+                                                          ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
                                                     ),
-                                                    textAlign: TextAlign.center,
-                                                  ),
+                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.green.withOpacity(0.8),),
                                                 ),
-                                                Container(
-                                                  width: 100,
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.red.withOpacity(0.8),
-                                                    borderRadius: BorderRadius.circular(12),
-                                                  ),
+                                                ConditionalBuilder(
+                                                  condition: state is! DeliveryAcceptLoadingState,
+                                                    builder: (c)=> GestureDetector(
+                                                      onTap:(){
+                                                        cubit.deliveryAccept(
+                                                            context: context,
+                                                            accept: false,
+                                                            idOrder: cubit.getActiveOrdersModel![index].id.toString());
+                                                      },
+                                                      child: Container(
+                                                        width: 100,
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.red.withOpacity(0.8),
+                                                          borderRadius: BorderRadius.circular(12),
+                                                        ),
+                                                        child:Text(
+                                                          'رفض',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 16,
+                                                          ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.red.withOpacity(0.8),),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Container(width: double.maxFinite,height: 1,color: Colors.black45,),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                Expanded(
                                                   child: Text(
-                                                    'رفض',
+                                                    "تغيير حالة الطلب",
                                                     style: TextStyle(
-                                                      color: Colors.white,
                                                       fontWeight: FontWeight.w600,
                                                       fontSize: 16,
                                                     ),
@@ -320,6 +369,212 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
+                                            const SizedBox(height: 6),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ConditionalBuilder(
+                                                  condition: state is! ChangeStatusOrderLoadingState,
+                                                  builder: (c)=> GestureDetector(
+                                                    onTap:(){
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            backgroundColor: Colors.white,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8),
+                                                            ),
+                                                            title: Text("هل حقا ترغب في تغيير الحالة الى (تم التسليم) ؟",
+                                                              style: TextStyle(fontSize: 18),
+                                                              textAlign: TextAlign.center,),
+                                                            content: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: Text("إلغاء",style: TextStyle(color: primaryColor),),
+                                                                ),
+                                                                ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: primaryColor,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(8),
+                                                                    ),
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    cubit.changeStatusOrder(
+                                                                        context: context,
+                                                                        status: "تم التسليم",
+                                                                        idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                    );
+                                                                    },
+                                                                  child: Text("نعم",style: TextStyle(color: Colors.white),),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.green.withOpacity(0.8),
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                      child:Text(
+                                                        "تم التسليم",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontSize: 16,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.green.withOpacity(0.8),),
+                                                ),
+                                                ConditionalBuilder(
+                                                  condition: state is! ChangeStatusOrderLoadingState,
+                                                  builder: (c)=> GestureDetector(
+                                                    onTap:(){
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            backgroundColor: Colors.white,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8),
+                                                            ),
+                                                            title: Text("هل حقا ترغب في تغيير الحالة الى (تبديل الطلب) ؟",
+                                                              style: TextStyle(fontSize: 18),
+                                                              textAlign: TextAlign.center,),
+                                                            content: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: Text("إلغاء",style: TextStyle(color: primaryColor),),
+                                                                ),
+                                                                ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: primaryColor,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(8),
+                                                                    ),
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    cubit.changeStatusOrder(
+                                                                      context: context,
+                                                                      status: "تبديل الطلب",
+                                                                      idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                    );
+                                                                  },
+                                                                  child: Text("نعم",style: TextStyle(color: Colors.white),),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.orange.withOpacity(0.8),
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                      child:Text(
+                                                        "تبديل",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontSize: 16,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.orange.withOpacity(0.8),),
+                                                ),
+                                                ConditionalBuilder(
+                                                  condition: state is! ChangeStatusOrderLoadingState,
+                                                  builder: (c)=> GestureDetector(
+                                                    onTap:(){
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            backgroundColor: Colors.white,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(8),
+                                                            ),
+                                                            title: Text("هل حقا ترغب في تغيير الحالة الى (استرجاع الطلب) ؟",
+                                                              style: TextStyle(fontSize: 18),
+                                                              textAlign: TextAlign.center,),
+                                                            content: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: Text("إلغاء",style: TextStyle(color: primaryColor),),
+                                                                ),
+                                                                ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: primaryColor,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(8),
+                                                                    ),
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    cubit.changeStatusOrder(
+                                                                      context: context,
+                                                                      status: "استرجاع الطلب",
+                                                                      idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                    );
+                                                                  },
+                                                                  child: Text("نعم",style: TextStyle(color: Colors.white),),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.red.withOpacity(0.8),
+                                                        borderRadius: BorderRadius.circular(12),
+                                                      ),
+                                                      child:Text(
+                                                        "استرجاع",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontSize: 16,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.red.withOpacity(0.8),),
+                                                ),
+                                              ],
+                                            ),
+
                                           ],
                                         ),
                                       ),

@@ -28,6 +28,14 @@ class DeliveryStatusLoadingState extends DeliveryStates {}
 class DeliveryStatusSuccessState extends DeliveryStates {}
 class DeliveryStatusErrorState extends DeliveryStates {}
 
+class DeliveryAcceptLoadingState extends DeliveryStates {}
+class DeliveryAcceptSuccessState extends DeliveryStates {}
+class DeliveryAcceptErrorState extends DeliveryStates {}
+
+class ChangeStatusOrderLoadingState extends DeliveryStates {}
+class ChangeStatusOrderSuccessState extends DeliveryStates {}
+class ChangeStatusOrderErrorState extends DeliveryStates {}
+
 class GetOrderLoadingState extends DeliveryStates {}
 class GetOrderSuccessState extends DeliveryStates {}
 class GetOrderErrorState extends DeliveryStates {}

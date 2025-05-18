@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:delivery_app/features/delivery/cubit/states.dart';
 import 'package:delivery_app/features/delivery/model/GetActiveOrders.dart';
 import 'package:delivery_app/features/delivery/model/GetChangeOrders.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -240,20 +243,32 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   }
 
 
+
+  void startAutoRefresh({required BuildContext context}) {
+    getActiveOrder(context: context);
+   Timer.periodic(Duration(minutes: 3), (timer) {
+      getActiveOrder(context: context);
+    });
+  }
+
   List<GetActiveOrders>? getActiveOrdersModel;
   void getActiveOrder({required BuildContext context}) {
     emit(GetActiveOrderLoadingState());
     DioHelper.getData(
       url: '/delivery/$id/firststatus-orders-delivery',
     ).then((value) {
-      getActiveOrdersModel = (value.data as List)
-          .map((item) => GetActiveOrders.fromJson
-        (item as Map<String, dynamic>)).toList();
+      List<GetActiveOrders> newData = (value.data as List)
+          .map((item) => GetActiveOrders.fromJson(item))
+          .toList();
+      if (!listEquals(getActiveOrdersModel, newData)) {
+        getActiveOrdersModel = newData;
+        emit(GetActiveOrderSuccessState());
+      }
       emit(GetActiveOrderSuccessState());
     }).catchError((error) {
       if (error is DioError) {
         showToastError(text: error.toString(),
-          context: context!,);
+          context: context,);
         print(error.toString());
         emit(GetActiveOrderErrorState());
       }else {
@@ -262,8 +277,72 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     });
   }
 
+  deliveryAccept({required BuildContext context, required bool accept, required String idOrder,}){
+    emit(DeliveryAcceptLoadingState());
+    DioHelper.putData(
+      url: '/order/$idOrder/delivery-accept',
+      token: token,
+      data:
+      {
+        'accept': accept,
+        'deliveryId': id,
+      },
+    ).then((value) {
+      if (accept==false) {
+        getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
+      }
+      showToastSuccess(
+        text:"تمت العملية بنجاح",
+        context: context,
+      );
+      emit(DeliveryAcceptSuccessState());
+    }).catchError((error)
+    {
+      if (error is DioError) {
+        showToastError(
+          text:"حدث خطأ",
+          context: context,
+        );
+        emit(DeliveryAcceptErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
 
-  // void connectToSocket() {
+  changeStatusOrder({required BuildContext context, required String status, required String idOrder,}){
+    emit(ChangeStatusOrderLoadingState());
+    DioHelper.putData(
+      url: '/orders/$idOrder/status',
+      token: token,
+      data:
+      {
+        'status': status,
+      },
+    ).then((value) {
+      getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
+      showToastSuccess(
+        text:"تمت العملية بنجاح",
+        context: context,
+      );
+      emit(ChangeStatusOrderSuccessState());
+    }).catchError((error)
+    {
+      if (error is DioError) {
+        print("Unknown Error: $error");
+
+        showToastError(
+          text:"حدث خطأ",
+          context: context,
+        );
+        emit(ChangeStatusOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+// void connectToSocket() {
   //   SocketHelper.connect();
   //
   //   SocketHelper.onEvent("connect", (_) {

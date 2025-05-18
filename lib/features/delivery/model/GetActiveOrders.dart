@@ -38,7 +38,7 @@ class GetActiveOrders {
   factory GetActiveOrders.fromJson(Map<String, dynamic> json) => GetActiveOrders(
     id: json["id"],
     userId: json["userId"],
-    assignedDeliveryId: json["assignedDeliveryId"],
+    assignedDeliveryId: json["assignedDeliveryId"]??0,
     address: json["address"],
     phone: json["phone"],
     orderAmount: json["orderAmount"],
