@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/ navigation/navigation.dart';
+import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
@@ -180,7 +181,8 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Row(
+                                                cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty
+                                                    ?Container():Row(
                                                   children: [
                                                     Text(
                                                       'د.ع ',
@@ -269,8 +271,84 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                               ],
                                             ),
                                             const SizedBox(height: 6),
+                                            cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty ?Column(
+                                              children: [
+                                                const SizedBox(height: 12),
+                                                Container(width: double.maxFinite,height: 2,color: Colors.grey,),
+                                                const SizedBox(height: 12),
+                                                SizedBox(
+                                                  height: 90,
+                                                  child: ListView.builder(
+                                                      physics: AlwaysScrollableScrollPhysics(),
+                                                      itemCount: cubit.getActiveOrdersModel![index].items?.length,
+                                                      itemBuilder:(context,itemIndex){
+                                                        int number = int.parse(cubit.getActiveOrdersModel![index].items![itemIndex].product.price.toString());
+                                                        return Column(
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                SizedBox(width: 12,),
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                        children: [
+                                                                          Text(cubit.getActiveOrdersModel![index].items![itemIndex].product.title.toString(),
+                                                                            maxLines: 1,
+                                                                            overflow: TextOverflow.ellipsis,),
+                                                                        ],
+                                                                      ),
+                                                                      SizedBox(height: 4,),
+                                                                      Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                        children: [
+                                                                          Text('د.ع',style: TextStyle(color: primaryColor),),
+                                                                          SizedBox(width: 4,),
+                                                                          Text(NumberFormat('#,###').format(number).toString()),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(width: 12,),
+                                                                Container(
+                                                                  width: 64,
+                                                                  height: 64,
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(6),
+                                                                  ),
+                                                                  child: ClipRRect(
+                                                                    borderRadius:
+                                                                    BorderRadius.circular(6.0),
+                                                                    child: Image.network(
+                                                                      '$url/uploads/${cubit.getActiveOrdersModel![index].items![itemIndex].product.images[0].toString()}',
+                                                                      fit: BoxFit.fill,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                                  children: [
+                                                                    Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 18),),
+                                                                    SizedBox(width: 2,),
+                                                                    Text('#',style: TextStyle(fontSize: 18),),
+                                                                  ],
+                                                                ),
+
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }),
+                                                ),
+                                              ],
+                                            ):const SizedBox(height: 12),
                                             Container(width: double.maxFinite,height: 1,color: Colors.black45,),
                                             const SizedBox(height: 8),
+
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
@@ -487,7 +565,7 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                       );
                                                     },
                                                     child: Container(
-                                                      width: 100,
+                                                      width: 70,
                                                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                                       decoration: BoxDecoration(
                                                         color: Colors.orange.withOpacity(0.8),

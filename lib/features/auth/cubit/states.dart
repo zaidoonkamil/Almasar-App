@@ -4,6 +4,8 @@ class AuthInitialState extends AuthStates {}
 
 class ValidationState extends AuthStates {}
 
+class SelectedImagesState extends AuthStates {}
+
 class LoginLoadingState extends AuthStates {}
 class LoginSuccessState extends AuthStates {}
 class LoginErrorState extends AuthStates {}

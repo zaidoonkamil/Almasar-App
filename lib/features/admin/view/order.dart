@@ -83,7 +83,7 @@ class OrderAdmin extends StatelessWidget {
                           color: Colors.white,
                         ),
                         child: Center(
-                          child: Text('الطلبات النشطة',
+                          child: Text('الطلبيات الواردة',
                             style: TextStyle(color: primaryColor,fontSize: 16 ),
                           ),
                         ),
@@ -112,7 +112,7 @@ class OrderAdmin extends StatelessWidget {
                             color: primaryColor
                         ),
                         child: Center(
-                          child: Text('جميع الطلبات',
+                          child: Text('الطلبيات المقبولة',
                             style: TextStyle(color: Colors.white,fontSize: 16 ),),
                         ),
                       ),

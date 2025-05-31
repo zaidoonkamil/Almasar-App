@@ -141,7 +141,7 @@ class TodayDashboard extends StatelessWidget {
                                                 style: TextStyle(fontSize: 20, color: Colors.white),
                                               ),
                                               Text(
-                                                cubit.getTodayDashboard!.totalAmountIncludingFee.toString(),
+                                                cubit.getTodayDashboard!.totalDeliveryFee.toString(),
                                                 style: TextStyle(fontSize: 20, color: Colors.white),
                                               ),
                                             ],

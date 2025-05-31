@@ -9,6 +9,12 @@ class ThemeService {
     primaryColor: primaryColor,
     fontFamily: 'Cairo',
     brightness: Brightness.light,
+    appBarTheme: AppBarTheme(
+      elevation: 1.5,
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      shadowColor: Colors.black.withOpacity(0.9),
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: primaryColor,
         showUnselectedLabels: false

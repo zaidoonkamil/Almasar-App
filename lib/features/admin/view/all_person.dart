@@ -103,6 +103,7 @@ class AllPerson extends StatelessWidget {
                                               location: cubit.getNameUserModel![index].location,
                                               role: cubit.getNameUserModel![index].role,
                                                 createdAt:  cubit.getNameUserModel![index].createdAt.toString(),
+                                              sponsorshipAmount: cubit.getNameUserModel![index].sponsorshipAmount.toString(),
                                             ),
                                             );
                                           },

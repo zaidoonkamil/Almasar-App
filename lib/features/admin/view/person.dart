@@ -145,6 +145,35 @@ class Person extends StatelessWidget {
                       ),
                     ),
                   ),
+                  SizedBox(height: 20,),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: (){
+                        navigateTo(context, AllPerson(role: 'vendor'));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 24),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.3),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(5, 5),
+                            ),
+                          ],
+                          borderRadius:  BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Text('التجار',
+                            style: TextStyle(color: primaryColor,fontSize: 16 ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 40,),
                 ],
               ),

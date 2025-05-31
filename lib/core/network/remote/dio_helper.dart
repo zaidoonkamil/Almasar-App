@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 String url='https://backendalmasar.khayrat-alrahman.com';
-//String url='http://168.231.111.44:3000';
+//String url='http://localhost:3000';
 
 class DioHelper {
   static Dio? dio;

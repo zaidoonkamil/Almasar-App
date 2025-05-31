@@ -11,6 +11,8 @@ import '../../../core/network/local/cache_helper.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/custom_text_field.dart';
+import '../../user/navigation_bar_user.dart';
+import '../../vendor/view/home.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -44,13 +46,14 @@ class Login extends StatelessWidget {
                   token = AuthCubit.get(context).token.toString();
                   id = AuthCubit.get(context).id.toString();
                   adminOrUser = AuthCubit.get(context).role.toString();
-
                   if (adminOrUser == 'admin') {
                     navigateAndFinish(context, BottomNavBarAdmin());
                   } else if (adminOrUser == 'delivery') {
                     navigateAndFinish(context, BottomNavBarDelivery());
+                  } else if (adminOrUser == 'vendor') {
+                    navigateAndFinish(context, HomeVendor());
                   } else {
-                    navigateAndFinish(context, Home());
+                    navigateAndFinish(context, BottomNavBarUser());
                   }
                 });
               });

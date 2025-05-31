@@ -34,6 +34,8 @@ class GetOrder {
 class Order {
   int id;
   int userId;
+  int? vendorId;
+  dynamic productId;
   dynamic assignedDeliveryId;
   String address;
   String phone;
@@ -41,6 +43,9 @@ class Order {
   int deliveryFee;
   String notes;
   String status;
+  dynamic isAccepted;
+  dynamic rejectionReason;
+  List<Item>? items;
   DateTime createdAt;
   DateTime updatedAt;
   List<StatusHistory> statusHistory;
@@ -51,6 +56,11 @@ class Order {
     required this.assignedDeliveryId,
     required this.address,
     required this.phone,
+    required this.vendorId,
+    required this.productId,
+    required this.isAccepted,
+    required this.rejectionReason,
+    required this.items,
     required this.orderAmount,
     required this.deliveryFee,
     required this.notes,
@@ -63,6 +73,8 @@ class Order {
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     id: json["id"],
     userId: json["userId"],
+    vendorId: json["vendorId"],
+    productId: json["productId"],
     assignedDeliveryId: json["assignedDeliveryId"],
     address: json["address"],
     phone: json["phone"],
@@ -70,14 +82,19 @@ class Order {
     deliveryFee: json["deliveryFee"],
     notes: json["notes"],
     status: json["status"],
+    isAccepted: json["isAccepted"],
+    rejectionReason: json["rejectionReason"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
+    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
     statusHistory: List<StatusHistory>.from(json["statusHistory"].map((x) => StatusHistory.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "userId": userId,
+    "vendorId": vendorId,
+    "productId": productId,
     "assignedDeliveryId": assignedDeliveryId,
     "address": address,
     "phone": phone,
@@ -85,9 +102,81 @@ class Order {
     "deliveryFee": deliveryFee,
     "notes": notes,
     "status": status,
+    "isAccepted": isAccepted,
+    "rejectionReason": rejectionReason,
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
+    "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),
     "statusHistory": List<dynamic>.from(statusHistory.map((x) => x.toJson())),
+  };
+}
+
+
+class Item {
+  int id;
+  int orderId;
+  int productId;
+  int quantity;
+  DateTime createdAt;
+  DateTime updatedAt;
+  Product product;
+
+  Item({
+    required this.id,
+    required this.orderId,
+    required this.productId,
+    required this.quantity,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.product,
+  });
+
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+    id: json["id"],
+    orderId: json["orderId"],
+    productId: json["productId"],
+    quantity: json["quantity"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    product: Product.fromJson(json["Product"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "orderId": orderId,
+    "productId": productId,
+    "quantity": quantity,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "Product": product.toJson(),
+  };
+}
+
+class Product {
+  int id;
+  String title;
+  int price;
+  List<String> images;
+
+  Product({
+    required this.id,
+    required this.title,
+    required this.price,
+    required this.images,
+  });
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+    id: json["id"],
+    title: json["title"],
+    price: json["price"],
+    images: List<String>.from(json["images"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "price": price,
+    "images": List<dynamic>.from(images.map((x) => x)),
   };
 }
 

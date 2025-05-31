@@ -19,12 +19,11 @@ class HomeDelivery extends StatelessWidget {
 
   static int currentIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => DeliveryCubit()
-        ..getAds(context: context)..getProfile(context: context),
+        ..verifyToken(context: context)..getAds(context: context)..getProfile(context: context),
       child: BlocConsumer<DeliveryCubit,DeliveryStates>(
         listener: (context,state){},
         builder: (context,state){

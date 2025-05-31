@@ -1,5 +1,6 @@
 import 'package:delivery_app/features/delivery/navigation_bar_Delivery.dart';
 import 'package:delivery_app/features/onboarding/onboarding.dart';
+import 'package:delivery_app/features/vendor/view/home.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/ navigation/navigation.dart';
@@ -8,6 +9,7 @@ import '../../core/widgets/constant.dart';
 import '../admin/navigation_bar_admin.dart';
 import '../auth/view/login.dart';
 import '../delivery/view/changing_order.dart';
+import '../user/navigation_bar_user.dart';
 import '../user/view/home.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -41,8 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
             widget = BottomNavBarAdmin();
           }else if(adminOrUser == 'delivery'){
             widget = BottomNavBarDelivery();
+          }else if(adminOrUser == 'vendor'){
+            widget = HomeVendor();
           }else{
-            widget = Home();
+            widget = BottomNavBarUser();
           }
         }
         token = CacheHelper.getData(key: 'token') ;
@@ -63,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: Container(
+              child: SizedBox(
                 width: double.maxFinite,
                 height: double.maxFinite,
                 child: Center(child:

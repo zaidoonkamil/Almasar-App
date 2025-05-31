@@ -3,18 +3,15 @@ import 'dart:async';
 import 'package:delivery_app/features/admin/cubit/states.dart';
 import 'package:delivery_app/features/admin/model/AllOrder.dart';
 import 'package:delivery_app/features/delivery/model/GetActiveOrders.dart';
-import 'package:delivery_app/features/delivery/model/GetChangeOrders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/network/remote/socket_helper.dart';
 import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../../user/model/GetAdsModel.dart';
@@ -33,6 +30,30 @@ class AdminCubit extends Cubit<AdminStates> {
     emit(ValidationState());
   }
 
+  void verifyToken({required BuildContext context}) {
+    emit(VerifyTokenLoadingState());
+    DioHelper.getData(
+        url: '/verify-token',
+        token: token
+    ).then((value) {
+      bool isValid = value.data['valid'];
+      if (isValid) {
+        emit(VerifyTokenSuccessState());
+      } else {
+        signOut(context);
+        showToastError(text: "توكن غير صالح", context: context);
+        emit(VerifyTokenErrorState());
+      }
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        emit(VerifyTokenErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
 
   List<GetNameUser>? getNameUserModel;
   void getNameUser({required BuildContext? context,required String role}) {
@@ -132,6 +153,17 @@ class AdminCubit extends Cubit<AdminStates> {
     }
   }
 
+  List<XFile> selectedImages2 = [];
+  Future<void> pickImages2() async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> resultList = await picker.pickMultiImage();
+
+    if (resultList.isNotEmpty) {
+      selectedImages2 = resultList;
+      emit(SelectedImagesState());
+    }
+  }
+
   void addAds({required BuildContext context}) async {
     emit(AddAdsLoadingState());
     if (selectedImages.isEmpty) {
@@ -175,26 +207,48 @@ class AdminCubit extends Cubit<AdminStates> {
     required String password,
     required String role,
     required BuildContext context,
-  }){
+  })async{
     emit(AddPersonLoadingState());
+    FormData formData = FormData.fromMap(
+        {
+          'name': name,
+          'phone': phone,
+          'location': location,
+          'password': password,
+          'role': role,
+        },
+        ListFormat.multiCompatible
+    );
+    if(role =='delivery'){
+      if (selectedImages2.isEmpty) {
+        showToastInfo(text: "الرجاء اختيار صور أولاً!", context: context);
+        emit(AddPersonErrorState());
+        return;
+      }
+      for (var file in selectedImages2) {
+        formData.files.add(
+          MapEntry(
+            "images",
+            await MultipartFile.fromFile(
+            file.path, filename: file.name,
+            contentType: MediaType('image', 'jpeg'),
+          ),
+        ),
+    );
+    }
+    }
+
     DioHelper.postData(
       url: '/users',
-      data:
-      {
-        'name': name,
-        'phone': phone,
-        'location': location,
-        'password': password,
-        'role': role,
-      },
+      data: formData,
+      options: Options(headers: {"Content-Type": "multipart/form-data"}),
     ).then((value) {
       emit(AddPersonSuccessState());
     }).catchError((error)
     {
       if (error is DioError) {
-        print(error.response?.data["error"]);
         showToastError(
-          text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
+          text: error.response?.data["error"],
           context: context,
         );
         emit(AddPersonErrorState());
@@ -439,6 +493,50 @@ class AdminCubit extends Cubit<AdminStates> {
           context: context,
         );
         emit(DeliveriesAssignOrderErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+  void deleteUser({required BuildContext context,required String id}) {
+    emit(DeleteUserLoadingState());
+    DioHelper.deleteData(
+        url: '/users/$id',
+    ).then((value) {
+        showToastSuccess(text: "تمت عملية الحذف بنجاح", context: context);
+        emit(DeleteUserSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        emit(DeleteUserErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+  TextEditingController userNameController = TextEditingController();
+  void getFirstCall({required String sponsorshipAmount}){
+    userNameController.text=sponsorshipAmount;
+  }
+
+  void sponsorshipVendor({required BuildContext context,required String id,required String sponsorshipAmount}) {
+    emit(SponsorshipVendorLoadingState());
+    DioHelper.putData(
+        url: '/vendor/$id/sponsorship',
+      data: {
+          'sponsorshipAmount': sponsorshipAmount,
+      }
+    ).then((value) {
+        showToastSuccess(text: "تمت عملية الترقية بنجاح", context: context);
+        emit(SponsorshipVendorSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        emit(SponsorshipVendorErrorState());
       }else {
         print("Unknown Error: $error");
       }

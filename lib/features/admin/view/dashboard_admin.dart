@@ -142,7 +142,7 @@ class DashboardAdmin extends StatelessWidget {
                                                 style: TextStyle(fontSize: 20, color: Colors.white),
                                               ),
                                               Text(
-                                                cubit.getDashboard!.totalAmountIncludingFee.toString(),
+                                                cubit.getDashboard!.totalDeliveryFee.toString(),
                                                 style: TextStyle(fontSize: 20, color: Colors.white),
                                               ),
                                             ],

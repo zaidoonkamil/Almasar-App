@@ -19,7 +19,6 @@ void signOut(context)
     {
       CacheHelper.removeData(key: 'role',);
       CacheHelper.removeData(key: 'id',);
-      CacheHelper.removeData(key: 'role',);
       navigateTo(context, const Login(),);
     }
   });

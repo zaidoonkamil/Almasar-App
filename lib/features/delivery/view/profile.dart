@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/styles/themes.dart';
+import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
@@ -94,7 +95,15 @@ class ProfileDelivery extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(width: 6,),
-                                Image.asset('assets/images/Group 1171275632 (1).png'),
+                                cubit.profileModel!.images.isEmpty?
+                                Image.asset('assets/images/Group 1171275632 (1).png'):
+                                ClipOval(
+                                  child: Image.network(
+                                    '$url/uploads/${cubit.profileModel!.images[0]}',
+                                    height: 70,
+                                    width: 80,
+                                  ),
+                                ),
                               ],
                             ),
                           );

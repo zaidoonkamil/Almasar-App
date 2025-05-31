@@ -4,6 +4,10 @@ class DeliveryInitialState extends DeliveryStates {}
 
 class ValidationState extends DeliveryStates {}
 
+class VerifyTokenLoadingState extends DeliveryStates {}
+class VerifyTokenSuccessState extends DeliveryStates {}
+class VerifyTokenErrorState extends DeliveryStates {}
+
 class GetProfileLoadingState extends DeliveryStates {}
 class GetProfileSuccessState extends DeliveryStates {}
 class GetProfileErrorStates extends DeliveryStates {}

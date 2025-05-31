@@ -142,7 +142,7 @@ class DashboardDelivery extends StatelessWidget {
                                                 style: TextStyle(fontSize: 20, color: Colors.white),
                                               ),
                                               Text(
-                                                cubit.getDashboard!.totalAmountIncludingFee.toString(),
+                                                cubit.getDashboard!.deliveryFee.toString()??'0',
                                                 style: TextStyle(fontSize: 20, color: Colors.white),
                                               ),
                                             ],
@@ -185,7 +185,7 @@ class DashboardDelivery extends StatelessWidget {
                                         label: 'رسوم التوصيل',
                                         icon: 'healthicons_vespa-motorcycle-outline.png',
                                         total: cubit.getDashboard!.totalAmountIncludingFee,
-                                        used:  cubit.getDashboard!.deliveryFee,
+                                        used:  cubit.getDashboard!.deliveryFee??0,
                                         color: Colors.deepOrangeAccent,
                                       ),
                                       SizedBox(width: 10,),

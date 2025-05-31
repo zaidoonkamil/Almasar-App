@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:delivery_app/features/delivery/cubit/states.dart';
 import 'package:delivery_app/features/delivery/model/GetActiveOrders.dart';
-import 'package:delivery_app/features/delivery/model/GetChangeOrders.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/network/remote/socket_helper.dart';
 import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../../user/model/GetAdsModel.dart';
@@ -28,12 +26,32 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     emit(ValidationState());
   }
 
+  void verifyToken({required BuildContext context}) {
+    emit(VerifyTokenLoadingState());
+    DioHelper.getData(
+      url: '/verify-token',
+      token: token
+    ).then((value) {
+      bool isValid = value.data['valid'];
+      if (isValid) {
+        emit(VerifyTokenSuccessState());
+      } else {
+        signOut(context);
+        showToastError(text: "توكن غير صالح", context: context);
+        emit(VerifyTokenErrorState());
+      }
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        emit(VerifyTokenErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
 
-
-  deliveryStatus({
-    required BuildContext context,
-    required bool isActive,
-  }){
+  deliveryStatus({required BuildContext context, required bool isActive,}){
     emit(DeliveryStatusLoadingState());
     DioHelper.putData(
       url: '/delivery/$id/status',
@@ -127,7 +145,6 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
       }
     });
   }
-
 
   ProfileModel? profileModel;
   void getProfile({required BuildContext context,}) {
@@ -242,8 +259,6 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     });
   }
 
-
-
   void startAutoRefresh({required BuildContext context}) {
     getActiveOrder(context: context);
    Timer.periodic(Duration(minutes: 3), (timer) {
@@ -342,6 +357,7 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     });
   }
 
+
 // void connectToSocket() {
   //   SocketHelper.connect();
   //
@@ -377,6 +393,7 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   //     }
   //   });
   // }
+
 
 
 

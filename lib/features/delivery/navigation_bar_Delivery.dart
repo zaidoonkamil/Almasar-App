@@ -16,7 +16,7 @@ class BottomNavBarDelivery extends StatefulWidget {
 }
 
 class _BottomNavBarDeliveryState extends State<BottomNavBarDelivery> {
-  int currentIndex = 1;
+  int currentIndex = 2;
   DateTime? lastBackPressed;
   List<Widget> screens = [
     ProfileDelivery(),

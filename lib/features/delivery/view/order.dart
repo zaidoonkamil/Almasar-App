@@ -1,17 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/%20navigation/navigation.dart';
-import 'package:delivery_app/core/widgets/circular_progress.dart';
 import 'package:delivery_app/core/widgets/constant.dart';
 import 'package:delivery_app/features/delivery/view/changing_order.dart';
-import 'package:delivery_app/features/delivery/view/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 import '../../../../core/styles/themes.dart';
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/widgets/StatCard.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'all_order.dart';
@@ -91,7 +84,7 @@ class OrderDelivery extends StatelessWidget {
                           color: Colors.white,
                         ),
                         child: Center(
-                          child: Text('الطلبات النشطة',
+                          child: Text('الطلبيات الواردة',
                             style: TextStyle(color: primaryColor,fontSize: 16 ),
                           ),
                         ),
@@ -120,7 +113,7 @@ class OrderDelivery extends StatelessWidget {
                             color: primaryColor
                         ),
                         child: Center(
-                          child: Text('جميع الطلبات',
+                          child: Text('الطلبيات المقبولة',
                             style: TextStyle(color: Colors.white,fontSize: 16 ),),
                         ),
                       ),

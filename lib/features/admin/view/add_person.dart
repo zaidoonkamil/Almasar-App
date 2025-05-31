@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,7 @@ class AddPerson extends StatelessWidget {
       child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){
           if(state is AddPersonSuccessState){
+            AdminCubit.get(context).selectedImages2=[];
             userNameController.text='';
             phoneController.text='';
             locationController.text='';
@@ -52,7 +55,7 @@ class AddPerson extends StatelessWidget {
             phoneController1.text='';
             locationController1.text='';
             passwordController1.text='';
-            rePasswordController.text='';
+            rePasswordController1.text='';
 
             userNameController2.text='';
             phoneController2.text='';
@@ -307,7 +310,25 @@ class AddPerson extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 70),
+                                        const SizedBox(height: 20),
+                                        GestureDetector(
+                                            onTap:(){
+                                              cubit.pickImages2();
+                                            },
+                                            child:
+                                            cubit.selectedImages2.isEmpty?
+                                            Image.asset('assets/images/Group 1171275632 (1).png'):Padding(
+                                              padding: const EdgeInsets.all(5.0),
+                                              child: ClipOval(
+                                                child: Image.file(
+                                                  File(cubit.selectedImages2[0].path),
+                                                  height: 120,
+                                                  width: 120,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )),
+                                        const SizedBox(height: 20),
                                         CustomTextField(
                                           controller: userNameController1,
                                           hintText: 'الاسم الثلاثي',

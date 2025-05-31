@@ -1,33 +1,21 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:delivery_app/core/widgets/constant.dart';
-import 'package:delivery_app/core/widgets/show_toast.dart';
-import 'package:delivery_app/features/auth/view/login.dart';
-import 'package:delivery_app/features/auth/view/register.dart';
-import 'package:delivery_app/features/user/view/orders.dart';
-import 'package:delivery_app/features/user/view/request_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/ navigation/navigation.dart';
 import '../../../../core/styles/themes.dart';
-import '../../../../core/widgets/circular_progress.dart';
-import '../../../../core/widgets/custom_form_field.dart';
-import '../../../../core/widgets/custom_text_field.dart';
-import '../../../core/widgets/StatCard.dart';
+import '../../../core/widgets/constant.dart';
+import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key, required this.name, required this.phone});
 
-  final String name;
-  final String phone;
+class ProfileUser extends StatelessWidget {
+  const ProfileUser({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => UserCubit(),
+      create: (BuildContext context) => UserCubit()..getProfile(context: context),
       child: BlocConsumer<UserCubit,UserStates>(
         listener: (context,state){},
         builder: (context,state){
@@ -43,7 +31,6 @@ class Profile extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
@@ -76,47 +63,45 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 64,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                              onTap: (){
-                                navigateBack(context);
-                              },
-                              child: Icon(Icons.arrow_back_ios_new,size: 28,)),
-                          Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
+                    ConditionalBuilder(
+                        condition: cubit.profileModel != null,
+                        builder: (context){
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text('سلام عليكم',style: TextStyle(fontSize: 20,color: Colors.redAccent,),),
+                                    Text(
+                                      cubit.profileModel!.name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 4,),
-                                  Text(
-                                    phone,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey,
+                                    SizedBox(height: 4,),
+                                    Text(
+                                      cubit.profileModel!.phone,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 6,),
-                              Image.asset('assets/images/Group 1171275632 (1).png'),
-                            ],
-                          ),
+                                  ],
+                                ),
+                                SizedBox(width: 6,),
+                               Image.asset('assets/images/Group 1171275632 (1).png'),
+                              ],
+                            ),
 
-                        ],
-                      ),
+                          );
+                        },
+                        fallback: (c)=>Center(child: CircularProgressIndicator(color: primaryColor,))
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18.0),

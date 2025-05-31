@@ -34,6 +34,10 @@ class GetTodayDashboardAdminLoadingState extends AdminStates {}
 class GetTodayDashboardAdminSuccessState extends AdminStates {}
 class GetTodayDashboardAdminErrorState extends AdminStates {}
 
+class VerifyTokenLoadingState extends AdminStates {}
+class VerifyTokenSuccessState extends AdminStates {}
+class VerifyTokenErrorState extends AdminStates {}
+
 class GetNameUserLoadingState extends AdminStates {}
 class GetNameUserSuccessState extends AdminStates {}
 class GetNameUserErrorState extends AdminStates {}
@@ -61,4 +65,12 @@ class ChangeStatusOrderErrorState extends AdminStates {}
 class DeliveriesAssignOrderLoadingState extends AdminStates {}
 class DeliveriesAssignOrderSuccessState extends AdminStates {}
 class DeliveriesAssignOrderErrorState extends AdminStates {}
+
+class DeleteUserLoadingState extends AdminStates {}
+class DeleteUserSuccessState extends AdminStates {}
+class DeleteUserErrorState extends AdminStates {}
+
+class SponsorshipVendorLoadingState extends AdminStates {}
+class SponsorshipVendorSuccessState extends AdminStates {}
+class SponsorshipVendorErrorState extends AdminStates {}
 
