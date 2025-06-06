@@ -266,42 +266,46 @@ class AllOrdersAdmin extends StatelessWidget {
                                               ],
                                             ),
                                             const SizedBox(height: 6),
-                                            Container(width: double.maxFinite,height: 1,color: Colors.black45,),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                            Column(
                                               children: [
-                                                Text(': المستخدم',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                Container(width: double.maxFinite,height: 1,color: Colors.black45,),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(': المستخدم',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.person_outline, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].user.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text( cubit.allOrderModel!.orders[index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                const SizedBox(width: 6),
-                                                const Icon(Icons.person_outline, color: Colors.grey),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text( cubit.allOrderModel!.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                const SizedBox(width: 6),
-                                                const Icon(Icons.phone_outlined, color: Colors.grey),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text( cubit.allOrderModel!.orders[index].user.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                const SizedBox(width: 6),
-                                                const Icon(Icons.location_on_outlined, color: Colors.grey),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 8),
                                             cubit.allOrderModel!.orders[index].delivery != null ?Column(
                                               children: [
                                                 const SizedBox(height: 6),
@@ -338,6 +342,50 @@ class AllOrdersAdmin extends StatelessWidget {
                                                     Text( cubit.allOrderModel!.orders[index].delivery!.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( DateFormat('yyyy/M/d').format(DateTime.parse(cubit.allOrderModel!.orders[index].statusHistory.last.changeDate.toString())).toString()
+                                                      ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.date_range, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( DateFormat('h:mm a').format(DateTime.parse(cubit.allOrderModel!.orders[index].statusHistory.last.changeDate.toString())).toString()
+                                                      ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.data_exploration, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                              ],
+                                            ):Container(),
+                                            cubit.allOrderModel!.orders[index].statusHistory.last.status != "تم الاستلام"
+                                                || cubit.allOrderModel!.orders[index].statusHistory.last.status != "تم التسليم" ?Column(
+                                              children: [
+                                                const SizedBox(height: 6),
+                                                Container(width: double.maxFinite,height: 1,color: Colors.black45,),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(': السبب',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.allOrderModel!.orders[index].statusHistory.last.note,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.note_alt_outlined, color: Colors.grey),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),

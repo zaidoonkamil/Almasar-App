@@ -26,6 +26,10 @@ class AddAdsLoadingState extends AdminStates {}
 class AddAdsSuccessState extends AdminStates {}
 class AddAdsErrorState extends AdminStates {}
 
+class AddNotificationLoadingState extends AdminStates {}
+class AddNotificationSuccessState extends AdminStates {}
+class AddNotificationErrorState extends AdminStates {}
+
 class GetDashboardAdminLoadingState extends AdminStates {}
 class GetDashboardAdminSuccessState extends AdminStates {}
 class GetDashboardAdminErrorState extends AdminStates {}

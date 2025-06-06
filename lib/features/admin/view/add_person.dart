@@ -115,7 +115,6 @@ class AddPerson extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     SizedBox(height: 20,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),

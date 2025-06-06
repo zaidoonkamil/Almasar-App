@@ -6,19 +6,22 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputType keyboardType;
   final bool obscureText;
+  final void Function()? onTap;
   final TextEditingController? controller;
   final String? Function(String?)? validate;
+  final int maxLines;
 
   const CustomTextField({
     super.key,
     required this.hintText,
     required this.prefixIcon,
     this.controller,
+    this.onTap,
     this.suffixIcon,
     this.validate,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
-
+    this.maxLines = 1,
   });
 
   @override
@@ -40,9 +43,11 @@ class CustomTextField extends StatelessWidget {
       child: TextFormField(
         textAlign:TextAlign.right,
         keyboardType: keyboardType,
+        onTap: onTap,
         obscureText: obscureText,
         validator: validate,
         controller: controller,
+        maxLines: maxLines,
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,

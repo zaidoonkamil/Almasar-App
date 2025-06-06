@@ -9,11 +9,17 @@ import 'package:intl/intl.dart';
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
+import '../../../core/widgets/custom_text_field.dart';
+import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
 class ChangingOrdersAdmin extends StatelessWidget {
   const ChangingOrdersAdmin({super.key,});
+
+  static TextEditingController noteController = TextEditingController();
+  static TextEditingController noteRController = TextEditingController();
+  static TextEditingController noteCController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,11 @@ class ChangingOrdersAdmin extends StatelessWidget {
         listener: (context,state){
           if(state is ChangeStatusOrderSuccessState){
             navigateBack(context);
+          }
+          if(state is ChangeStatusOrderSuccessState){
+            noteController.text='';
+            noteCController.text='';
+            noteRController.text='';
           }
         },
         builder: (context,state){
@@ -373,7 +384,7 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                   ),
                                                 ],
                                               ):const SizedBox(height: 12),
-                                              cubit.getActiveOrdersModel![index].assignedDeliveryId == null ? Column(
+                                              cubit.getActiveOrdersModel![index].assignedDeliveryId == 0 ? Column(
                                                 children: [
                                                   GestureDetector(
                                                     onTap: (){
@@ -429,7 +440,7 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                           context: context,
                                                           builder: (BuildContext context) {
                                                             return AlertDialog(
-                                                              backgroundColor: Colors.white,
+                                                              backgroundColor:  Color(0xFFF5F5F8),
                                                               shape: RoundedRectangleBorder(
                                                                 borderRadius: BorderRadius.circular(8),
                                                               ),
@@ -454,11 +465,12 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                                     ),
                                                                     onPressed: () {
                                                                       cubit.changeStatusOrder(
-                                                                          context: context,
-                                                                          status: "تم التسليم",
-                                                                          idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                        context: context,
+                                                                        status: "تم التسليم",
+                                                                        idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                        note: '',
                                                                       );
-                                                                      },
+                                                                    },
                                                                     child: Text("نعم",style: TextStyle(color: Colors.white),),
                                                                   ),
                                                                 ],
@@ -466,7 +478,7 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                             );
                                                           },
                                                         );
-              
+
                                                       },
                                                       child: Container(
                                                         width: 100,
@@ -496,13 +508,24 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                           context: context,
                                                           builder: (BuildContext context) {
                                                             return AlertDialog(
-                                                              backgroundColor: Colors.white,
+                                                              backgroundColor:  Color(0xFFF5F5F8),
                                                               shape: RoundedRectangleBorder(
                                                                 borderRadius: BorderRadius.circular(8),
                                                               ),
-                                                              title: Text("هل حقا ترغب في تغيير الحالة الى (تبديل الطلب) ؟",
-                                                                style: TextStyle(fontSize: 18),
-                                                                textAlign: TextAlign.center,),
+                                                              title: Column(
+                                                                children: [
+                                                                  Text("هل حقا ترغب في تغيير الحالة الى (تبديل الطلب) ؟",
+                                                                    style: TextStyle(fontSize: 18),
+                                                                    textAlign: TextAlign.center,),
+                                                                  SizedBox(height: 20,),
+                                                                  CustomTextField(
+                                                                    controller: noteRController,
+                                                                    hintText: 'سبب تبديل الطلب',
+                                                                    prefixIcon: Icons.note_alt_outlined,
+                                                                    keyboardType: TextInputType.text,
+                                                                  ),
+                                                                ],
+                                                              ),
                                                               content: Row(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
@@ -520,11 +543,20 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                                       ),
                                                                     ),
                                                                     onPressed: () {
-                                                                      cubit.changeStatusOrder(
-                                                                        context: context,
-                                                                        status: "تبديل الطلب",
-                                                                        idOrder: cubit.getActiveOrdersModel![index].id.toString(),
-                                                                      );
+                                                                      if(noteRController.text.trim() == ''){
+                                                                        showToastInfo(
+                                                                          text: 'رجائا ادخل سبب الرفض',
+                                                                          context: context,
+                                                                        );
+                                                                      }else{
+                                                                        cubit.changeStatusOrder(
+                                                                          context: context,
+                                                                          status: "تبديل الطلب",
+                                                                          note: noteRController.text.trim(),
+                                                                          idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                        );
+                                                                        navigateBack(context);
+                                                                      }
                                                                     },
                                                                     child: Text("نعم",style: TextStyle(color: Colors.white),),
                                                                   ),
@@ -562,13 +594,24 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                           context: context,
                                                           builder: (BuildContext context) {
                                                             return AlertDialog(
-                                                              backgroundColor: Colors.white,
+                                                              backgroundColor:  Color(0xFFF5F5F8),
                                                               shape: RoundedRectangleBorder(
                                                                 borderRadius: BorderRadius.circular(8),
                                                               ),
-                                                              title: Text("هل حقا ترغب في تغيير الحالة الى (استرجاع الطلب) ؟",
-                                                                style: TextStyle(fontSize: 18),
-                                                                textAlign: TextAlign.center,),
+                                                              title: Column(
+                                                                children: [
+                                                                  Text("هل حقا ترغب في تغيير الحالة الى (استرجاع الطلب) ؟",
+                                                                    style: TextStyle(fontSize: 18),
+                                                                    textAlign: TextAlign.center,),
+                                                                  SizedBox(height: 20,),
+                                                                  CustomTextField(
+                                                                    controller: noteCController,
+                                                                    hintText: 'سبب استرجاع الطلب',
+                                                                    prefixIcon: Icons.note_alt_outlined,
+                                                                    keyboardType: TextInputType.text,
+                                                                  ),
+                                                                ],
+                                                              ),
                                                               content: Row(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
@@ -586,11 +629,20 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                                       ),
                                                                     ),
                                                                     onPressed: () {
-                                                                      cubit.changeStatusOrder(
-                                                                        context: context,
-                                                                        status: "استرجاع الطلب",
-                                                                        idOrder: cubit.getActiveOrdersModel![index].id.toString(),
-                                                                      );
+                                                                      if(noteCController.text.trim() == ''){
+                                                                        showToastInfo(
+                                                                          text: 'رجائا ادخل سبب الرفض',
+                                                                          context: context,
+                                                                        );
+                                                                      }else{
+                                                                        cubit.changeStatusOrder(
+                                                                          context: context,
+                                                                          status: "استرجاع الطلب",
+                                                                          note: noteCController.text.trim(),
+                                                                          idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                        );
+                                                                        navigateBack(context);
+                                                                      }
                                                                     },
                                                                     child: Text("نعم",style: TextStyle(color: Colors.white),),
                                                                   ),

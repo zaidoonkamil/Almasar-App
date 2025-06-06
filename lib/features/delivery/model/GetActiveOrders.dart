@@ -54,7 +54,7 @@ class GetActiveOrders {
     userId: json["userId"],
     vendorId: json["vendorId"],
     productId: json["productId"],
-    assignedDeliveryId: json["assignedDeliveryId"],
+    assignedDeliveryId: json["assignedDeliveryId"]??0,
     address: json["address"],
     phone: json["phone"],
     orderAmount: json["orderAmount"],
@@ -68,7 +68,7 @@ class GetActiveOrders {
     statusHistory: List<dynamic>.from(json["statusHistory"].map((x) => x)),
     items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
     user: User.fromJson(json["user"]),
-    delivery: Delivery.fromJson(json["delivery"]),
+    delivery: json["delivery"] != null ? Delivery.fromJson(json["delivery"]) : Delivery(id: 0, name: "", phone: "", location: "", createdAt: DateTime.now()),
     rating: json["rating"],
   );
 

@@ -177,12 +177,14 @@ class Delivery {
 class StatusHistory {
   int id;
   String status;
+  String note;
   DateTime changeDate;
   int orderId;
 
   StatusHistory({
     required this.id,
     required this.status,
+    required this.note,
     required this.changeDate,
     required this.orderId,
   });
@@ -190,6 +192,7 @@ class StatusHistory {
   factory StatusHistory.fromJson(Map<String, dynamic> json) => StatusHistory(
     id: json["id"],
     status: json["status"],
+    note: json["note"]??'',
     changeDate: DateTime.parse(json["changeDate"]),
     orderId: json["orderId"],
   );
@@ -197,6 +200,7 @@ class StatusHistory {
   Map<String, dynamic> toJson() => {
     "id": id,
     "status": status,
+    "note": note,
     "changeDate": changeDate.toIso8601String(),
     "orderId": orderId,
   };

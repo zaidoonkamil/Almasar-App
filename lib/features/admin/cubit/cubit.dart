@@ -399,15 +399,23 @@ class AdminCubit extends Cubit<AdminStates> {
     });
   }
 
-  changeStatusOrder({required BuildContext context, required String status, required String idOrder,}){
+  changeStatusOrder({required BuildContext context, required String status, required String idOrder, required String note,}){
     emit(ChangeStatusOrderLoadingState());
+    Map<String, dynamic> data;
+    if(status == "استرجاع الطلب" || status == "تبديل الطلب"){
+      data={
+        'status':status,
+        'note':note,
+      };
+    }else{
+      data={
+        'status':status,
+      };
+    }
     DioHelper.putData(
       url: '/orders/$idOrder/status',
       token: token,
-      data:
-      {
-        'status': status,
-      },
+      data: data,
     ).then((value) {
       getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
       showToastSuccess(
@@ -540,6 +548,43 @@ class AdminCubit extends Cubit<AdminStates> {
       }else {
         print("Unknown Error: $error");
       }
+    });
+  }
+
+  void addNotification({
+    required BuildContext context,
+    required String title,
+    required String desc,
+    required String role,}) async {
+    emit(AddNotificationLoadingState());
+    Map<String,dynamic> data;
+    String url;
+    if (role.isNotEmpty) {
+      url='/send-notification-to-role';
+      data={
+        'title': title,
+        'message': desc,
+        'role': role,
+      };
+    }else{
+      url='/send-notification';
+      data={
+        'title': title,
+        'message': desc,
+      };
+    }
+    DioHelper.postData(
+      url: url,
+      data: data,
+    ).then((value) {
+      emit(AddNotificationSuccessState());
+    }).catchError((error) {
+      if (error is DioException) {
+        showToastError(text: error.message!, context: context);
+      } else {
+        print("❌ Unknown Error: $error");
+      }
+      emit(AddNotificationErrorState());
     });
   }
 

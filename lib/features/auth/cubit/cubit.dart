@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../../core/network/remote/dio_helper.dart';
 
@@ -125,17 +126,11 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
 
-
-
   String? token;
   String? role;
   String? id;
 
-  signIn({
-    required String phone,
-    required String password,
-    required BuildContext context,
-  }){
+  signIn({required String phone, required String password, required BuildContext context,}){
     emit(LoginLoadingState());
     DioHelper.postData(
       url: '/login',
@@ -148,6 +143,7 @@ class AuthCubit extends Cubit<AuthStates> {
      token=value.data['token'];
      role=value.data['user']['role'];
      id=value.data['user']['id'].toString();
+     registerDevice(id!);
       emit(LoginSuccessState());
     }).catchError((error)
     {
@@ -161,6 +157,32 @@ class AuthCubit extends Cubit<AuthStates> {
         print("Unknown Error: $error");
       }
     });
+  }
+
+  Future<void> registerDevice(String userId) async {
+    final playerId = OneSignal.User.pushSubscription.id;
+
+    if (playerId != null) {
+      try {
+        final response = await DioHelper.postData(
+          url: "/register-device",
+          data: {
+            "user_id": userId,
+            "player_id": playerId,
+          },
+        );
+
+        if (response.statusCode == 200) {
+          print("✅ تم تسجيل الجهاز بنجاح");
+        } else {
+          print("❌ خطأ أثناء تسجيل الجهاز: ${response.statusMessage}");
+        }
+      } catch (error) {
+        print("❌ Error: $error");
+      }
+    } else {
+      print("❌ لم يتم الحصول على player_id من OneSignal");
+    }
   }
 
 

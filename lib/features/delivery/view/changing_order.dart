@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/circular_progress.dart';
+import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,11 +8,16 @@ import 'package:intl/intl.dart';
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
+import '../../../core/widgets/custom_text_field.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
 class ChangingOrdersDelivery extends StatelessWidget {
   const ChangingOrdersDelivery({super.key,});
+
+  static TextEditingController noteController = TextEditingController();
+  static TextEditingController noteRController = TextEditingController();
+  static TextEditingController noteCController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,11 @@ class ChangingOrdersDelivery extends StatelessWidget {
         listener: (context,state){
           if(state is ChangeStatusOrderSuccessState){
             navigateBack(context);
+          }
+          if(state is DeliveryAcceptSuccessState){
+            noteController.text='';
+            noteCController.text='';
+            noteRController.text='';
           }
         },
         builder: (context,state){
@@ -366,67 +377,129 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 const Icon(Icons.phone_outlined, color: Colors.grey),
                                               ],
                                             ),
-                                            const SizedBox(height: 16),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            cubit.getActiveOrdersModel![index].isAccepted == true?Container(): Column(
                                               children: [
-                                                ConditionalBuilder(
-                                                  condition: state is! DeliveryAcceptLoadingState,
-                                                    builder: (c)=> GestureDetector(
-                                                      onTap:(){
-                                                        cubit.deliveryAccept(
-                                                            context: context,
-                                                            accept: true,
-                                                            idOrder: cubit.getActiveOrdersModel![index].id.toString());
-                                                      },
-                                                      child: Container(
-                                                        width: 100,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.green.withOpacity(0.8),
-                                                          borderRadius: BorderRadius.circular(12),
-                                                        ),
-                                                        child:Text(
-                                                          'قبول',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 16,
+                                                const SizedBox(height: 16),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    ConditionalBuilder(
+                                                      condition: state is! DeliveryAcceptLoadingState,
+                                                      builder: (c)=> GestureDetector(
+                                                        onTap:(){
+                                                          cubit.deliveryAccept(
+                                                              context: context,
+                                                              accept: true,
+                                                              rejectionReason: '',
+                                                              idOrder: cubit.getActiveOrdersModel![index].id.toString());
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.green.withOpacity(0.8),
+                                                            borderRadius: BorderRadius.circular(12),
                                                           ),
-                                                          textAlign: TextAlign.center,
+                                                          child:Text(
+                                                            'قبول',
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w600,
+                                                              fontSize: 16,
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
                                                         ),
                                                       ),
+                                                      fallback: (c)=>CircularProgressIndicator(color:Colors.green.withOpacity(0.8),),
                                                     ),
-                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.green.withOpacity(0.8),),
-                                                ),
-                                                ConditionalBuilder(
-                                                  condition: state is! DeliveryAcceptLoadingState,
-                                                    builder: (c)=> GestureDetector(
-                                                      onTap:(){
-                                                        cubit.deliveryAccept(
+                                                    ConditionalBuilder(
+                                                      condition: state is! DeliveryAcceptLoadingState,
+                                                      builder: (c)=> GestureDetector(
+                                                        onTap:(){
+                                                          showDialog(
                                                             context: context,
-                                                            accept: false,
-                                                            idOrder: cubit.getActiveOrdersModel![index].id.toString());
-                                                      },
-                                                      child: Container(
-                                                        width: 100,
-                                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.red.withOpacity(0.8),
-                                                          borderRadius: BorderRadius.circular(12),
-                                                        ),
-                                                        child:Text(
-                                                          'رفض',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 16,
+                                                            builder: (BuildContext context) {
+                                                              return AlertDialog(
+                                                                backgroundColor:  Color(0xFFF5F5F8),
+                                                                shape: RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(8),
+                                                                ),
+                                                                title: Column(
+                                                                  children: [
+                                                                    Text("! رجائا ادخل سبب رفض الطلب ",
+                                                                      style: TextStyle(fontSize: 18),
+                                                                      textAlign: TextAlign.center,),
+                                                                    SizedBox(height: 20,),
+                                                                    CustomTextField(
+                                                                      controller: noteController,
+                                                                      hintText: 'سبب رفض الطلب',
+                                                                      prefixIcon: Icons.note_alt_outlined,
+                                                                      keyboardType: TextInputType.text,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                content: Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    TextButton(
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                      child: Text("إلغاء",style: TextStyle(color: primaryColor),),
+                                                                    ),
+                                                                    ElevatedButton(
+                                                                      style: ElevatedButton.styleFrom(
+                                                                        backgroundColor: primaryColor,
+                                                                        shape: RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.circular(8),
+                                                                        ),
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        if(noteController.text.trim() == ''){
+                                                                          showToastInfo(
+                                                                              text: 'رجائا ادخل سبب الرفض',
+                                                                              context: context);
+                                                                        }else{
+                                                                          cubit.deliveryAccept(
+                                                                              context: context,
+                                                                              accept: false,
+                                                                              rejectionReason: noteController.text.trim(),
+                                                                              idOrder: cubit.getActiveOrdersModel![index].id.toString());
+                                                                          navigateBack(context);
+                                                                        }
+
+                                                                      },
+                                                                      child: Text("ارسال",style: TextStyle(color: Colors.white),),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.red.withOpacity(0.8),
+                                                            borderRadius: BorderRadius.circular(12),
                                                           ),
-                                                          textAlign: TextAlign.center,
+                                                          child:Text(
+                                                            'رفض',
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w600,
+                                                              fontSize: 16,
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
                                                         ),
                                                       ),
+                                                      fallback: (c)=>CircularProgressIndicator(color:Colors.red.withOpacity(0.8),),
                                                     ),
-                                                  fallback: (c)=>CircularProgressIndicator(color:Colors.red.withOpacity(0.8),),
+                                                  ],
                                                 ),
                                               ],
                                             ),
@@ -459,7 +532,7 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
-                                                            backgroundColor: Colors.white,
+                                                            backgroundColor:  Color(0xFFF5F5F8),
                                                             shape: RoundedRectangleBorder(
                                                               borderRadius: BorderRadius.circular(8),
                                                             ),
@@ -487,6 +560,7 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                                         context: context,
                                                                         status: "تم التسليم",
                                                                         idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                      note: '',
                                                                     );
                                                                     },
                                                                   child: Text("نعم",style: TextStyle(color: Colors.white),),
@@ -526,13 +600,24 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
-                                                            backgroundColor: Colors.white,
+                                                            backgroundColor:  Color(0xFFF5F5F8),
                                                             shape: RoundedRectangleBorder(
                                                               borderRadius: BorderRadius.circular(8),
                                                             ),
-                                                            title: Text("هل حقا ترغب في تغيير الحالة الى (تبديل الطلب) ؟",
-                                                              style: TextStyle(fontSize: 18),
-                                                              textAlign: TextAlign.center,),
+                                                            title: Column(
+                                                              children: [
+                                                                Text("هل حقا ترغب في تغيير الحالة الى (تبديل الطلب) ؟",
+                                                                  style: TextStyle(fontSize: 18),
+                                                                  textAlign: TextAlign.center,),
+                                                                SizedBox(height: 20,),
+                                                                CustomTextField(
+                                                                  controller: noteRController,
+                                                                  hintText: 'سبب تبديل الطلب',
+                                                                  prefixIcon: Icons.note_alt_outlined,
+                                                                  keyboardType: TextInputType.text,
+                                                                ),
+                                                              ],
+                                                            ),
                                                             content: Row(
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
@@ -550,11 +635,20 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                                     ),
                                                                   ),
                                                                   onPressed: () {
-                                                                    cubit.changeStatusOrder(
-                                                                      context: context,
-                                                                      status: "تبديل الطلب",
-                                                                      idOrder: cubit.getActiveOrdersModel![index].id.toString(),
-                                                                    );
+                                                                    if(noteRController.text.trim() == ''){
+                                                                      showToastInfo(
+                                                                        text: 'رجائا ادخل سبب الرفض',
+                                                                        context: context,
+                                                                      );
+                                                                    }else{
+                                                                      cubit.changeStatusOrder(
+                                                                        context: context,
+                                                                        status: "تبديل الطلب",
+                                                                        note: noteRController.text.trim(),
+                                                                        idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                      );
+                                                                      navigateBack(context);
+                                                                    }
                                                                   },
                                                                   child: Text("نعم",style: TextStyle(color: Colors.white),),
                                                                 ),
@@ -592,13 +686,24 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                         context: context,
                                                         builder: (BuildContext context) {
                                                           return AlertDialog(
-                                                            backgroundColor: Colors.white,
+                                                            backgroundColor:  Color(0xFFF5F5F8),
                                                             shape: RoundedRectangleBorder(
                                                               borderRadius: BorderRadius.circular(8),
                                                             ),
-                                                            title: Text("هل حقا ترغب في تغيير الحالة الى (استرجاع الطلب) ؟",
-                                                              style: TextStyle(fontSize: 18),
-                                                              textAlign: TextAlign.center,),
+                                                            title: Column(
+                                                              children: [
+                                                                Text("هل حقا ترغب في تغيير الحالة الى (استرجاع الطلب) ؟",
+                                                                  style: TextStyle(fontSize: 18),
+                                                                  textAlign: TextAlign.center,),
+                                                                SizedBox(height: 20,),
+                                                                CustomTextField(
+                                                                  controller: noteCController,
+                                                                  hintText: 'سبب استرجاع الطلب',
+                                                                  prefixIcon: Icons.note_alt_outlined,
+                                                                  keyboardType: TextInputType.text,
+                                                                ),
+                                                              ],
+                                                            ),
                                                             content: Row(
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
@@ -616,11 +721,20 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                                     ),
                                                                   ),
                                                                   onPressed: () {
-                                                                    cubit.changeStatusOrder(
-                                                                      context: context,
-                                                                      status: "استرجاع الطلب",
-                                                                      idOrder: cubit.getActiveOrdersModel![index].id.toString(),
-                                                                    );
+                                                                    if(noteCController.text.trim() == ''){
+                                                                      showToastInfo(
+                                                                          text: 'رجائا ادخل سبب الرفض',
+                                                                          context: context,
+                                                                      );
+                                                                    }else{
+                                                                      cubit.changeStatusOrder(
+                                                                        context: context,
+                                                                        status: "استرجاع الطلب",
+                                                                        note: noteCController.text.trim(),
+                                                                        idOrder: cubit.getActiveOrdersModel![index].id.toString(),
+                                                                      );
+                                                                      navigateBack(context);
+                                                                    }
                                                                   },
                                                                   child: Text("نعم",style: TextStyle(color: Colors.white),),
                                                                 ),
@@ -652,7 +766,6 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-
                                           ],
                                         ),
                                       ),

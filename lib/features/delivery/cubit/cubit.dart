@@ -292,19 +292,33 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     });
   }
 
-  deliveryAccept({required BuildContext context, required bool accept, required String idOrder,}){
+  deliveryAccept({required BuildContext context, required bool accept, required String idOrder,required String rejectionReason,}){
     emit(DeliveryAcceptLoadingState());
+    Map<String, dynamic> data;
+    if(accept == false){
+      data = {
+            'accept': accept,
+            'deliveryId': id,
+            'rejectionReason': rejectionReason,
+          };
+    }else{
+      data = {
+            'accept': accept,
+            'deliveryId': id,
+          };
+    }
+
     DioHelper.putData(
       url: '/order/$idOrder/delivery-accept',
       token: token,
-      data:
-      {
-        'accept': accept,
-        'deliveryId': id,
-      },
+      data: data,
     ).then((value) {
       if (accept==false) {
         getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
+      }else{
+        getActiveOrdersModel?.firstWhere(
+              (order) => order.id.toString() == idOrder,
+        ).isAccepted = true;
       }
       showToastSuccess(
         text:"تمت العملية بنجاح",
@@ -325,15 +339,24 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     });
   }
 
-  changeStatusOrder({required BuildContext context, required String status, required String idOrder,}){
+  changeStatusOrder({required BuildContext context, required String status, required String idOrder, required String note,}){
     emit(ChangeStatusOrderLoadingState());
+    Map<String, dynamic> data;
+    if(status == "استرجاع الطلب" || status == "تبديل الطلب"){
+      data={
+        'status':status,
+        'note':note,
+      };
+    }else{
+       data={
+        'status':status,
+      };
+    }
+
     DioHelper.putData(
       url: '/orders/$idOrder/status',
       token: token,
-      data:
-      {
-        'status': status,
-      },
+      data: data,
     ).then((value) {
       getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
       showToastSuccess(

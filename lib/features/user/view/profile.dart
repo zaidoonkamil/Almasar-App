@@ -74,7 +74,6 @@ class ProfileUser extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text('سلام عليكم',style: TextStyle(fontSize: 20,color: Colors.redAccent,),),
                                     Text(
                                       cubit.profileModel!.name,
                                       style: TextStyle(
