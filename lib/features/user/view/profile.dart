@@ -1,4 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:delivery_app/core/%20navigation/navigation.dart';
+import 'package:delivery_app/features/auth/view/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -229,7 +231,7 @@ class ProfileUser extends StatelessWidget {
                     Column(
                       children: [
                         SizedBox(height: 90,),
-                        GestureDetector(
+                        token !=''? GestureDetector(
                           onTap: (){
                             showDialog(
                               context: context,
@@ -289,9 +291,34 @@ class ProfileUser extends StatelessWidget {
                               ],
                             ),
                           ),
+                        ):
+                        GestureDetector(
+                          onTap: (){
+                            navigateTo(context, Login());
+                          },
+                          child: Container(
+                            height: 41,
+                            width: double.maxFinite,
+                            color: primaryColor.withOpacity(0.1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset('assets/images/Group 6892.png'),
+                                Text(
+                                  'تسجيل الدخول',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 20,height: 10,),
+                              ],
+                            ),
+                          ),
                         ),
                         SizedBox(height: 10,),
-                        GestureDetector(
+                        token !=''?GestureDetector(
                           onTap: (){
                             showDialog(
                               context: context,
@@ -354,7 +381,8 @@ class ProfileUser extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ),
+                        ):
+                        Container(),
                       ],
                     ),
                   ],

@@ -227,7 +227,7 @@ class HomeAdmin extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text('الاحصائية اليومية',
-                                          style: TextStyle(color: primaryColor,fontSize: 16 ),
+                                          style: TextStyle(color: primaryColor,fontSize: 14 ),
                                         ),
                                       ),
                                     ),
@@ -255,7 +255,7 @@ class HomeAdmin extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text('الاحصائية الكلية',
-                                          style: TextStyle(color: Colors.white,fontSize: 16 ),),
+                                          style: TextStyle(color: Colors.white,fontSize: 14 ),),
                                       ),
                                     ),
                                   ),

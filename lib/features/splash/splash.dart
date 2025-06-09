@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(CacheHelper.getData(key: 'token') == null){
         token='';
         if (onBoarding != null) {
-          widget = const Login();
+          widget = const BottomNavBarUser();
         } else {
           widget = OnboardingScreen();
         }

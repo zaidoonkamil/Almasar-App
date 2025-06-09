@@ -340,10 +340,10 @@ class AdminCubit extends Cubit<AdminStates> {
   int currentPage = 1;
   bool isLastPage = false;
   AllOrder? allOrderModel;
-  void allOrder({required String page,required BuildContext context,}) {
+  void allOrder({required String page,required String url,required BuildContext context,}) {
     emit(GetAllOrderLoadingState());
     DioHelper.getData(
-      url: '/admin/all-orders?$page',
+      url: '$url?$page',
     ).then((value) {
       allOrderModel = AllOrder.fromJson(value.data);
       orders.addAll(allOrderModel!.orders);

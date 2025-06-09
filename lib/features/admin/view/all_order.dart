@@ -11,12 +11,14 @@ import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
 class AllOrdersAdmin extends StatelessWidget {
-  const AllOrdersAdmin({super.key});
+  const AllOrdersAdmin({super.key, required this.url});
+
+  final String url;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AdminCubit()..allOrder(page: '1',context: context,),
+      create: (BuildContext context) => AdminCubit()..allOrder(page: '1',context: context, url: url,),
       child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){},
         builder: (context,state){
@@ -65,7 +67,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                     String formattedDate = DateFormat('yyyy/M/d').format(dateTime);
                                     String formattedTime = DateFormat('h:mm a').format(dateTime);
                                     if (index == cubit.orders.length - 1 && !cubit.isLastPage) {
-                                      cubit.allOrder(page: (cubit.currentPage + 1).toString(),context:context);
+                                      cubit.allOrder(page: (cubit.currentPage + 1).toString(),context:context, url: url);
                                     }
                                     return  Container(
                                       margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),

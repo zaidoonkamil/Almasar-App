@@ -24,6 +24,9 @@ class UserCubit extends Cubit<UserStates> {
   }
 
   void verifyToken({required BuildContext context}) {
+    if(token == ''){
+      return emit(VerifyTokenErrorState());
+    }
     emit(VerifyTokenLoadingState());
     DioHelper.getData(
         url: '/verify-token',
@@ -73,6 +76,18 @@ class UserCubit extends Cubit<UserStates> {
 
   ProfileModel? profileModel;
   void getProfile({required BuildContext context,}) {
+    if(token == ''){
+      profileModel = ProfileModel(
+        id: 1,
+        name: "ضيف",
+        phone: "",
+        isActive: false,
+        location: "الرياض - حي النخيل",
+        createdAt: DateTime.now(),
+        images: [],
+      );
+      return emit(GetProfileSuccessState());
+    }
     emit(GetProfileLoadingState());
     DioHelper.getData(
       url: '/users/$id',

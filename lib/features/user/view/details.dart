@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:delivery_app/core/widgets/constant.dart';
+import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -337,10 +339,14 @@ class Details extends StatelessWidget {
                                 SizedBox(height: 20,),
                                 GestureDetector(
                                   onTap: (){
-                                    cubit.addProductsToCart(
-                                      productId: id ,
-                                      context: context,
-                                    );
+                                    if(token != ''){
+                                      cubit.addProductsToCart(
+                                        productId: id ,
+                                        context: context,
+                                      );
+                                    }else{
+                                      showToastInfo(text: 'سجل الدخول اولا', context: context);
+                                    }
                                   },
                                   child: Container(
                                     width: double.maxFinite,

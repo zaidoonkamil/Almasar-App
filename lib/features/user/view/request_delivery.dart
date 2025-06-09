@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:delivery_app/core/widgets/constant.dart';
 import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/custom_text_field.dart';
+import '../../auth/view/login.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -41,47 +43,47 @@ class RequestDelivery extends StatelessWidget {
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color(0xFFF2F2F7),
-              body: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.maxFinite,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 6,
-                            spreadRadius: 2,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'شركة المسار',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const Text(
-                            'للتوصيل الداخلي السريع',
-                            style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
+              body: Column(
+                children: [
+                  Container(
+                    width: double.maxFinite,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 6,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
                     ),
-                    Padding(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'شركة المسار',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const Text(
+                          'للتوصيل الداخلي السريع',
+                          style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  token !=''? SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Form(
                         key: formKey,
@@ -227,8 +229,40 @@ class RequestDelivery extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ):
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            navigateTo(context, Login());
+                          },
+                          child: Container(
+                            width: 180,
+                            height: 48,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                    offset: const Offset(5, 5),
+                                  ),
+                                ],
+                                borderRadius:  BorderRadius.circular(30),
+                                color: primaryColor
+                            ),
+                            child: Center(
+                              child: Text('تسجيل الدخول',
+                                style: TextStyle(color: Colors.white,fontSize: 16 ),),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           );

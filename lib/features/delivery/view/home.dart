@@ -185,7 +185,7 @@ class HomeDelivery extends StatelessWidget {
                                           navigateTo(context, TodayDashboard());
                                         },
                                         child: Container(
-                                          height: 200,
+                                          height: 150,
                                           decoration: BoxDecoration(
                                             boxShadow: [
                                               BoxShadow(
@@ -200,7 +200,7 @@ class HomeDelivery extends StatelessWidget {
                                           ),
                                           child: Center(
                                             child: Text('الاحصائية اليومية',
-                                              style: TextStyle(color: primaryColor,fontSize: 16 ),
+                                              style: TextStyle(color: primaryColor,fontSize: 14 ),
                                             ),
                                           ),
                                         ),
@@ -213,7 +213,7 @@ class HomeDelivery extends StatelessWidget {
                                           navigateTo(context, DashboardDelivery());
                                         },
                                         child: Container(
-                                          height: 200,
+                                          height: 150,
                                           decoration: BoxDecoration(
                                               boxShadow: [
                                                 BoxShadow(
@@ -228,7 +228,7 @@ class HomeDelivery extends StatelessWidget {
                                           ),
                                           child: Center(
                                             child: Text('الاحصائية الكلية',
-                                              style: TextStyle(color: Colors.white,fontSize: 16 ),),
+                                              style: TextStyle(color: Colors.white,fontSize: 14 ),),
                                           ),
                                         ),
                                       ),

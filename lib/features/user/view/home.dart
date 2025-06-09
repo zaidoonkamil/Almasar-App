@@ -30,7 +30,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => UserCubit()
-        ..getAds(context: context)..getProfile(context: context)..verifyToken(context: context)
+        ..getAds(context: context)
+        ..getProfile(context: context)
+        ..verifyToken(context: context)
         ..getVendor(page: '1', context: context),
       child: BlocConsumer<UserCubit,UserStates>(
         listener: (context,state){},
@@ -200,7 +202,7 @@ class Home extends StatelessWidget {
                                               },
                                               fallback: (c)=> Padding(
                                                 padding: const EdgeInsets.symmetric(vertical: 60.0),
-                                                child: CircularProgressIndicator(color: primaryColor,),
+                                                child: Container(),
                                               ),
                                             ),
                                           ],
@@ -271,7 +273,7 @@ class Home extends StatelessWidget {
                                                                       maxLines: 1,
                                                                       overflow: TextOverflow.ellipsis,
                                                                       textAlign: TextAlign.center,
-                                                                      style: TextStyle(color: Colors.white,fontSize: 16),),
+                                                                      style: TextStyle(color: Colors.white,fontSize: 14),),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -306,7 +308,7 @@ class Home extends StatelessWidget {
                                                 ),
                                               );
                                             },
-                                            fallback: (c)=>Center(child: Text('لا يوجد بيانات ليتم عرضها'))),
+                                            fallback: (c)=>Center(child: CircularProgress())),
                                         SizedBox(height: 30,),
                                       ],
                                     ),

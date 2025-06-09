@@ -94,7 +94,7 @@ class OrderAdmin extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                       navigateTo(context, AllOrdersAdmin());
+                       navigateTo(context, AllOrdersAdmin(url: '/admin/all-orders',));
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),
@@ -114,6 +114,35 @@ class OrderAdmin extends StatelessWidget {
                         child: Center(
                           child: Text('الطلبيات المقبولة',
                             style: TextStyle(color: Colors.white,fontSize: 16 ),),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: (){
+                        navigateTo(context, AllOrdersAdmin(url: '/admin/returned-or-exchanged-orders',));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 24),
+                        height: 200,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.3),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(5, 5),
+                            ),
+                          ],
+                          borderRadius:  BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Text('الطلبيات المعلقة',
+                            style: TextStyle(color: primaryColor,fontSize: 16 ),
+                          ),
                         ),
                       ),
                     ),

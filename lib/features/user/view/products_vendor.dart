@@ -119,7 +119,6 @@ class ProductsVendor extends StatelessWidget {
                                       ),
                                       SizedBox(height: 6,),
                                       Text(name,style: TextStyle(fontSize: 18),),
-                                      Text(phone),
                                       SizedBox(height: 16,),
                                       Container(
                                         margin: EdgeInsets.symmetric(horizontal: 10),

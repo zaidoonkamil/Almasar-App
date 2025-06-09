@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/network/local/cache_helper.dart';
 import '../../core/styles/themes.dart';
+import '../user/navigation_bar_user.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -44,7 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
     } else {
       CacheHelper.saveData(key: 'onBoarding',value: true );
-      navigateAndFinish(context, Login());
+      navigateAndFinish(context, BottomNavBarUser());
     }
   }
 
@@ -63,7 +64,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   GestureDetector(
                     onTap: (){
                       CacheHelper.saveData(key: 'onBoarding',value: true );
-                      navigateAndFinish(context, Login());
+                      navigateAndFinish(context, BottomNavBarUser());
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),

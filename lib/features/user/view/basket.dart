@@ -1,4 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:delivery_app/core/widgets/constant.dart';
+import 'package:delivery_app/features/auth/view/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -323,7 +325,32 @@ class Basket extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircularProgress(),
+                               token != '' ? CircularProgress():
+                               GestureDetector(
+                                 onTap: (){
+                                   navigateTo(context, Login());
+                                 },
+                                 child: Container(
+                                   width: 180,
+                                   height: 48,
+                                   decoration: BoxDecoration(
+                                       boxShadow: [
+                                         BoxShadow(
+                                           color: Colors.black.withOpacity(0.2),
+                                           blurRadius: 10,
+                                           spreadRadius: 2,
+                                           offset: const Offset(5, 5),
+                                         ),
+                                       ],
+                                       borderRadius:  BorderRadius.circular(30),
+                                       color: primaryColor
+                                   ),
+                                   child: Center(
+                                     child: Text('تسجيل الدخول',
+                                       style: TextStyle(color: Colors.white,fontSize: 16 ),),
+                                   ),
+                                 ),
+                               ),
                               ],
                             ),
                           ),
