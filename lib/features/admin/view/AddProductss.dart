@@ -23,6 +23,7 @@ class AddProductss extends StatelessWidget {
   static TextEditingController descriptionController = TextEditingController();
   static TextEditingController priceController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
