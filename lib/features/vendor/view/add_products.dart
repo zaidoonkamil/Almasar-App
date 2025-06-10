@@ -14,8 +14,9 @@ import '../../../core/widgets/custom_text_field.dart';
 import '../cubit/cubit.dart';
 
 class AddProducts extends StatelessWidget {
-  const AddProducts({super.key});
+  const AddProducts({super.key, required this.idVendor});
 
+  final String idVendor;
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   static TextEditingController titleController = TextEditingController();
   static TextEditingController descriptionController = TextEditingController();
@@ -159,6 +160,7 @@ class AddProducts extends StatelessWidget {
                                         description: descriptionController.text.trim(),
                                         price: priceController.text.trim(),
                                         context: context,
+                                        idVendor: idVendor,
                                       );
                                   }
                                 },

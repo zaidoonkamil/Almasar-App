@@ -2,18 +2,22 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:delivery_app/features/admin/navigation_bar_admin.dart';
 import 'package:delivery_app/features/delivery/view/all_order.dart';
+import 'package:delivery_app/features/vendor/view/add_products.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/custom_text_field.dart';
+import '../../user/view/products_vendor.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
+import 'AddProductss.dart';
 
 class DetailsPerson extends StatelessWidget {
   const DetailsPerson({
     super.key,
+    required this.image,
     required this.id,
     required this.name,
     required this.phone,
@@ -23,6 +27,7 @@ class DetailsPerson extends StatelessWidget {
     required this.sponsorshipAmount,
   });
 
+  final String image;
   final String id;
   final String name;
   final String phone;
@@ -368,6 +373,66 @@ class DetailsPerson extends StatelessWidget {
                       fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
                     ),
                     SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: (){
+                        navigateTo(context,
+                          ProductsVendor(
+                          idVendor: id,
+                          image: image,
+                          name: name,
+                          phone: phone,),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        height: 48,
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                                offset: const Offset(5, 5),
+                              ),
+                            ],
+                            borderRadius:  BorderRadius.circular(12),
+                            color: primaryColor
+                        ),
+                        child: Center(
+                          child: Text('رؤية المنتجات',
+                            style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: (){
+                        navigateTo(context, AddProductss(
+                          idVendor: id,));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        height: 48,
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                                offset: const Offset(5, 5),
+                              ),
+                            ],
+                            borderRadius:  BorderRadius.circular(12),
+                            color: primaryColor
+                        ),
+                        child: Center(
+                          child: Text('اضافة منتج',
+                            style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

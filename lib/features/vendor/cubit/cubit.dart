@@ -149,7 +149,7 @@ class VendorCubit extends Cubit<VendorStates> {
     }
   }
 
-  addProducts({required String title, required String description, required String price,required BuildContext context,}) async {
+  addProducts({required String title, required String description, required String idVendor, required String price,required BuildContext context,}) async {
     emit(AddProductsLoadingState());
 
       if (selectedImages.isEmpty) {
@@ -180,7 +180,7 @@ class VendorCubit extends Cubit<VendorStates> {
       }
 
       DioHelper.postData(
-        url: '/vendor/$id/products',
+        url: '/vendor/$idVendor/products',
         data: formData,
         options: Options(headers: {"Content-Type": "multipart/form-data"}),
       ).then((value) {

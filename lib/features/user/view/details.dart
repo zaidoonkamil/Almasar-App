@@ -340,10 +340,15 @@ class Details extends StatelessWidget {
                                 GestureDetector(
                                   onTap: (){
                                     if(token != ''){
-                                      cubit.addProductsToCart(
-                                        productId: id ,
-                                        context: context,
-                                      );
+                                      if(adminOrUser == 'admin'){
+                                        showToastInfo(text: 'سجل عن طريق تطبييق المستخدم', context: context);
+                                      }else{
+                                        cubit.addProductsToCart(
+                                          productId: id ,
+                                          context: context,
+                                        );
+                                      }
+
                                     }else{
                                       showToastInfo(text: 'سجل الدخول اولا', context: context);
                                     }

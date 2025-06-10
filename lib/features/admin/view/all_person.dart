@@ -96,6 +96,12 @@ class AllPerson extends StatelessWidget {
                                       children: [
                                         GestureDetector(
                                           onTap:(){
+                                            String image;
+                                            if(cubit.getNameUserModel![index].role == 'vendor'){
+                                              image=cubit.getNameUserModel![index].images[0];
+                                            }else{
+                                              image='';
+                                            }
                                             navigateTo(context, DetailsPerson(
                                                 id: cubit.getNameUserModel![index].id.toString(),
                                                 name: cubit.getNameUserModel![index].name,
@@ -104,6 +110,7 @@ class AllPerson extends StatelessWidget {
                                               role: cubit.getNameUserModel![index].role,
                                                 createdAt:  cubit.getNameUserModel![index].createdAt.toString(),
                                               sponsorshipAmount: cubit.getNameUserModel![index].sponsorshipAmount.toString(),
+                                              image: image,
                                             ),
                                             );
                                           },

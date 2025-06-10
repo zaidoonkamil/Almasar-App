@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:delivery_app/core/widgets/constant.dart';
 import 'package:delivery_app/features/vendor/view/add_products.dart';
 import 'package:delivery_app/features/vendor/view/home.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class MyProducts extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: GestureDetector(
                           onTap: (){
-                            navigateTo(context, AddProducts());
+                            navigateTo(context, AddProducts(idVendor: id,));
                           },
                           child: Icon(Icons.add,color: Colors.black,size: 28,)),
                     )

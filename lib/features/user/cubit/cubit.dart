@@ -107,6 +107,7 @@ class UserCubit extends Cubit<UserStates> {
     });
   }
 
+
   addOrder({
     required String address,
     required String phone,
@@ -317,6 +318,31 @@ class UserCubit extends Cubit<UserStates> {
         token: token
     ).then((value) {
       getCart(context: context);
+      showToastSuccess(
+        text: 'تمت عملية الحذف بنجاح',
+        context: context,
+      );
+      emit(DeleteCartSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(
+          text: error.response?.data["error"],
+          context: context,
+        );
+        emit(DeleteCartErrorStates());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+  void deleteProductsInOfVendor({required BuildContext context,required String vendorId,required String productId,}) {
+    emit(DeleteCartLoadingState());
+    DioHelper.deleteData(
+        url: '/vendor/$vendorId/products/$productId',
+        token: token
+    ).then((value) {
+      getProductsVendor(page: '1', context: context, id: vendorId);
       showToastSuccess(
         text: 'تمت عملية الحذف بنجاح',
         context: context,
