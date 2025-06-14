@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/%20navigation/navigation.dart';
+import 'package:delivery_app/core/widgets/custom_appbar.dart';
 import 'package:delivery_app/features/auth/view/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,42 +29,7 @@ class ProfileUser extends StatelessWidget {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.maxFinite,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 6,
-                            spreadRadius: 2,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'شركة المسار',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const Text(
-                            'للتوصيل الداخلي السريع',
-                            style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    CustomAppbar(),
                     SizedBox(height: 64,),
                     ConditionalBuilder(
                         condition: cubit.profileModel != null,
@@ -242,7 +208,7 @@ class ProfileUser extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   title: Text("هل حقا ترغب في تسجيل الخروج ؟",
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(fontSize: 16),
                                     textAlign: TextAlign.center,),
                                   content: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -329,7 +295,7 @@ class ProfileUser extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   title: Text("هل حقا ترغب في حذف الحساب ؟",
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(fontSize: 16),
                                     textAlign: TextAlign.center,),
                                   content: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

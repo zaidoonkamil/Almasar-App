@@ -16,6 +16,7 @@ import '../../../../core/widgets/custom_form_field.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/widgets/StatCard.dart';
+import '../../../core/widgets/custom_appbar.dart';
 import '../../user/cubit/cubit.dart';
 import '../../user/cubit/states.dart';
 
@@ -40,53 +41,13 @@ class ProfileVendor extends StatelessWidget {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.maxFinite,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 6,
-                            spreadRadius: 2,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'شركة المسار',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const Text(
-                            'للتوصيل الداخلي السريع',
-                            style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    CustomAppbarBack(),
                     SizedBox(height: 64,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          GestureDetector(
-                              onTap: (){
-                                navigateBack(context);
-                              },
-                              child: Icon(Icons.arrow_back_ios_new,size: 28,)),
                           Row(
                             children: [
                               Column(

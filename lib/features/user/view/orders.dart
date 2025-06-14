@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
+import '../../../core/widgets/custom_appbar.dart';
 import '../../auth/view/login.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
@@ -29,42 +30,7 @@ class Orders extends StatelessWidget {
               backgroundColor: const Color(0xFFF5F5F8),
               body: Column(
                 children: [
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 6,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'شركة المسار',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const Text(
-                          'للتوصيل الداخلي السريع',
-                          style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  CustomAppbar(),
                   token != ''? ConditionalBuilder(
                     condition: cubit.orderModel != null,
                     builder: (c){
@@ -182,7 +148,8 @@ class Orders extends StatelessWidget {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Text( cubit.orderModel!.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                          Text( cubit.orderModel!.orders[index].phone,
+                                                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
                                                           const SizedBox(width: 6),
                                                           const Icon(Icons.person, color: Colors.grey),
                                                         ],
@@ -193,7 +160,8 @@ class Orders extends StatelessWidget {
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
-                                                      Expanded(child: Text(cubit.orderModel!.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,)),
+                                                      Expanded(child: Text(cubit.orderModel!.orders[index].address,
+                                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,)),
                                                       const SizedBox(width: 6),
                                                       const Icon(Icons.location_on, color: Colors.grey),
                                                     ],
@@ -209,7 +177,7 @@ class Orders extends StatelessWidget {
                                                             'د.ع ',
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 18,
+                                                              fontSize: 16,
                                                               color: primaryColor,
                                                             ),
                                                           ),
@@ -217,7 +185,7 @@ class Orders extends StatelessWidget {
                                                             cubit.orderModel!.orders[index].deliveryFee.toString(),
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 18,
+                                                              fontSize: 16,
                                                               // color: Color(0xFFFE6B35),
                                                             ),
                                                           ),
@@ -232,7 +200,7 @@ class Orders extends StatelessWidget {
                                                             ' د.ع ',
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 18,
+                                                              fontSize: 16,
                                                               color: primaryColor,
                                                             ),
                                                           ),
@@ -240,7 +208,7 @@ class Orders extends StatelessWidget {
                                                             cubit.orderModel!.orders[index].orderAmount.toString(),
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 18,
+                                                              fontSize: 16,
                                                               // color: Color(0xFFFE6B35),
                                                             ),
                                                           ),
@@ -260,7 +228,7 @@ class Orders extends StatelessWidget {
                                                         style: const TextStyle(
                                                           color: Colors.black54,
                                                           fontWeight: FontWeight.bold,
-                                                          fontSize: 18,
+                                                          fontSize: 16,
                                                           // color: Color(0xFFFE6B35),
                                                         ),
                                                       ),
@@ -274,7 +242,7 @@ class Orders extends StatelessWidget {
                                                           textAlign: TextAlign.end,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
-                                                            fontSize: 18,
+                                                            fontSize: 16,
                                                             // color: Color(0xFFFE6B35),
                                                           ),
                                                         ),
@@ -284,7 +252,7 @@ class Orders extends StatelessWidget {
                                                           textAlign: TextAlign.end,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
-                                                            fontSize: 18,
+                                                            fontSize: 16,
                                                             // color: Color(0xFFFE6B35),
                                                           ),
                                                         ),
@@ -352,7 +320,7 @@ class Orders extends StatelessWidget {
                                                                       Row(
                                                                         mainAxisAlignment: MainAxisAlignment.end,
                                                                         children: [
-                                                                          Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 18),),
+                                                                          Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 16),),
                                                                           SizedBox(width: 2,),
                                                                           Text('#',style: TextStyle(fontSize: 18),),
                                                                         ],

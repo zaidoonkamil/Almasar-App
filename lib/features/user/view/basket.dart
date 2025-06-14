@@ -9,6 +9,7 @@ import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/circular_progress.dart';
+import '../../../core/widgets/custom_appbar.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'complete_shopping.dart';
@@ -38,42 +39,7 @@ class Basket extends StatelessWidget {
                                 SingleChildScrollView(
                                   child: Column(
                                     children: [
-                                      Container(
-                                        width: double.maxFinite,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(0.1),
-                                              blurRadius: 6,
-                                              spreadRadius: 2,
-                                              offset: const Offset(0, 5),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              'شركة المسار',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                            const Text(
-                                              'للتوصيل الداخلي السريع',
-                                              style: TextStyle(
-                                                fontSize: 8,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      CustomAppbar(),
                                       SizedBox(height: 12,),
                                       ListView.builder(
                                           shrinkWrap: true,
@@ -117,7 +83,7 @@ class Basket extends StatelessWidget {
                                                         GestureDetector(
                                                             onTap: (){
                                                               cubit.deleteProductsInCart( context: context,
-                                                                  id: cubit.getCartModel[index].productt.id.toString());
+                                                                  id: cubit.getCartModel[index].id.toString());
                                                             },
                                                             child: Image.asset('assets/images/Card options icon.png')),
                                                         SizedBox(width: 12,),
@@ -157,7 +123,12 @@ class Basket extends StatelessWidget {
                                                             Text(NumberFormat('#,###').format(number).toString()),
                                                           ],
                                                         ),
-                                                        Text('العدد : 1'),
+                                                        Row(
+                                                          children: [
+                                                            Text(cubit.getCartModel[index].quantity.toString()),
+                                                            Text(' : العدد'),
+                                                          ],
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
@@ -234,42 +205,7 @@ class Basket extends StatelessWidget {
                         fallback: (context)=>
                             Column(
                               children: [
-                                Container(
-                                  width: double.maxFinite,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        offset: const Offset(0, 5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        'شركة المسار',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                      const Text(
-                                        'للتوصيل الداخلي السريع',
-                                        style: TextStyle(
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                CustomAppbar(),
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -285,42 +221,7 @@ class Basket extends StatelessWidget {
                   fallback: (context)=>
                       Column(
                         children: [
-                          Container(
-                            width: double.maxFinite,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 6,
-                                  spreadRadius: 2,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'شركة المسار',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const Text(
-                                  'للتوصيل الداخلي السريع',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          CustomAppbar(),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

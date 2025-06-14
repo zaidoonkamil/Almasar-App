@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/widgets/custom_appbar.dart';
 import 'package:delivery_app/features/user/view/orders.dart';
 import 'package:delivery_app/features/user/view/products_vendor.dart';
 import 'package:delivery_app/features/vendor/view/profile.dart';
@@ -56,42 +57,7 @@ class Home extends StatelessWidget {
                 backgroundColor: const Color(0xFFF2F2F7),
                 body: Column(
                   children: [
-                    Container(
-                      width: double.maxFinite,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 6,
-                            spreadRadius: 2,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'شركة المسار',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const Text(
-                            'للتوصيل الداخلي السريع',
-                            style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    CustomAppbar(),
                     Expanded(
                       child: ConditionalBuilder(
                           condition: cubit.profileModel != null ,

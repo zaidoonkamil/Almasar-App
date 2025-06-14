@@ -115,7 +115,7 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                   Row(
                                                     children: [
                                                       Text(
-                                                        "${index+1}",
+                                                        "${cubit.getActiveOrdersModel![index].id}",
                                                         style: const TextStyle(
                                                           fontWeight: FontWeight.bold,
                                                           fontSize: 16,

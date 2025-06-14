@@ -75,7 +75,7 @@ class HomeVendor extends StatelessWidget {
                 ),
                 body:
                 ConditionalBuilder(
-                    condition: cubit.profileModel != null && cubit.getAdsModel.isNotEmpty,
+                    condition: cubit.profileModel != null && cubit.getAdsModel != [],
                     builder: (c){
                       return Stack(
                         children: [
@@ -174,8 +174,7 @@ class HomeVendor extends StatelessWidget {
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     crossAxisAlignment: CrossAxisAlignment.end,
-                                                    children: List.generate(
-                                                        cubit.getAdsModel.length, (index) {
+                                                    children: List.generate(cubit.getAdsModel.length, (index) {
                                                       return Container(
                                                         width: currentIndex == index ? 30 : 8,
                                                         height: 7.0,
@@ -189,17 +188,15 @@ class HomeVendor extends StatelessWidget {
                                                       );
                                                     }),
                                                   ),
+                                                  SizedBox(height: 18,),
                                                 ],
                                               );
                                             },
-                                            fallback: (c)=> Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 60.0),
-                                              child: CircularProgressIndicator(color: primaryColor,),
-                                            ),
+                                            fallback: (c)=> Container(),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 26,),
+                                      SizedBox(height: 8,),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
                                         child: GestureDetector(

@@ -164,9 +164,9 @@ class UserCubit extends Cubit<UserStates> {
       emit(GetOrderSuccessState());
     }).catchError((error) {
       if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
+        // showToastError(text: error.toString(),
+        //   context: context!,);
+       // print(error.toString());
         emit(GetOrderErrorState());
       }else {
         print("Unknown Error: $error");
@@ -215,6 +215,8 @@ class UserCubit extends Cubit<UserStates> {
     DioHelper.getData(
       url: '/vendor/$id/products?page=$page',
     ).then((value) {
+      product=[];
+      productsVendorModel=null;
       productsVendorModel = ProductsVendorModel.fromJson(value.data);
       product.addAll(productsVendorModel!.products);
       paginationProductsVendor = productsVendorModel!.paginationProductsVendor;
@@ -228,6 +230,33 @@ class UserCubit extends Cubit<UserStates> {
         showToastError(text: error.toString(),
           context: context,);
         print(error.toString());
+        emit(GetProductsVendorErrorState());
+      }else {
+        print("Unknown Error: $error");
+      }
+    });
+  }
+
+  void getProductsVendorSearch({required String title,required String page,required String id,required BuildContext context,}) {
+    emit(GetProductsVendorLoadingState());
+    DioHelper.getData(
+      url: '/vendor/$id/products/search?title=$title&page=$page',
+    ).then((value) {
+      product=[];
+      productsVendorModel=null;
+
+      productsVendorModel = ProductsVendorModel.fromJson(value.data);
+      product.addAll(productsVendorModel!.products);
+      paginationProductsVendor = productsVendorModel!.paginationProductsVendor;
+      currentPageProductsVendor = paginationProductsVendor!.currentPage;
+      if (currentPageProductsVendor >= paginationProductsVendor!.totalPages) {
+        isLastPageProductsVendor = true;
+      }
+      emit(GetProductsVendorSuccessState());
+    }).catchError((error) {
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
         emit(GetProductsVendorErrorState());
       }else {
         print("Unknown Error: $error");
@@ -268,7 +297,7 @@ class UserCubit extends Cubit<UserStates> {
       },
     ).then((value) {
       showToastSuccess(
-        text: "تم اضافة المنتج بنجاح",
+        text: value.data["message"],
         context: context,
       );
       emit(AddOrderSuccessState());

@@ -400,7 +400,6 @@ class AdminCubit extends Cubit<AdminStates> {
   }
 
   changeStatusOrder({required BuildContext context, required String status, required String idOrder, required String note,}){
-    emit(ChangeStatusOrderLoadingState());
     Map<String, dynamic> data;
     if(status == "استرجاع الطلب" || status == "تبديل الطلب"){
       data={
@@ -412,12 +411,13 @@ class AdminCubit extends Cubit<AdminStates> {
         'status':status,
       };
     }
+    emit(ChangeStatusOrderLoadingState());
     DioHelper.putData(
       url: '/orders/$idOrder/status',
       token: token,
       data: data,
     ).then((value) {
-      getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
+     getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
       showToastSuccess(
         text:"تمت العملية بنجاح",
         context: context,

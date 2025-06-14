@@ -3,11 +3,14 @@ import 'package:delivery_app/core/%20navigation/navigation.dart';
 import 'package:delivery_app/core/network/remote/dio_helper.dart';
 import 'package:delivery_app/core/styles/themes.dart';
 import 'package:delivery_app/core/widgets/constant.dart';
+import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/widgets/circular_progress.dart';
+import '../../../core/widgets/custom_appbar.dart';
+import '../../../core/widgets/custom_text_field.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 import 'details.dart';
@@ -20,6 +23,7 @@ class ProductsVendor extends StatelessWidget {
   final String phone;
   final String idVendor;
   static ScrollController? scrollController;
+  static TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,57 +43,7 @@ class ProductsVendor extends StatelessWidget {
               backgroundColor: const Color(0xFFF2F2F7),
               body: Column(
                 children: [
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 6,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: (){
-                            navigateBack(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Icon(Icons.arrow_back_ios_new),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'شركة المسار',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const Text(
-                              'للتوصيل الداخلي السريع',
-                              style: TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(width: 40,)
-                      ],
-                    ),
-                  ),
+                  CustomAppbarBack(),
                   ConditionalBuilder(
                       condition: cubit.productsVendorModel != null ,
                       builder: (c){
@@ -131,6 +85,58 @@ class ProductsVendor extends StatelessWidget {
                                         height: 1,
                                         color: Colors.grey,
                                       ),
+                                      SizedBox(height: 12,),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                            onTap: (){
+                                              if(searchController.text.isNotEmpty){
+                                                searchController.text.trim();
+                                                cubit.getProductsVendorSearch(
+                                                    title: searchController.text,
+                                                    page: '1',
+                                                    id: idVendor,
+                                                    context: context);
+                                              }else{
+                                                cubit.getProductsVendor(page: '1', context: context, id: idVendor);
+                                              }
+                                            },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 20),
+                                          height: 48,
+                                          decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black.withOpacity(0.2),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 2,
+                                                  offset: const Offset(5, 5),
+                                                ),
+                                              ],
+                                              borderRadius:  BorderRadius.circular(12),
+                                              color: primaryColor
+                                          ),
+                                          child: Center(
+                                            child: Text('بحث',
+                                              style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                          ),
+                                        ),
+                                      ),
+                                            SizedBox(width: 10,),
+                                            Expanded(
+                                              child: CustomTextField(
+                                                controller: searchController,
+                                                hintText: 'بحث',
+                                                prefixIcon: Icons.search,
+                                                keyboardType: TextInputType.text,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
                                       SizedBox(height: 16,),
                                       GridView.custom(
                                         physics: const NeverScrollableScrollPhysics(),

@@ -293,7 +293,6 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   }
 
   deliveryAccept({required BuildContext context, required bool accept, required String idOrder,required String rejectionReason,}){
-    emit(DeliveryAcceptLoadingState());
     Map<String, dynamic> data;
     if(accept == false){
       data = {
@@ -307,23 +306,18 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
             'deliveryId': id,
           };
     }
-
+    emit(DeliveryAcceptLoadingState());
     DioHelper.putData(
       url: '/order/$idOrder/delivery-accept',
-      token: token,
       data: data,
     ).then((value) {
       if (accept==false) {
         getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
       }else{
-        getActiveOrdersModel?.firstWhere(
-              (order) => order.id.toString() == idOrder,
+        getActiveOrdersModel?.firstWhere((order) => order.id.toString() == idOrder,
         ).isAccepted = true;
       }
-      showToastSuccess(
-        text:"تمت العملية بنجاح",
-        context: context,
-      );
+
       emit(DeliveryAcceptSuccessState());
     }).catchError((error)
     {

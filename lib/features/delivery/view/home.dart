@@ -11,6 +11,7 @@ import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import '../../../../core/styles/themes.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/widgets/StatCard.dart';
+import '../../../core/widgets/custom_appbar.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -33,43 +34,7 @@ class HomeDelivery extends StatelessWidget {
               backgroundColor: const Color(0xFFF2F2F7),
               body: Column(
                 children: [
-                  Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 6,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'شركة المسار',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const Text(
-                          'للتوصيل الداخلي السريع',
-                          style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  CustomAppbar(),
                   ConditionalBuilder(
                       condition: cubit.profileModel != null,
                       builder: (c){
@@ -141,13 +106,11 @@ class HomeDelivery extends StatelessWidget {
                                                 );
                                               }),
                                             ),
+                                            SizedBox(height: 18,),
                                           ],
                                         );
                                       },
-                                      fallback: (c)=> Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 60.0),
-                                        child: CircularProgressIndicator(color: primaryColor,),
-                                      ),
+                                      fallback: (c)=> Container(),
                                     ),
                                   ],
                                 ),

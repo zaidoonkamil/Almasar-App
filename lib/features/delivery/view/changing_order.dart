@@ -33,6 +33,10 @@ class ChangingOrdersDelivery extends StatelessWidget {
             navigateBack(context);
           }
           if(state is DeliveryAcceptSuccessState){
+            showToastSuccess(
+              text:"تمت العملية بنجاح",
+              context: context,
+            );
             noteController.text='';
             noteCController.text='';
             noteRController.text='';
@@ -368,13 +372,18 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 const Icon(Icons.person_outline, color: Colors.grey),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
+                                            cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty ?
+                                                Container():Column(
                                               children: [
-                                                Text( cubit.getActiveOrdersModel![index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                const SizedBox(width: 6),
-                                                const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.getActiveOrdersModel![index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
                                               ],
                                             ),
                                             cubit.getActiveOrdersModel![index].isAccepted == true?Container(): Column(
