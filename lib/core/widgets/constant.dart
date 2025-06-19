@@ -5,6 +5,9 @@ import '../network/local/cache_helper.dart';
 String token='';
 String id='';
 String adminOrUser='' ;
+String callPhone='7744486170';
+String whatsAppPhone='7748052440';
+String howWeAre='نهدف إلى تقديم خدمات توصيل سريعة وموثوقة تعزز راحة العملاء وثقتهم' ;
 
 void signOut(context)
 {

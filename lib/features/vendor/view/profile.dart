@@ -8,6 +8,7 @@ import 'package:delivery_app/features/user/view/orders.dart';
 import 'package:delivery_app/features/user/view/request_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/ navigation/navigation.dart';
 import '../../../../core/styles/themes.dart';
@@ -19,6 +20,7 @@ import '../../../core/widgets/StatCard.dart';
 import '../../../core/widgets/custom_appbar.dart';
 import '../../user/cubit/cubit.dart';
 import '../../user/cubit/states.dart';
+import '../../user/view/how_as.dart';
 
 class ProfileVendor extends StatelessWidget {
   const ProfileVendor({super.key, required this.name, required this.phone, required this.image});
@@ -93,33 +95,38 @@ class ProfileVendor extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: 80,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.arrow_back_ios_new_rounded),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'من نحن',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey,
+                          GestureDetector(
+                            onTap: (){
+                              navigateTo(context, HowAs());
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(Icons.arrow_back_ios_new_rounded),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'من نحن',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 4,),
-                                      Image.asset('assets/images/info-circle.png'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 6,),
-                              Container(width: double.maxFinite,height: 2,color: Colors.black12,),
-                              SizedBox(height: 14,),
-                            ],
+                                        SizedBox(width: 4,),
+                                        Image.asset('assets/images/info-circle.png'),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 6,),
+                                Container(width: double.maxFinite,height: 2,color: Colors.black12,),
+                                SizedBox(height: 14,),
+                              ],
+                            ),
                           ),
                           Column(
                             children: [
@@ -128,9 +135,37 @@ class ProfileVendor extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      Image.asset('assets/images/Group 1171275618.png'),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            final url = 'tel:+964$callPhone';
+                                            await launch(
+                                              url,
+                                              enableJavaScript: true,
+                                            ).catchError((e) {
+                                              showToastError(
+                                                text: e.toString(),
+                                                context: context,
+                                              );
+                                            });
+                                          },
+
+                                          child: Image.asset('assets/images/Group 1171275618.png')),
                                       SizedBox(width: 4,),
-                                      Image.asset('assets/images/Group 1171275617.png'),
+                                      GestureDetector(
+                                          onTap:()async{
+                                            final url =
+                                                'https://wa.me/+964$whatsAppPhone?text=';
+                                            await launch(
+                                              url,
+                                              enableJavaScript: true,
+                                            ).catchError((e) {
+                                              showToastError(
+                                                text: e.toString(),
+                                                context: context,
+                                              );
+                                            });
+                                          },
+                                          child: Image.asset('assets/images/Group 1171275617.png')),
                                     ],
                                   ),
                                   Row(
@@ -145,60 +180,6 @@ class ProfileVendor extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4,),
                                       Image.asset('assets/images/Vector (1).png'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 6,),
-                              Container(width: double.maxFinite,height: 2,color: Colors.black12,),
-                              SizedBox(height: 14,),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.arrow_back_ios_new_rounded),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'تقييم التطبيق',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      SizedBox(width: 4,),
-                                      Image.asset('assets/images/solar_star-line-duotone.png'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 6,),
-                              Container(width: double.maxFinite,height: 2,color: Colors.black12,),
-                              SizedBox(height: 14,),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.arrow_back_ios_new_rounded),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'مشاركة التطبيق',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      SizedBox(width: 4,),
-                                      Image.asset('assets/images/octicon_share-16.png'),
                                     ],
                                   ),
                                 ],
