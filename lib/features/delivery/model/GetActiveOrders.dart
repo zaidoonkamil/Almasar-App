@@ -62,7 +62,7 @@ class GetActiveOrders {
     notes: json["notes"],
     status: json["status"],
     isAccepted: json["isAccepted"],
-    rejectionReason: json["rejectionReason"],
+    rejectionReason: json["rejectionReason"]??'',
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     statusHistory: List<dynamic>.from(json["statusHistory"].map((x) => x)),

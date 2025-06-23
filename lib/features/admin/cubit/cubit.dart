@@ -417,14 +417,11 @@ class AdminCubit extends Cubit<AdminStates> {
       token: token,
       data: data,
     ).then((value) {
-     getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
-      showToastSuccess(
-        text:"تمت العملية بنجاح",
-        context: context,
-      );
+      getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
       emit(ChangeStatusOrderSuccessState());
     }).catchError((error)
     {
+
       if (error is DioError) {
         print("Unknown Error: $error");
 

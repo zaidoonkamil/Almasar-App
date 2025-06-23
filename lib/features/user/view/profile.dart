@@ -172,6 +172,96 @@ class ProfileUser extends StatelessWidget {
                               SizedBox(height: 14,),
                             ],
                           ),
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                          onTap:()async{
+                                            final url =
+                                                'https://www.facebook.com/share/1Qth2gtivt/?mibextid=wwXIfr';
+                                            await launch(
+                                              url,
+                                              enableJavaScript: true,
+                                            ).catchError((e) {
+                                              showToastError(
+                                                text: e.toString(),
+                                                context: context,
+                                              );
+                                            });
+                                          },
+                                          child: Image.asset('assets/images/Group 1171275617ss.png')),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'فيسبوك',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4,),
+                                      Image.asset('assets/images/proicons_facebook.png'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 6,),
+                              Container(width: double.maxFinite,height: 2,color: Colors.black12,),
+                              SizedBox(height: 14,),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                          onTap:()async{
+                                            final url =
+                                                'https://www.instagram.com/as6h/';
+                                            await launch(
+                                              url,
+                                              enableJavaScript: true,
+                                            ).catchError((e) {
+                                              showToastError(
+                                                text: e.toString(),
+                                                context: context,
+                                              );
+                                            });
+                                          },
+                                          child: Image.asset('assets/images/Group 1171275617 (1)1.png')),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'انستقرام',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4,),
+                                      Image.asset('assets/images/lets-icons_insta.png'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 6,),
+                              Container(width: double.maxFinite,height: 2,color: Colors.black12,),
+                              SizedBox(height: 14,),
+                            ],
+                          ),
                           // Column(
                           //   children: [
                           //     Row(

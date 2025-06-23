@@ -3,10 +3,12 @@ import 'package:delivery_app/core/widgets/circular_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
+import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -18,7 +20,8 @@ class AllOrdersAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AdminCubit()..allOrder(page: '1',context: context, url: urll,),
+      create: (BuildContext context) => AdminCubit()
+        ..allOrder(page: '1',context: context, url: urll,),
       child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){},
         builder: (context,state){
@@ -145,12 +148,26 @@ class AllOrdersAdmin extends StatelessWidget {
                                                     color: Colors.grey[600],
                                                   ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text( cubit.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    const SizedBox(width: 6),
-                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                  ],
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    final url = 'tel:${cubit.orders[index].phone}';
+                                                    await launch(
+                                                      url,
+                                                      enableJavaScript: true,
+                                                    ).catchError((e) {
+                                                      showToastError(
+                                                        text: e.toString(),
+                                                        context: context,
+                                                      );
+                                                    });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Text( cubit.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      const SizedBox(width: 6),
+                                                      const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -308,6 +325,41 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 const SizedBox(height: 8),
                                               ],
                                             ),
+                                            cubit.orders[index].rejectionReason != '' ?Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      ': سبب رفض الدلفري',
+                                                      textAlign: TextAlign.end,
+                                                      style: const TextStyle(
+                                                        color: Colors.black54,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 16,
+                                                        // color: Color(0xFFFE6B35),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        cubit.orders[index].rejectionReason,
+                                                        textAlign: TextAlign.end,
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 18,
+                                                          // color: Color(0xFFFE6B35),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 12),
+                                              ],
+                                            ):Container(),
                                             cubit.orders[index].delivery != null ?Column(
                                               children: [
                                                 const SizedBox(height: 6),
@@ -329,13 +381,27 @@ class AllOrdersAdmin extends StatelessWidget {
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: [
-                                                    Text( cubit.orders[index].delivery!.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    const SizedBox(width: 6),
-                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                  ],
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    final url = 'tel:${cubit.orders[index].delivery!.phone}';
+                                                    await launch(
+                                                      url,
+                                                      enableJavaScript: true,
+                                                    ).catchError((e) {
+                                                      showToastError(
+                                                        text: e.toString(),
+                                                        context: context,
+                                                      );
+                                                    });
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Text( cubit.orders[index].delivery!.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      const SizedBox(width: 6),
+                                                      const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                    ],
+                                                  ),
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Row(
@@ -370,7 +436,9 @@ class AllOrdersAdmin extends StatelessWidget {
                                               ],
                                             ):Container(),
                                             cubit.orders[index].statusHistory.last.status != "تم الاستلام"
-                                                || cubit.orders[index].statusHistory.last.status != "تم التسليم" ?Column(
+                                                && cubit.orders[index].statusHistory.last.status != "تم التسليم"
+                                                && (cubit.orders[index].statusHistory.last.note?.isNotEmpty ?? false)
+                                                ?Column(
                                               children: [
                                                 const SizedBox(height: 6),
                                                 Container(width: double.maxFinite,height: 1,color: Colors.black45,),
@@ -378,14 +446,15 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text(': السبب',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text(': سبب الحالة',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Expanded(child: Text( cubit.orders[index].statusHistory.last.note,
+                                                    Expanded(child: Text(
+                                                      cubit.orders[index].statusHistory.last.note!,
                                                       textAlign: TextAlign.end,
                                                       style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)),
                                                     const SizedBox(width: 6),

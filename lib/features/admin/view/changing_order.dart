@@ -5,6 +5,7 @@ import 'package:delivery_app/features/admin/view/all_active_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
@@ -31,13 +32,15 @@ class ChangingOrdersAdmin extends StatelessWidget {
       },
       child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){
-          if(state is ChangeStatusOrderSuccessState){
-            navigateBack(context);
-          }
+
           if(state is ChangeStatusOrderSuccessState){
             noteController.text='';
             noteCController.text='';
             noteRController.text='';
+            showToastSuccess(
+              text:"تمت العملية بنجاح",
+              context: context,
+            );
           }
         },
         builder: (context,state){
@@ -166,12 +169,26 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                       color: Colors.grey[600],
                                                     ),
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Text( cubit.getActiveOrdersModel![index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                      const SizedBox(width: 6),
-                                                      const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                    ],
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      final url = 'tel:${cubit.getActiveOrdersModel![index].phone}';
+                                                      await launch(
+                                                        url,
+                                                        enableJavaScript: true,
+                                                      ).catchError((e) {
+                                                        showToastError(
+                                                          text: e.toString(),
+                                                          context: context,
+                                                        );
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Text( cubit.getActiveOrdersModel![index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                        const SizedBox(width: 6),
+                                                        const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -300,13 +317,27 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                 ],
                                               ),
                                               const SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text( cubit.getActiveOrdersModel![index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                  const SizedBox(width: 6),
-                                                  const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                ],
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  final url = 'tel:${cubit.getActiveOrdersModel![index].user.phone}';
+                                                  await launch(
+                                                    url,
+                                                    enableJavaScript: true,
+                                                  ).catchError((e) {
+                                                    showToastError(
+                                                      text: e.toString(),
+                                                      context: context,
+                                                    );
+                                                  });
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text( cubit.getActiveOrdersModel![index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
                                               ),
                                               const SizedBox(height: 16),
                                               cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty ?Column(
@@ -384,6 +415,41 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                   ),
                                                 ],
                                               ):const SizedBox(height: 12),
+                                              cubit.getActiveOrdersModel![index].rejectionReason != '' ?Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        ': سبب الرفض',
+                                                        textAlign: TextAlign.end,
+                                                        style: const TextStyle(
+                                                          color: Colors.black54,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 18,
+                                                          // color: Color(0xFFFE6B35),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                     Expanded(
+                                                        child: Text(
+                                                          cubit.getActiveOrdersModel![index].rejectionReason,
+                                                          textAlign: TextAlign.end,
+                                                          style: const TextStyle(
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 18,
+                                                            // color: Color(0xFFFE6B35),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                ],
+                                              ):Container(),
                                               cubit.getActiveOrdersModel![index].assignedDeliveryId == 0 ? Column(
                                                 children: [
                                                   GestureDetector(

@@ -4,6 +4,7 @@ import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
@@ -163,12 +164,26 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                     color: Colors.grey[600],
                                                   ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text( cubit.getActiveOrdersModel![index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    const SizedBox(width: 6),
-                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                  ],
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                  final url = 'tel:${cubit.getActiveOrdersModel![index].phone}';
+                                                  await launch(
+                                                    url,
+                                                    enableJavaScript: true,
+                                                  ).catchError((e) {
+                                                    showToastError(
+                                                      text: e.toString(),
+                                                      context: context,
+                                                    );
+                                                  });
+                                                },
+                                                  child: Row(
+                                                    children: [
+                                                      Text( cubit.getActiveOrdersModel![index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      const SizedBox(width: 6),
+                                                      const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -372,20 +387,20 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 const Icon(Icons.person_outline, color: Colors.grey),
                                               ],
                                             ),
-                                            cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty ?
-                                                Container():Column(
-                                              children: [
-                                                const SizedBox(height: 8),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: [
-                                                    Text( cubit.getActiveOrdersModel![index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    const SizedBox(width: 6),
-                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                            // cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty ?
+                                            //     Container():Column(
+                                            //   children: [
+                                            //     const SizedBox(height: 8),
+                                            //     Row(
+                                            //       mainAxisAlignment: MainAxisAlignment.end,
+                                            //       children: [
+                                            //         Text( cubit.getActiveOrdersModel![index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                            //         const SizedBox(width: 6),
+                                            //         const Icon(Icons.phone_outlined, color: Colors.grey),
+                                            //       ],
+                                            //     ),
+                                            //   ],
+                                            // ),
                                             cubit.getActiveOrdersModel![index].isAccepted == true?Container(): Column(
                                               children: [
                                                 const SizedBox(height: 16),

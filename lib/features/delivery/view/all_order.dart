@@ -3,10 +3,12 @@ import 'package:delivery_app/core/widgets/circular_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
+import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -145,12 +147,27 @@ class AllOrdersDelivery extends StatelessWidget {
                                                     color: Colors.grey[600],
                                                   ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text( cubit.orderModel!.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                    const SizedBox(width: 6),
-                                                    const Icon(Icons.phone_outlined, color: Colors.grey),
-                                                  ],
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    final url = 'tel:${cubit.orderModel!.orders[index].phone}';
+                                                    await launch(
+                                                      url,
+                                                      enableJavaScript: true,
+                                                    ).catchError((e) {
+                                                      showToastError(
+                                                        text: e.toString(),
+                                                        context: context,
+                                                      );
+                                                    });
+                                                  },
+
+                                                  child: Row(
+                                                    children: [
+                                                      Text( cubit.orderModel!.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      const SizedBox(width: 6),
+                                                      const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -278,15 +295,15 @@ class AllOrdersDelivery extends StatelessWidget {
                                                 const Icon(Icons.person_outline, color: Colors.grey),
                                               ],
                                             ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                Text( cubit.orderModel!.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
-                                                const SizedBox(width: 6),
-                                                const Icon(Icons.phone_outlined, color: Colors.grey),
-                                              ],
-                                            ),
+                                            // const SizedBox(height: 8),
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.end,
+                                            //   children: [
+                                            //     Text( cubit.orderModel!.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                            //     const SizedBox(width: 6),
+                                            //     const Icon(Icons.phone_outlined, color: Colors.grey),
+                                            //   ],
+                                            // ),
                                             const SizedBox(height: 8),
                                             cubit.orderModel!.orders[index].items != null && cubit.orderModel!.orders[index].items!.isNotEmpty ?Column(
                                               children: [

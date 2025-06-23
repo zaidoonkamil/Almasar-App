@@ -67,7 +67,7 @@ class Order {
   String notes;
   String status;
   dynamic isAccepted;
-  dynamic rejectionReason;
+  String rejectionReason;
   DateTime createdAt;
   DateTime updatedAt;
   List<Item>? items;
@@ -110,7 +110,7 @@ class Order {
     notes: json["notes"],
     status: json["status"],
     isAccepted: json["isAccepted"],
-    rejectionReason: json["rejectionReason"],
+    rejectionReason: json["rejectionReason"] ??'',
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
@@ -177,7 +177,7 @@ class Delivery {
 class StatusHistory {
   int id;
   String status;
-  String note;
+  String? note;
   DateTime changeDate;
   int orderId;
 
