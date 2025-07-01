@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: double.maxFinite,
                 height: double.maxFinite,
                 child: Center(child:
-                Image.asset('assets/images/logo.png',width: 300,),
+                Image.asset('assets/images/logo.png',width: 180,),
                 ),
               ),
             ),
