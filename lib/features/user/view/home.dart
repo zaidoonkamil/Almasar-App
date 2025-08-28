@@ -191,9 +191,6 @@ class Home extends StatelessWidget {
                                                 childrenDelegate: SliverChildBuilderDelegate(
                                                   childCount: cubit.vendorModel!.data.length,
                                                       (context, index) {
-                                                        if (index == cubit.vendorModel!.data.length - 1 && !cubit.isLastPageVendor) {
-                                                          cubit.getVendor(page: (cubit.currentPageVendor + 1).toString(), context: context);
-                                                        }
                                                     return GestureDetector(
                                                       onTap: () {
                                                         navigateTo(context, ProductsVendor(

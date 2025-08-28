@@ -136,46 +136,33 @@ class DetailsPerson extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Column(
-                                children: [
-                                  Image.asset('assets/images/fluent_person-16-regular.png'),
-                                  SizedBox(height: 10,),
-                                  Image.asset('assets/images/solar_phone-outline (3).png'),
-                                  SizedBox(height: 10,),
-                                  Image.asset('assets/images/mingcute_location-line (2).png'),
-                                  SizedBox(height: 10,),
-                                  Image.asset('assets/images/f7_person-2.png'),
-                                  SizedBox(height: 10,),
-                                  Image.asset('assets/images/tabler_clock.png'),
-                                ],
-                              ),
                               Spacer(),
                               Column(
                                 children: [
-                                  Text(name,style: TextStyle(fontSize: 18),),
+                                  Text(name,style: TextStyle(fontSize: 14),),
                                   SizedBox(height: 10,),
-                                  Text(phone,style: TextStyle(fontSize: 18),),
+                                  Text(phone,style: TextStyle(fontSize: 14),),
                                   SizedBox(height: 10,),
-                                  Text(location,style: TextStyle(fontSize: 18),),
+                                  Text(location,style: TextStyle(fontSize: 14),),
                                   SizedBox(height: 10,),
-                                  Text(role,style: TextStyle(fontSize: 18),),
+                                  Text(role,style: TextStyle(fontSize: 14),),
                                   SizedBox(height: 10,),
-                                  Text(formattedDate,style: TextStyle(fontSize: 18),),
+                                  Text(formattedDate,style: TextStyle(fontSize: 14),),
                                 ],
                               ),
                               Spacer(),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(':الاسم',style: TextStyle(fontSize: 17),),
+                                  Text(':الاسم',style: TextStyle(fontSize: 13),),
                                   SizedBox(height: 10,),
-                                  Text(':الهاتف',style: TextStyle(fontSize: 17),),
+                                  Text(':الهاتف',style: TextStyle(fontSize: 13),),
                                   SizedBox(height: 10,),
-                                  Text(':الموقع',style: TextStyle(fontSize: 17),),
+                                  Text(':الموقع',style: TextStyle(fontSize: 13),),
                                   SizedBox(height: 10,),
-                                  Text(':الصلاحياة',style: TextStyle(fontSize: 17),),
+                                  Text(':الصلاحياة',style: TextStyle(fontSize: 13),),
                                   SizedBox(height: 10,),
-                                  Text(':تاريخ الانشاء',style: TextStyle(fontSize: 17),),
+                                  Text(':تاريخ الانشاء',style: TextStyle(fontSize: 13),),
                                 ],
                               ),
                             ],
@@ -274,7 +261,7 @@ class DetailsPerson extends StatelessWidget {
                                         ),
                                         child: Center(
                                           child: Text('تعديل',
-                                            style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                            style: TextStyle(color: Colors.white,fontSize: 14 ),),
                                         ),
                                       ),
                                     );
@@ -313,7 +300,7 @@ class DetailsPerson extends StatelessWidget {
                                   title: Column(
                                     children: [
                                       Text("هل حقا ترغب في حذف المستخدم ؟",
-                                        style: TextStyle(fontSize: 18),
+                                        style: TextStyle(fontSize: 14),
                                         textAlign: TextAlign.center,),
                                       Text("سوف يشمل ذلك حذف جميع بيانات المستخدم هذا",
                                         style: TextStyle(fontSize: 16,color: Colors.grey),
@@ -365,7 +352,7 @@ class DetailsPerson extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text('حذف المستخدم',
-                                style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                style: TextStyle(color: Colors.white,fontSize: 14 ),),
                             ),
                           ),
                         );
@@ -401,7 +388,7 @@ class DetailsPerson extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text('رؤية المنتجات',
-                            style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                            style: TextStyle(color: Colors.white,fontSize: 14 ),),
                         ),
                       ),
                     ),
@@ -429,7 +416,7 @@ class DetailsPerson extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text('اضافة منتج',
-                            style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                            style: TextStyle(color: Colors.white,fontSize: 14 ),),
                         ),
                       ),
                     ),

@@ -136,7 +136,6 @@ class ProductsVendor extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-
                                       SizedBox(height: 16,),
                                       GridView.custom(
                                         physics: const NeverScrollableScrollPhysics(),
@@ -152,9 +151,6 @@ class ProductsVendor extends StatelessWidget {
                                         childrenDelegate: SliverChildBuilderDelegate(
                                           childCount: cubit.productsVendorModel!.products.length,
                                               (context, index) {
-                                                if (index == cubit.productsVendorModel!.products.length - 1 && !cubit.isLastPageProductsVendor) {
-                                                  cubit.getProductsVendor(page: (cubit.currentPageProductsVendor + 1).toString(), context: context, id: idVendor);
-                                                }
                                             int number = int.parse(cubit.productsVendorModel!.products[index].price.toString());
                                             DateTime dateTime = DateTime.parse(cubit.productsVendorModel!.products[index].createdAt.toString());
                                             String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);

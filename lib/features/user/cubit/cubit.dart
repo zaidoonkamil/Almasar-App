@@ -174,10 +174,7 @@ class UserCubit extends Cubit<UserStates> {
     });
   }
 
-  List<Datum> datum = [];
   PaginationVendor? paginationVendor;
-  int currentPageVendor = 1;
-  bool isLastPageVendor = false;
   VendorModel? vendorModel;
   void getVendor({required String page,required BuildContext context,}) {
     emit(GetVendorLoadingState());
@@ -185,12 +182,6 @@ class UserCubit extends Cubit<UserStates> {
       url: '/vendorbysponsored?page=$page',
     ).then((value) {
       vendorModel = VendorModel.fromJson(value.data);
-      datum.addAll(vendorModel!.data);
-      paginationVendor = vendorModel!.paginationVendor;
-      currentPageVendor = paginationVendor!.currentPage;
-      if (currentPageVendor >= paginationVendor!.totalPages) {
-        isLastPageVendor = true;
-      }
       emit(GetVendorSuccessState());
     }).catchError((error) {
       if (error is DioError) {
@@ -205,25 +196,14 @@ class UserCubit extends Cubit<UserStates> {
   }
 
 
-  List<Products> product = [];
-  PaginationProductsVendor? paginationProductsVendor;
-  int currentPageProductsVendor = 1;
-  bool isLastPageProductsVendor = false;
   ProductsVendorModel? productsVendorModel;
   void getProductsVendor({required String page,required String id,required BuildContext context,}) {
     emit(GetProductsVendorLoadingState());
     DioHelper.getData(
       url: '/vendor/$id/products?page=$page',
     ).then((value) {
-      product=[];
       productsVendorModel=null;
       productsVendorModel = ProductsVendorModel.fromJson(value.data);
-      product.addAll(productsVendorModel!.products);
-      paginationProductsVendor = productsVendorModel!.paginationProductsVendor;
-      currentPageProductsVendor = paginationProductsVendor!.currentPage;
-      if (currentPageProductsVendor >= paginationProductsVendor!.totalPages) {
-        isLastPageProductsVendor = true;
-      }
       emit(GetProductsVendorSuccessState());
     }).catchError((error) {
       if (error is DioError) {
@@ -242,16 +222,8 @@ class UserCubit extends Cubit<UserStates> {
     DioHelper.getData(
       url: '/vendor/$id/products/search?title=$title&page=$page',
     ).then((value) {
-      product=[];
       productsVendorModel=null;
-
       productsVendorModel = ProductsVendorModel.fromJson(value.data);
-      product.addAll(productsVendorModel!.products);
-      paginationProductsVendor = productsVendorModel!.paginationProductsVendor;
-      currentPageProductsVendor = paginationProductsVendor!.currentPage;
-      if (currentPageProductsVendor >= paginationProductsVendor!.totalPages) {
-        isLastPageProductsVendor = true;
-      }
       emit(GetProductsVendorSuccessState());
     }).catchError((error) {
       if (error is DioError) {

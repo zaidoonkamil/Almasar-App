@@ -29,11 +29,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.zaidoon.almasar"
+        applicationId = "com.napol.almasardelivery"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 3
+        versionName = "3.0"
     }
 
     signingConfigs {
