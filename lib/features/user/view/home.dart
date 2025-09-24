@@ -204,6 +204,7 @@ class Home extends StatelessWidget {
                                                         children: [
                                                           Container(
                                                             width: double.maxFinite,
+                                                            height: double.maxFinite,
                                                             margin: const EdgeInsets.all(4),
                                                             decoration: BoxDecoration(
                                                               color: Colors.white,
@@ -213,7 +214,7 @@ class Home extends StatelessWidget {
                                                               borderRadius: BorderRadius.circular(6),
                                                               child: Image.network(
                                                                 "$url/uploads/${cubit.vendorModel!.data[index].images[0]}",
-                                                                fit: BoxFit.fill,
+                                                                fit: BoxFit.cover,
                                                               ),
                                                             ),
                                                           ),
@@ -233,7 +234,7 @@ class Home extends StatelessWidget {
                                                                   children: [
                                                                     Expanded(
                                                                       child: Text(cubit.vendorModel!.data[index].name,
-                                                                      maxLines: 1,
+                                                                      maxLines: 2,
                                                                       overflow: TextOverflow.ellipsis,
                                                                       textAlign: TextAlign.center,
                                                                       style: TextStyle(color: Colors.white,fontSize: 14),),

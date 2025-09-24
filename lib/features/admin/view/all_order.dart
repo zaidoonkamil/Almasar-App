@@ -163,7 +163,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                   },
                                                   child: Row(
                                                     children: [
-                                                      Text( cubit.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      Text( cubit.orders[index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                       const SizedBox(width: 6),
                                                       const Icon(Icons.phone_outlined, color: Colors.grey),
                                                     ],
@@ -184,7 +184,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text(cubit.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
+                                                    Text(cubit.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.location_on_outlined, color: Colors.grey),
                                                   ],
@@ -202,7 +202,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                       'د.ع ',
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
+                                                        fontSize: 14,
                                                         color: primaryColor,
                                                       ),
                                                     ),
@@ -210,7 +210,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                       cubit.orders[index].deliveryFee.toString(),
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
+                                                        fontSize: 14,
                                                         // color: Color(0xFFFE6B35),
                                                       ),
                                                     ),
@@ -225,7 +225,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                       ' د.ع ',
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
+                                                        fontSize: 14,
                                                         color: primaryColor,
                                                       ),
                                                     ),
@@ -233,7 +233,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                       cubit.orders[index].orderAmount.toString(),
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.bold,
-                                                        fontSize: 18,
+                                                        fontSize: 14,
                                                         // color: Color(0xFFFE6B35),
                                                       ),
                                                     ),
@@ -253,7 +253,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                   style: const TextStyle(
                                                     color: Colors.black54,
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
+                                                    fontSize: 14,
                                                     // color: Color(0xFFFE6B35),
                                                   ),
                                                 ),
@@ -267,7 +267,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                     textAlign: TextAlign.end,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       // color: Color(0xFFFE6B35),
                                                     ),
                                                   ),
@@ -277,7 +277,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                     textAlign: TextAlign.end,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
-                                                      fontSize: 18,
+                                                      fontSize: 14,
                                                       // color: Color(0xFFFE6B35),
                                                     ),
                                                   ),
@@ -292,14 +292,14 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text(': المستخدم',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text(': المستخدم',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text( cubit.orders[index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text( cubit.orders[index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.person_outline, color: Colors.grey),
                                                   ],
@@ -308,7 +308,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text( cubit.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text( cubit.orders[index].user.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.phone_outlined, color: Colors.grey),
                                                   ],
@@ -317,7 +317,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text( cubit.orders[index].user.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Expanded(child: Text( cubit.orders[index].user.location,textAlign: TextAlign.end,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),)),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.location_on_outlined, color: Colors.grey),
                                                   ],
@@ -350,7 +350,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                         textAlign: TextAlign.end,
                                                         style: const TextStyle(
                                                           fontWeight: FontWeight.bold,
-                                                          fontSize: 18,
+                                                          fontSize: 14,
                                                           // color: Color(0xFFFE6B35),
                                                         ),
                                                       ),
@@ -368,14 +368,14 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text(': الدليفري',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text(': الدليفري',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text( cubit.orders[index].delivery!.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text( cubit.orders[index].delivery!.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.person_outline, color: Colors.grey),
                                                   ],
@@ -397,7 +397,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
-                                                      Text( cubit.orders[index].delivery!.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      Text( cubit.orders[index].delivery!.phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                       const SizedBox(width: 6),
                                                       const Icon(Icons.phone_outlined, color: Colors.grey),
                                                     ],
@@ -407,7 +407,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text( cubit.orders[index].delivery!.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text( cubit.orders[index].delivery!.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.location_on_outlined, color: Colors.grey),
                                                   ],
@@ -417,7 +417,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
                                                     Text( DateFormat('yyyy/M/d').format(DateTime.parse(cubit.orders[index].statusHistory.last.changeDate.toString())).toString()
-                                                      ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.date_range, color: Colors.grey),
                                                   ],
@@ -427,7 +427,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
                                                     Text( DateFormat('h:mm a').format(DateTime.parse(cubit.orders[index].statusHistory.last.changeDate.toString())).toString()
-                                                      ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                      ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.data_exploration, color: Colors.grey),
                                                   ],
@@ -446,7 +446,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    Text(': سبب الحالة',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                    Text(': سبب الحالة',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),
@@ -456,7 +456,7 @@ class AllOrdersAdmin extends StatelessWidget {
                                                     Expanded(child: Text(
                                                       cubit.orders[index].statusHistory.last.note!,
                                                       textAlign: TextAlign.end,
-                                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)),
+                                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),)),
                                                     const SizedBox(width: 6),
                                                     const Icon(Icons.note_alt_outlined, color: Colors.grey),
                                                   ],
@@ -525,9 +525,9 @@ class AllOrdersAdmin extends StatelessWidget {
                                                                 Row(
                                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                                   children: [
-                                                                    Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 18),),
+                                                                    Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 14),),
                                                                     SizedBox(width: 2,),
-                                                                    Text('#',style: TextStyle(fontSize: 18),),
+                                                                    Text('#',style: TextStyle(fontSize: 14),),
                                                                   ],
                                                                 ),
 

@@ -84,7 +84,7 @@ class Orders extends StatelessWidget {
                                               ],
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(16),
+                                              padding: const EdgeInsets.all(14),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -97,14 +97,14 @@ class Orders extends StatelessWidget {
                                                             "${index+1}",
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 16,
+                                                              fontSize: 14,
                                                             ),
                                                           ),
                                                           Text(
                                                             " طلب #",
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 16,
+                                                              fontSize: 14,
                                                             ),
                                                           ),
                                                         ],
@@ -130,7 +130,7 @@ class Orders extends StatelessWidget {
                                                         Colors.green:cubit.orderModel!.orders[index].status == 'استرجاع الطلب'?
                                                         Colors.red:Colors.orange,
                                                         fontWeight: FontWeight.w600,
-                                                        fontSize: 16,
+                                                        fontSize: 14,
                                                       ),
                                                       textAlign: TextAlign.center,
                                                     ),
@@ -149,7 +149,7 @@ class Orders extends StatelessWidget {
                                                       Row(
                                                         children: [
                                                           Text( cubit.orderModel!.orders[index].phone,
-                                                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                                                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
                                                           const SizedBox(width: 6),
                                                           const Icon(Icons.person, color: Colors.grey),
                                                         ],
@@ -161,7 +161,7 @@ class Orders extends StatelessWidget {
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
                                                       Expanded(child: Text(cubit.orderModel!.orders[index].address,
-                                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,)),
+                                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,)),
                                                       const SizedBox(width: 6),
                                                       const Icon(Icons.location_on, color: Colors.grey),
                                                     ],
@@ -177,7 +177,7 @@ class Orders extends StatelessWidget {
                                                             'د.ع ',
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 16,
+                                                              fontSize: 14,
                                                               color: primaryColor,
                                                             ),
                                                           ),
@@ -185,7 +185,7 @@ class Orders extends StatelessWidget {
                                                             cubit.orderModel!.orders[index].deliveryFee.toString(),
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 16,
+                                                              fontSize: 14,
                                                               // color: Color(0xFFFE6B35),
                                                             ),
                                                           ),
@@ -200,7 +200,7 @@ class Orders extends StatelessWidget {
                                                             ' د.ع ',
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 16,
+                                                              fontSize: 14,
                                                               color: primaryColor,
                                                             ),
                                                           ),
@@ -208,7 +208,7 @@ class Orders extends StatelessWidget {
                                                             cubit.orderModel!.orders[index].orderAmount.toString(),
                                                             style: const TextStyle(
                                                               fontWeight: FontWeight.bold,
-                                                              fontSize: 16,
+                                                              fontSize: 14,
                                                               // color: Color(0xFFFE6B35),
                                                             ),
                                                           ),
@@ -228,7 +228,7 @@ class Orders extends StatelessWidget {
                                                         style: const TextStyle(
                                                           color: Colors.black54,
                                                           fontWeight: FontWeight.bold,
-                                                          fontSize: 16,
+                                                          fontSize: 14,
                                                           // color: Color(0xFFFE6B35),
                                                         ),
                                                       ),
@@ -242,7 +242,7 @@ class Orders extends StatelessWidget {
                                                           textAlign: TextAlign.end,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             // color: Color(0xFFFE6B35),
                                                           ),
                                                         ),
@@ -252,7 +252,7 @@ class Orders extends StatelessWidget {
                                                           textAlign: TextAlign.end,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
-                                                            fontSize: 16,
+                                                            fontSize: 14,
                                                             // color: Color(0xFFFE6B35),
                                                           ),
                                                         ),
@@ -320,7 +320,7 @@ class Orders extends StatelessWidget {
                                                                       Row(
                                                                         mainAxisAlignment: MainAxisAlignment.end,
                                                                         children: [
-                                                                          Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 16),),
+                                                                          Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 14),),
                                                                           SizedBox(width: 2,),
                                                                           Text('#',style: TextStyle(fontSize: 18),),
                                                                         ],
@@ -373,7 +373,7 @@ class Orders extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text('تسجيل الدخول',
-                                style: TextStyle(color: Colors.white,fontSize: 16 ),),
+                                style: TextStyle(color: Colors.white,fontSize: 14 ),),
                             ),
                           ),
                         ),

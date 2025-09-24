@@ -47,7 +47,7 @@ class ProfileUser extends StatelessWidget {
                                     Text(
                                       cubit.profileModel!.name,
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black87,
                                       ),
@@ -94,7 +94,7 @@ class ProfileUser extends StatelessWidget {
                                         Text(
                                           'من نحن',
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey,
                                           ),
@@ -156,7 +156,7 @@ class ProfileUser extends StatelessWidget {
                                       Text(
                                         'الاتصال المباشر بالدعم',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey,
                                         ),
@@ -201,7 +201,7 @@ class ProfileUser extends StatelessWidget {
                                       Text(
                                         'فيسبوك',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey,
                                         ),
@@ -246,7 +246,7 @@ class ProfileUser extends StatelessWidget {
                                       Text(
                                         'انستقرام',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey,
                                         ),
@@ -273,7 +273,7 @@ class ProfileUser extends StatelessWidget {
                           //             Text(
                           //               'تقييم التطبيق',
                           //               style: TextStyle(
-                          //                 fontSize: 16,
+                          //                 fontSize: 14,
                           //                 fontWeight: FontWeight.bold,
                           //                 color: Colors.grey,
                           //               ),
@@ -300,13 +300,13 @@ class ProfileUser extends StatelessWidget {
                           //             Text(
                           //               'مشاركة التطبيق',
                           //               style: TextStyle(
-                          //                 fontSize: 16,
+                          //                 fontSize: 14,
                           //                 fontWeight: FontWeight.bold,
                           //                 color: Colors.grey,
                           //               ),
                           //             ),
                           //             SizedBox(width: 4,),
-                          //             Image.asset('assets/images/octicon_share-16.png'),
+                          //             Image.asset('assets/images/octicon_share-14.png'),
                           //           ],
                           //         ),
                           //       ],
@@ -333,7 +333,7 @@ class ProfileUser extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   title: Text("هل حقا ترغب في تسجيل الخروج ؟",
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(fontSize: 14),
                                     textAlign: TextAlign.center,),
                                   content: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -373,7 +373,7 @@ class ProfileUser extends StatelessWidget {
                                 Text(
                                   'تسجيل الخروج',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: primaryColor,
                                   ),
@@ -398,7 +398,7 @@ class ProfileUser extends StatelessWidget {
                                 Text(
                                   'تسجيل الدخول',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: primaryColor,
                                   ),
@@ -420,7 +420,7 @@ class ProfileUser extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   title: Text("هل حقا ترغب في حذف الحساب ؟",
-                                    style: TextStyle(fontSize: 16),
+                                    style: TextStyle(fontSize: 14),
                                     textAlign: TextAlign.center,),
                                   content: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -463,7 +463,7 @@ class ProfileUser extends StatelessWidget {
                                 Text(
                                   'حذف الحساب',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: primaryColor,
                                   ),
