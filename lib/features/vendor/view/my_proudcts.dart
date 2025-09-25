@@ -74,117 +74,113 @@ class MyProducts extends StatelessWidget {
                 body: ConditionalBuilder(
                     condition: cubit.getProductsModel != null ,
                     builder: (c){
-                      return Column(
-                        children: [
-                          SingleChildScrollView(
-                            physics: AlwaysScrollableScrollPhysics(),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 24.0,horizontal: 10),
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: cubit.getProductsModel!.products.length,
-                                      itemBuilder:(context,index){
-                                        int number = int.parse(cubit.getProductsModel!.products[index].price.toString());
-                                        DateTime dateTime = DateTime.parse(cubit.getProductsModel!.products[index].createdAt.toString());
-                                        String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+                      return SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24.0,horizontal: 10),
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: cubit.getProductsModel!.products.length,
+                                  itemBuilder:(context,index){
+                                    int number = int.parse(cubit.getProductsModel!.products[index].price.toString());
+                                    DateTime dateTime = DateTime.parse(cubit.getProductsModel!.products[index].createdAt.toString());
+                                    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
 
-                                        return Container(
-                                          padding: EdgeInsets.all(12),
-                                          margin: EdgeInsets.symmetric(horizontal: 16,vertical: 4),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(12),
-                                              color: Colors.white
-                                          ),
-                                          child: Column(
+                                    return Container(
+                                      padding: EdgeInsets.all(12),
+                                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.white
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Expanded(
-                                                    child: Column(
+                                              Expanded(
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(width: 12,),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
                                                       children: [
-                                                        SizedBox(width: 12,),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            Expanded(
-                                                                child: Text(
-                                                                cubit.getProductsModel!.products[index].title.toString(),
-                                                            textAlign: TextAlign.end,
-                                                            overflow: TextOverflow.ellipsis,
-                                                            maxLines: 1,)),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            Text('د.ع',style: TextStyle(color: primaryColor),),
-                                                            SizedBox(width: 4,),
-                                                            Text(NumberFormat('#,###').format(number).toString(),style: TextStyle(fontSize: 16),),
-                                                          ],
-                                                        ),
-
+                                                        Expanded(
+                                                            child: Text(
+                                                            cubit.getProductsModel!.products[index].title.toString(),
+                                                        textAlign: TextAlign.end,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 1,)),
                                                       ],
                                                     ),
-                                                  ),
-                                                  SizedBox(width: 12,),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      Container(
-                                                        width: 74,
-                                                        height: 74,
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(6),
-                                                        ),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                          BorderRadius.circular(6.0),
-                                                          child: Image.network(
-                                                            '$url/uploads/${cubit.getProductsModel!.products[index].images[0].toString()}',
-                                                            fit: BoxFit.fill,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(' ${index+1}#',style: TextStyle(fontSize: 16),),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 4,),
-                                              Container(width: double.maxFinite,height:1,color: Colors.grey,),
-                                              SizedBox(height: 6,),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text(formattedDate),
-                                                  SizedBox(width: 4,),
-                                                  Image.asset('assets/images/solar_calendar-broken (1).png',width: 20,height: 20,),
-                                                ],
-                                              ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        Text('د.ع',style: TextStyle(color: primaryColor),),
+                                                        SizedBox(width: 4,),
+                                                        Text(NumberFormat('#,###').format(number).toString(),style: TextStyle(fontSize: 16),),
+                                                      ],
+                                                    ),
 
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(width: 12,),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Expanded(child: Text(
-                                                    cubit.getProductsModel!.products[index].description.toString(),
-                                                    textAlign: TextAlign.end,
-                                                  ),),
+                                                  Container(
+                                                    width: 74,
+                                                    height: 74,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(6),
+                                                    ),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                      BorderRadius.circular(6.0),
+                                                      child: Image.network(
+                                                        '$url/uploads/${cubit.getProductsModel!.products[index].images[0].toString()}',
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(' ${index+1}#',style: TextStyle(fontSize: 16),),
                                                 ],
                                               ),
                                             ],
                                           ),
-                                        );
-                                      }),
-                                ),
+                                          SizedBox(height: 4,),
+                                          Container(width: double.maxFinite,height:1,color: Colors.grey,),
+                                          SizedBox(height: 6,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Text(formattedDate),
+                                              SizedBox(width: 4,),
+                                              Image.asset('assets/images/solar_calendar-broken (1).png',width: 20,height: 20,),
+                                            ],
+                                          ),
 
-                              ],
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Expanded(child: Text(
+                                                cubit.getProductsModel!.products[index].description.toString(),
+                                                textAlign: TextAlign.end,
+                                              ),),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
                             ),
-                          ),
-                        ],
+
+                          ],
+                        ),
                       );
                     },
                     fallback: (c)=>Center(child: CircularProgress())),
