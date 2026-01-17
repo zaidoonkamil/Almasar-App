@@ -15,6 +15,7 @@ import '../../../core/widgets/circular_progress.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
+import 'package:delivery_app/features/user/model/VendorModel.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -65,6 +66,24 @@ class Home extends StatelessWidget {
                             return Column(
                               children: [
                                 Expanded(
+                                  child: NotificationListener<ScrollNotification>(
+                                  onNotification: (ScrollNotification scrollInfo) {
+                                    if (scrollInfo.metrics.pixels >=
+                                            scrollInfo.metrics.maxScrollExtent - 50 &&
+                                        cubit.vendorModel != null &&
+                                        cubit.vendorModel!.paginationVendor
+                                                .currentPage <
+                                            cubit.vendorModel!.paginationVendor
+                                                .totalPages &&
+                                        !cubit.isVendorLoadingMore) {
+                                      int nextPage = cubit
+                                              .vendorModel!.paginationVendor.currentPage +
+                                          1;
+                                      cubit.getVendor(
+                                          page: '$nextPage', context: context);
+                                    }
+                                    return false;
+                                  },
                                   child: SingleChildScrollView(
                                     physics: AlwaysScrollableScrollPhysics(),
                                     child: Column(
@@ -189,15 +208,15 @@ class Home extends StatelessWidget {
                                                   childAspectRatio: 0.8,
                                                 ),
                                                 childrenDelegate: SliverChildBuilderDelegate(
-                                                  childCount: cubit.vendorModel!.data.length,
+                                                  childCount: cubit.allVendors.length,
                                                       (context, index) {
                                                     return GestureDetector(
                                                       onTap: () {
                                                         navigateTo(context, ProductsVendor(
-                                                          idVendor: cubit.vendorModel!.data[index].id.toString(),
-                                                          image: cubit.vendorModel!.data[index].images[0],
-                                                          name: cubit.vendorModel!.data[index].name,
-                                                          phone: cubit.vendorModel!.data[index].phone,
+                                                          idVendor: cubit.allVendors[index].id.toString(),
+                                                          image: cubit.allVendors[index].images[0],
+                                                          name: cubit.allVendors[index].name,
+                                                          phone: cubit.allVendors[index].phone,
                                                         ));
                                                       },
                                                       child: Stack(
@@ -213,7 +232,7 @@ class Home extends StatelessWidget {
                                                             child: ClipRRect(
                                                               borderRadius: BorderRadius.circular(6),
                                                               child: Image.network(
-                                                                "$url/uploads/${cubit.vendorModel!.data[index].images[0]}",
+                                                                "$url/uploads/${cubit.allVendors[index].images[0]}",
                                                                 fit: BoxFit.cover,
                                                               ),
                                                             ),
@@ -233,7 +252,7 @@ class Home extends StatelessWidget {
                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                   children: [
                                                                     Expanded(
-                                                                      child: Text(cubit.vendorModel!.data[index].name,
+                                                                      child: Text(cubit.allVendors[index].name,
                                                                       maxLines: 2,
                                                                       overflow: TextOverflow.ellipsis,
                                                                       textAlign: TextAlign.center,
@@ -244,7 +263,7 @@ class Home extends StatelessWidget {
                                                               ),
                                                             ],
                                                           ),
-                                                          cubit.vendorModel!.data[index].sponsorshipAmount !=0 ?
+                                                          cubit.allVendors[index].sponsorshipAmount !=0 ?
                                                           Row(
                                                             mainAxisAlignment: MainAxisAlignment.end,
                                                             children: [
@@ -274,9 +293,16 @@ class Home extends StatelessWidget {
                                             },
                                             fallback: (c)=>Center(child: CircularProgress())),
                                         SizedBox(height: 30,),
+                                        if (cubit.isVendorLoadingMore)
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                                child: CircularProgressIndicator()),
+                                          ),
                                       ],
                                     ),
                                   ),
+                                ),
                                 ),
                               ],
                             );

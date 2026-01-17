@@ -33,7 +33,7 @@ class GetDashboard {
     deliveredOrderComplet: json["deliveredOrderComplet"],
     deliveredOrderCancelled: json["deliveredOrderCancelled"],
     deliveredOrderExchange: json["deliveredOrderExchange"],
-    deliveryFee: json["deliveryFee"]??'',
+    deliveryFee: json["deliveryFee"]??0,
     totalAmountIncludingFee: json["totalAmountIncludingFee"],
     averageRating: json["averageRating"],
     totalRatings: json["totalRatings"],

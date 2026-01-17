@@ -130,7 +130,7 @@ class AddPerson extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 70),
+                                        const SizedBox(height: 20),
                                         CustomTextField(
                                           controller: userNameController,
                                           hintText: 'الاسم الثلاثي',
@@ -192,7 +192,7 @@ class AddPerson extends StatelessWidget {
                                           obscureText: true,
                                           // suffixIcon: const Icon(Icons.visibility_off, color: Colors.grey),
                                         ),
-                                        const SizedBox(height: 60),
+                                        const SizedBox(height: 30),
                                         ConditionalBuilder(
                                           condition: state is !AddPersonLoadingState,
                                           builder: (context){
@@ -436,7 +436,7 @@ class AddPerson extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 70),
+                                        const SizedBox(height: 20),
                                         CustomTextField(
                                           controller: userNameController2,
                                           hintText: 'الاسم الثلاثي',
@@ -495,7 +495,7 @@ class AddPerson extends StatelessWidget {
                                           prefixIcon: Icons.lock_outline,
                                           obscureText: true,
                                         ),
-                                        const SizedBox(height: 60),
+                                        const SizedBox(height: 30),
                                         ConditionalBuilder(
                                           condition: state is !AddPersonLoadingState,
                                           builder: (context){

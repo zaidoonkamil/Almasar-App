@@ -74,7 +74,21 @@ class MyProducts extends StatelessWidget {
                 body: ConditionalBuilder(
                     condition: cubit.getProductsModel != null ,
                     builder: (c){
-                      return SingleChildScrollView(
+                      return NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification scrollInfo) {
+                           if (scrollInfo.metrics.pixels >=
+                                  scrollInfo.metrics.maxScrollExtent - 50 &&
+                              cubit.getProductsModel != null &&
+                              cubit.getProductsModel!.pagination.currentPage <
+                                  cubit.getProductsModel!.pagination.totalPages &&
+                              !cubit.isProductLoadingMore) {
+                            int nextPage =
+                                cubit.getProductsModel!.pagination.currentPage + 1;
+                            cubit.getProducts(context: context, page: '$nextPage');
+                          }
+                          return false;
+                        },
+                        child: SingleChildScrollView(
                         physics: AlwaysScrollableScrollPhysics(),
                         child: Column(
                           children: [
@@ -83,10 +97,10 @@ class MyProducts extends StatelessWidget {
                               child: ListView.builder(
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
-                                  itemCount: cubit.getProductsModel!.products.length,
+                                  itemCount: cubit.allProducts.length,
                                   itemBuilder:(context,index){
-                                    int number = int.parse(cubit.getProductsModel!.products[index].price.toString());
-                                    DateTime dateTime = DateTime.parse(cubit.getProductsModel!.products[index].createdAt.toString());
+                                    int number = int.parse(cubit.allProducts[index].price.toString());
+                                    DateTime dateTime = DateTime.parse(cubit.allProducts[index].createdAt.toString());
                                     String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
 
                                     return Container(
@@ -110,7 +124,7 @@ class MyProducts extends StatelessWidget {
                                                       children: [
                                                         Expanded(
                                                             child: Text(
-                                                            cubit.getProductsModel!.products[index].title.toString(),
+                                                            cubit.allProducts[index].title.toString(),
                                                         textAlign: TextAlign.end,
                                                         overflow: TextOverflow.ellipsis,
                                                         maxLines: 1,)),
@@ -142,7 +156,7 @@ class MyProducts extends StatelessWidget {
                                                       borderRadius:
                                                       BorderRadius.circular(6.0),
                                                       child: Image.network(
-                                                        '$url/uploads/${cubit.getProductsModel!.products[index].images[0].toString()}',
+                                                        '$url/uploads/${cubit.allProducts[index].images[0].toString()}',
                                                         fit: BoxFit.fill,
                                                       ),
                                                     ),
@@ -167,8 +181,8 @@ class MyProducts extends StatelessWidget {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
-                                              Expanded(child: Text(
-                                                cubit.getProductsModel!.products[index].description.toString(),
+                                                Expanded(child: Text(
+                                                  cubit.allProducts[index].description.toString(),
                                                 textAlign: TextAlign.end,
                                               ),),
                                             ],
@@ -179,9 +193,14 @@ class MyProducts extends StatelessWidget {
                                   }),
                             ),
 
+                            if (cubit.isProductLoadingMore)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(child: CircularProgressIndicator()),
+                              ),
                           ],
                         ),
-                      );
+                      ));
                     },
                     fallback: (c)=>Center(child: CircularProgress())),
 

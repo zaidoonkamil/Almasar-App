@@ -27,13 +27,13 @@ class GetDashboardAdmin {
 
   factory GetDashboardAdmin.fromJson(Map<String, dynamic> json) => GetDashboardAdmin(
     message: json["message"],
-    totalOrders: json["totalOrders"],
-    completedOrders: json["completedOrders"],
-    cancelledOrders: json["cancelledOrders"],
-    exchangedOrders: json["exchangedOrders"],
-    totalOrderAmount: json["totalOrderAmount"],
-    totalDeliveryFee: json["totalDeliveryFee"],
-    totalAmountIncludingFee: json["totalAmountIncludingFee"],
+    totalOrders: (json["totalOrders"] as num).toInt(),
+    completedOrders: (json["completedOrders"] as num).toInt(),
+    cancelledOrders: (json["cancelledOrders"] as num).toInt(),
+    exchangedOrders: (json["exchangedOrders"] as num).toInt(),
+    totalOrderAmount: (json["totalOrderAmount"] as num).toInt(),
+    totalDeliveryFee: (json["totalDeliveryFee"] as num).toInt(),
+    totalAmountIncludingFee: (json["totalAmountIncludingFee"] as num).toInt(),
   );
 
   Map<String, dynamic> toJson() => {

@@ -17,6 +17,9 @@ import '../model/VendorModel.dart';
 class UserCubit extends Cubit<UserStates> {
   UserCubit() : super(UserInitialState());
 
+  List<Datum> allVendors = [];
+  bool isVendorLoadingMore = false;
+
   static UserCubit get(context) => BlocProvider.of(context);
 
   void slid(){
@@ -177,13 +180,27 @@ class UserCubit extends Cubit<UserStates> {
   PaginationVendor? paginationVendor;
   VendorModel? vendorModel;
   void getVendor({required String page,required BuildContext context,}) {
-    emit(GetVendorLoadingState());
+    if (page == '1') {
+      allVendors = [];
+      emit(GetVendorLoadingState());
+    } else {
+      isVendorLoadingMore = true;
+      emit(GetVendorSuccessState()); // Trigger rebuild to show loading at bottom
+    }
+
     DioHelper.getData(
       url: '/vendorbysponsored?page=$page',
     ).then((value) {
       vendorModel = VendorModel.fromJson(value.data);
+      if (page == '1') {
+        allVendors = vendorModel!.data;
+      } else {
+        allVendors.addAll(vendorModel!.data);
+        isVendorLoadingMore = false;
+      }
       emit(GetVendorSuccessState());
     }).catchError((error) {
+      isVendorLoadingMore = false;
       if (error is DioError) {
         showToastError(text: error.toString(),
           context: context,);
@@ -191,6 +208,7 @@ class UserCubit extends Cubit<UserStates> {
         emit(GetVendorErrorState());
       }else {
         print("Unknown Error: $error");
+        emit(GetVendorErrorState());
       }
     });
   }

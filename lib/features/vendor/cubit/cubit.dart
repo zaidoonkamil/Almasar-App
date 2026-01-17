@@ -92,19 +92,31 @@ class VendorCubit extends Cubit<VendorStates> {
     });
   }
 
-  List<Products> orderss = [];
+  List<Products> allProducts = [];
   Paginations? paginations;
   int currentPages = 1;
   bool isLastPages = false;
+  bool isProductLoadingMore = false;
   GetProductsModel? getProductsModel;
-  void getProducts({required BuildContext context,}) {
-    emit(GetProductsLoadingState());
+  void getProducts({required BuildContext context, String page = '1'}) {
+    if (page == '1') {
+      allProducts = [];
+      emit(GetProductsLoadingState());
+    } else {
+      isProductLoadingMore = true;
+      emit(GetProductsSuccessState());
+    }
     DioHelper.getData(
-        url: '/vendor/$id/products',
+        url: '/vendor/$id/products?page=$page',
         token: token
     ).then((value) {
       getProductsModel = GetProductsModel.fromJson(value.data);
-      orderss.addAll(getProductsModel!.products);
+      if (page == '1') {
+        allProducts = getProductsModel!.products;
+      } else {
+        allProducts.addAll(getProductsModel!.products);
+        isProductLoadingMore = false;
+      }
       paginations = getProductsModel!.pagination;
       currentPages = paginations!.currentPage;
       if (currentPages >= paginations!.totalPages) {
@@ -112,6 +124,7 @@ class VendorCubit extends Cubit<VendorStates> {
       }
       emit(GetProductsSuccessState());
     }).catchError((error) {
+      isProductLoadingMore = false;
       if (error is DioError) {
         showToastError(text: error.toString(),
           context: context,);

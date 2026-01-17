@@ -262,60 +262,6 @@ class ProfileUser extends StatelessWidget {
                               SizedBox(height: 14,),
                             ],
                           ),
-                          // Column(
-                          //   children: [
-                          //     Row(
-                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //       children: [
-                          //         Icon(Icons.arrow_back_ios_new_rounded),
-                          //         Row(
-                          //           children: [
-                          //             Text(
-                          //               'تقييم التطبيق',
-                          //               style: TextStyle(
-                          //                 fontSize: 14,
-                          //                 fontWeight: FontWeight.bold,
-                          //                 color: Colors.grey,
-                          //               ),
-                          //             ),
-                          //             SizedBox(width: 4,),
-                          //             Image.asset('assets/images/solar_star-line-duotone.png'),
-                          //           ],
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     SizedBox(height: 6,),
-                          //     Container(width: double.maxFinite,height: 2,color: Colors.black12,),
-                          //     SizedBox(height: 14,),
-                          //   ],
-                          // ),
-                          // Column(
-                          //   children: [
-                          //     Row(
-                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //       children: [
-                          //         Icon(Icons.arrow_back_ios_new_rounded),
-                          //         Row(
-                          //           children: [
-                          //             Text(
-                          //               'مشاركة التطبيق',
-                          //               style: TextStyle(
-                          //                 fontSize: 14,
-                          //                 fontWeight: FontWeight.bold,
-                          //                 color: Colors.grey,
-                          //               ),
-                          //             ),
-                          //             SizedBox(width: 4,),
-                          //             Image.asset('assets/images/octicon_share-14.png'),
-                          //           ],
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     SizedBox(height: 6,),
-                          //     Container(width: double.maxFinite,height: 2,color: Colors.black12,),
-                          //     SizedBox(height: 14,),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),

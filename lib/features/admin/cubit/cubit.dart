@@ -368,34 +368,34 @@ class AdminCubit extends Cubit<AdminStates> {
 
   void startAutoRefresh({required BuildContext context}) {
     getActiveOrder(context: context);
-    Timer.periodic(Duration(minutes: 3), (timer) {
+
+    _activeOrdersTimer?.cancel();
+    _activeOrdersTimer = Timer.periodic(const Duration(minutes: 3), (_) {
+      if (isClosed) return;
       getActiveOrder(context: context);
     });
   }
 
   List<GetActiveOrders>? getActiveOrdersModel;
   void getActiveOrder({required BuildContext context}) {
+    if (isClosed) return;
     emit(GetActiveOrderLoadingState());
-    DioHelper.getData(
-      url: '/admin/order-pending',
-    ).then((value) {
-      List<GetActiveOrders> newData = (value.data as List)
+
+    DioHelper.getData(url: '/admin/order-pending').then((value) {
+      if (isClosed) return;
+
+      final newData = (value.data as List)
           .map((item) => GetActiveOrders.fromJson(item))
           .toList();
+
       if (!listEquals(getActiveOrdersModel, newData)) {
         getActiveOrdersModel = newData;
-        emit(GetActiveOrderSuccessState());
       }
+
       emit(GetActiveOrderSuccessState());
     }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        print(error.toString());
-        emit(GetActiveOrderErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
+      if (isClosed) return;
+      emit(GetActiveOrderErrorState());
     });
   }
 
@@ -436,10 +436,16 @@ class AdminCubit extends Cubit<AdminStates> {
     });
   }
 
+  Timer? _activeOrdersTimer;
+  Timer? _activeDeliveryTimer;
+
 
   void startAutoRefreshActiveDelivery({required BuildContext context}) {
     getActiveDelivery(context: context);
-    Timer.periodic(Duration(minutes: 1), (timer) {
+
+    _activeDeliveryTimer?.cancel();
+    _activeDeliveryTimer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (isClosed) return;
       getActiveDelivery(context: context);
     });
   }
@@ -585,5 +591,11 @@ class AdminCubit extends Cubit<AdminStates> {
     });
   }
 
+  @override
+  Future<void> close() {
+    _activeOrdersTimer?.cancel();
+    _activeDeliveryTimer?.cancel();
+    return super.close();
+  }
 
 }

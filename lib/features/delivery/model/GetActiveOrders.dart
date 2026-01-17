@@ -4,6 +4,15 @@ List<GetActiveOrders> getActiveOrdersFromJson(String str) => List<GetActiveOrder
 
 String getActiveOrdersToJson(List<GetActiveOrders> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+int toInt(dynamic v, {int defaultValue = 0}) {
+  if (v == null) return defaultValue;
+  if (v is int) return v;
+  if (v is double) return v.toInt();
+  if (v is num) return v.toInt();
+  if (v is String) return int.tryParse(v) ?? defaultValue;
+  return defaultValue;
+}
+
 class GetActiveOrders {
   int id;
   int userId;
@@ -50,25 +59,27 @@ class GetActiveOrders {
   });
 
   factory GetActiveOrders.fromJson(Map<String, dynamic> json) => GetActiveOrders(
-    id: json["id"],
-    userId: json["userId"],
-    vendorId: json["vendorId"],
+    id: toInt(json["id"]),
+    userId: toInt(json["userId"]),
+    vendorId: json["vendorId"] == null ? null : toInt(json["vendorId"]),
     productId: json["productId"],
-    assignedDeliveryId: json["assignedDeliveryId"]??0,
-    address: json["address"],
-    phone: json["phone"],
-    orderAmount: json["orderAmount"],
-    deliveryFee: json["deliveryFee"],
-    notes: json["notes"],
-    status: json["status"],
+    assignedDeliveryId: toInt(json["assignedDeliveryId"]??0),
+    address: json["address"] ?? '',
+    phone: json["phone"] ?? '',
+    orderAmount: toInt(json["orderAmount"]),
+    deliveryFee: toInt(json["deliveryFee"]),
+    notes: json["notes"] ?? '',
+    status: json["status"] ?? '',
     isAccepted: json["isAccepted"],
-    rejectionReason: json["rejectionReason"]??'',
+    rejectionReason: json["rejectionReason"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
-    statusHistory: List<dynamic>.from(json["statusHistory"].map((x) => x)),
-    items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
+    statusHistory: (json["statusHistory"] as List? ?? []).toList(),
+    items: json["items"] == null ? [] : List<Item>.from((json["items"] as List).map((x) => Item.fromJson(x))),
     user: User.fromJson(json["user"]),
-    delivery: json["delivery"] != null ? Delivery.fromJson(json["delivery"]) : Delivery(id: 0, name: "", phone: "", location: "", createdAt: DateTime.now()),
+    delivery: json["delivery"] != null
+        ? Delivery.fromJson(json["delivery"])
+        : Delivery(id: 0, name: "", phone: "", location: "", createdAt: DateTime.now()),
     rating: json["rating"],
   );
 
@@ -113,11 +124,13 @@ class Delivery {
   });
 
   factory Delivery.fromJson(Map<String, dynamic> json) => Delivery(
-    id: json["id"],
-    name: json["name"],
-    phone: json["phone"],
-    location: json["location"],
-    createdAt: DateTime.parse(json["createdAt"]),
+    id: toInt(json["id"]),
+    name: json["name"] ?? '',
+    phone: json["phone"] ?? '',
+    location: json["location"] ?? '',
+    createdAt: json["createdAt"] == null
+        ? DateTime.now()
+        : DateTime.parse(json["createdAt"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -183,10 +196,12 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id: json["id"],
-    title: json["title"],
-    price: json["price"],
-    images: List<String>.from(json["images"].map((x) => x)),
+    id: toInt(json["id"]),
+    title: json["title"] ?? '',
+    price: toInt(json["price"]),
+    images: List<String>.from(
+      (json["images"] as List? ?? []).map((x) => x.toString()),
+    ),
   );
 
   Map<String, dynamic> toJson() => {
@@ -239,10 +254,10 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    phone: json["phone"],
-    location: json["location"],
+    id: toInt(json["id"]),
+    name: json["name"] ?? '',
+    phone: json["phone"] ?? '',
+    location: json["location"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {

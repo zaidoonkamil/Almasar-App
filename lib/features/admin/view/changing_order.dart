@@ -93,6 +93,7 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                       DateTime dateTime = DateTime.parse(cubit.getActiveOrdersModel![index].createdAt.toString());
                                       String formattedDate = DateFormat('yyyy/M/d').format(dateTime);
                                       String formattedTime = DateFormat('h:mm a').format(dateTime);
+                                      final rejection = cubit.getActiveOrdersModel![index].rejectionReason?.toString() ?? '';
                                       return  Container(
                                         margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
                                         decoration: BoxDecoration(
@@ -415,33 +416,31 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                   ),
                                                 ],
                                               ):const SizedBox(height: 12),
-                                              cubit.getActiveOrdersModel![index].rejectionReason != '' ?Column(
+                                              rejection.isNotEmpty ? Column(
                                                 children: [
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
+                                                    children: const [
                                                       Text(
                                                         ': سبب الرفض',
                                                         textAlign: TextAlign.end,
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                           color: Colors.black54,
                                                           fontWeight: FontWeight.bold,
                                                           fontSize: 18,
-                                                          // color: Color(0xFFFE6B35),
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                   Row(
                                                     children: [
-                                                     Expanded(
+                                                      Expanded(
                                                         child: Text(
-                                                          cubit.getActiveOrdersModel![index].rejectionReason,
+                                                          rejection,
                                                           textAlign: TextAlign.end,
                                                           style: const TextStyle(
                                                             fontWeight: FontWeight.bold,
                                                             fontSize: 18,
-                                                            // color: Color(0xFFFE6B35),
                                                           ),
                                                         ),
                                                       ),
@@ -449,7 +448,7 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                                   ),
                                                   const SizedBox(height: 12),
                                                 ],
-                                              ):Container(),
+                                              ) : const SizedBox.shrink(),
                                               cubit.getActiveOrdersModel![index].assignedDeliveryId == 0 ? Column(
                                                 children: [
                                                   GestureDetector(
