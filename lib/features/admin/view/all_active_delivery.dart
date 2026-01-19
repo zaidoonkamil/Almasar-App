@@ -27,7 +27,7 @@ class AllActiveDelivery extends StatelessWidget {
       child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){
           if(state is DeliveriesAssignOrderSuccessState){
-            navigateAndFinish(context, ChangingOrdersAdmin());
+            navigateAndFinish(context, ChangingOrdersAdmin(appBarText: 'الطلبيات النشطة',));
           }
         },
         builder: (context,state){

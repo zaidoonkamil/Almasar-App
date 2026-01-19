@@ -30,7 +30,7 @@ class OrderAdmin extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                       navigateTo(context, ChangingOrdersAdmin());
+                       navigateTo(context, ChangingOrdersAdmin(appBarText: 'الطلبيات النشطة',));
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),
@@ -59,7 +59,7 @@ class OrderAdmin extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                       navigateTo(context, AllOrdersAdmin(urll: '/admin/all-orders',));
+                       navigateTo(context, AllOrdersAdmin(urll: '/admin/all-orders', appBarText: 'الطلبيات المقبولة',));
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),
@@ -87,7 +87,7 @@ class OrderAdmin extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: (){
-                        navigateTo(context, AllOrdersAdmin(urll: '/admin/returned-or-exchanged-orders',));
+                        navigateTo(context, AllOrdersAdmin(urll: '/admin/returned-or-exchanged-orders', appBarText: 'الطلبيات المعلقة',));
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 24),

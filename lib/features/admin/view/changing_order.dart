@@ -16,11 +16,12 @@ import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
 class ChangingOrdersAdmin extends StatelessWidget {
-  const ChangingOrdersAdmin({super.key,});
+  const ChangingOrdersAdmin({super.key, required this.appBarText,});
 
   static TextEditingController noteController = TextEditingController();
   static TextEditingController noteRController = TextEditingController();
   static TextEditingController noteCController = TextEditingController();
+  final String appBarText;
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +67,8 @@ class ChangingOrdersAdmin extends StatelessWidget {
                                 navigateAndFinish(context, BottomNavBarAdmin(initialIndex: 3,));
                               },
                               child: Icon(Icons.arrow_back_ios_new,size: 28,)),
-                          const Text(
-                            'الطلبيات النشطة',
+                           Text(
+                            appBarText,
                             textAlign: TextAlign.end,
                             style: TextStyle(
                               fontSize: 24,

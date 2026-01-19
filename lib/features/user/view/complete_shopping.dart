@@ -164,6 +164,7 @@ class CompleteShopping extends StatelessWidget {
                               ],
                             ),
                           ),
+                          SizedBox(height: 100,),
                         ],
                       ),
                     ),

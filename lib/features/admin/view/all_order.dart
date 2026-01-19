@@ -13,9 +13,10 @@ import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
 class AllOrdersAdmin extends StatelessWidget {
-  const AllOrdersAdmin({super.key, required this.urll});
+  const AllOrdersAdmin({super.key, required this.urll, required this.appBarText});
 
   final String urll;
+  final String appBarText;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,8 @@ class AllOrdersAdmin extends StatelessWidget {
                               navigateBack(context);
                             },
                             child: Icon(Icons.arrow_back_ios_new,size: 28,)),
-                        const Text(
-                          'تقرير الطلبيات',
+                        Text(
+                          appBarText,
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             fontSize: 24,
