@@ -32,8 +32,8 @@ android {
         applicationId = "com.napol.almasardelivery"
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
-        versionCode = 4
-        versionName = "4.0"
+        versionCode = 5
+        versionName = "5.0"
     }
 
     signingConfigs {

@@ -34,16 +34,23 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+	</array>
+
+	<key>NSUserNotificationUsageDescription</key>
+	<string>نستخدم الإشعارات لإرسال تنبيهات مهمة عن الطلبات والتحديثات.</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>نحتاج الوصول للصور لاختيار صورة من المعرض.</string>
+
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>نحتاج إذن لحفظ الصور داخل المعرض.</string>
+
 </dict>
 </plist>
