@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/constant.dart';
 import 'package:delivery_app/features/vendor/view/add_products.dart';
+import 'package:delivery_app/features/vendor/view/edit_product.dart';
 import 'package:delivery_app/features/vendor/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,6 +116,21 @@ class MyProducts extends StatelessWidget {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
+                                              SizedBox(width: 8,),
+                                              GestureDetector(
+                                                onTap: (){
+                                                  navigateTo(context, EditProduct(idVendor: id, product: cubit.allProducts[index]));
+
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(6),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black.withOpacity(0.05),
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                  child: Icon(Icons.edit, size: 18,color: primaryColor,),
+                                                ),
+                                              ),
                                               Expanded(
                                                 child: Column(
                                                   children: [
@@ -162,6 +178,7 @@ class MyProducts extends StatelessWidget {
                                                     ),
                                                   ),
                                                   Text(' ${index+1}#',style: TextStyle(fontSize: 16),),
+
                                                 ],
                                               ),
                                             ],

@@ -26,6 +26,10 @@ class AddProductsLoadingState extends VendorStates {}
 class AddProductsSuccessState extends VendorStates {}
 class AddProductsErrorStates extends VendorStates {}
 
+class UpdateProductLoadingState extends VendorStates {}
+class UpdateProductSuccessState extends VendorStates {}
+class UpdateProductErrorState extends VendorStates {}
+
 class GetOrderLoadingState extends VendorStates {}
 class GetOrderSuccessState extends VendorStates {}
 class GetOrderErrorState extends VendorStates {}

@@ -1,4 +1,5 @@
 import 'package:delivery_app/core/widgets/constant.dart';
+import 'dart:convert';
 import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:delivery_app/features/vendor/cubit/states.dart';
 import 'package:dio/dio.dart';
@@ -209,6 +210,57 @@ class VendorCubit extends Cubit<VendorStates> {
           print("Unknown Error: $error");
         }
       });
+  }
+
+  Future<void> updateProduct({required String vendorId, required String productId, required String title, required String description, required String price, required List<String> removeImages, required BuildContext context}) async {
+    emit(UpdateProductLoadingState());
+
+    try {
+      FormData formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'price': price,
+        'removeImages': removeImages.isNotEmpty ? jsonEncode(removeImages) : null,
+      }, ListFormat.multiCompatible);
+
+      // add new images if selected
+      for (var file in selectedImages) {
+        formData.files.add(
+          MapEntry(
+            "images",
+            await MultipartFile.fromFile(
+              file.path, filename: file.name,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ),
+        );
+      }
+
+      final response = await DioHelper.dio!.put(
+        '/vendor/$vendorId/products/$productId',
+        data: formData,
+        options: Options(headers: {
+          'Authorization': token,
+          'Content-Type': 'multipart/form-data',
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        selectedImages = [];
+        emit(UpdateProductSuccessState());
+      } else {
+        showToastError(text: 'حدث خطأ أثناء التحديث', context: context);
+        emit(UpdateProductErrorState());
+      }
+    } catch (error) {
+      if (error is DioError) {
+        showToastError(text: handleDioError(error.response?.data), context: context);
+        emit(UpdateProductErrorState());
+      } else {
+        print('Unknown Error: $error');
+        emit(UpdateProductErrorState());
+      }
+    }
   }
 
   List<Order> orders = [];
