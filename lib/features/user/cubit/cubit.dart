@@ -179,13 +179,16 @@ class UserCubit extends Cubit<UserStates> {
 
   PaginationVendor? paginationVendor;
   VendorModel? vendorModel;
+  String vendorSearchQuery = '';
+  bool isVendorSearchLoadingMore = false;
+
   void getVendor({required String page,required BuildContext context,}) {
     if (page == '1') {
       allVendors = [];
       emit(GetVendorLoadingState());
     } else {
       isVendorLoadingMore = true;
-      emit(GetVendorSuccessState()); // Trigger rebuild to show loading at bottom
+      emit(GetVendorSuccessState());
     }
 
     DioHelper.getData(
@@ -209,6 +212,45 @@ class UserCubit extends Cubit<UserStates> {
       }else {
         print("Unknown Error: $error");
         emit(GetVendorErrorState());
+      }
+    });
+  }
+
+  void searchVendor({required String page, required String query, required BuildContext context, String limit = '10'}) {
+    print('🔎 searchVendor called: page=$page query="$query" limit=$limit');
+    if (page == '1') {
+      allVendors = [];
+      vendorSearchQuery = query;
+      emit(SearchVendorLoadingState());
+    } else {
+      isVendorSearchLoadingMore = true;
+      emit(SearchVendorSuccessState());
+    }
+
+    DioHelper.getData(
+      url: '/vendor-search?search=$query&page=$page&limit=$limit',
+    ).then((value) {
+      print('🔎 searchVendor response keys: ${value.data.keys}');
+      vendorModel = VendorModel.fromJson(value.data);
+      print('🔎 parsed vendorModel, data length: ${vendorModel!.data.length}');
+      if (page == '1') {
+        allVendors = vendorModel!.data;
+      } else {
+        allVendors.addAll(vendorModel!.data);
+        isVendorSearchLoadingMore = false;
+      }
+      emit(SearchVendorSuccessState());
+    }).catchError((error) {
+      isVendorSearchLoadingMore = false;
+      print('🔎 searchVendor error: $error');
+      if (error is DioError) {
+        showToastError(text: error.toString(),
+          context: context,);
+        print(error.toString());
+        emit(SearchVendorErrorState());
+      } else {
+        print("Unknown Error: $error");
+        emit(SearchVendorErrorState());
       }
     });
   }

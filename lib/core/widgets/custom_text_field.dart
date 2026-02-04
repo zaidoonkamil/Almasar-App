@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final void Function()? onTap;
   final TextEditingController? controller;
+  final void Function(String)? onChanged;
   final String? Function(String?)? validate;
   final int maxLines;
 
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.onTap,
     this.suffixIcon,
+    this.onChanged,
     this.validate,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
@@ -44,6 +46,7 @@ class CustomTextField extends StatelessWidget {
         textAlign:TextAlign.right,
         keyboardType: keyboardType,
         onTap: onTap,
+        onChanged: onChanged,
         obscureText: obscureText,
         validator: validate,
         controller: controller,

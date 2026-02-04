@@ -6,27 +6,90 @@ import 'package:delivery_app/features/user/view/orders.dart';
 import 'package:delivery_app/features/user/view/products_vendor.dart';
 import 'package:delivery_app/features/vendor/view/profile.dart';
 import 'package:delivery_app/features/user/view/request_delivery.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/ navigation/navigation.dart';
 import '../../../../core/styles/themes.dart';
+import '../../../core/widgets/CustomSearchField.dart' show CustomSearchField;
 import '../../../core/widgets/circular_progress.dart';
+import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
-import 'package:delivery_app/features/user/model/VendorModel.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
-  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  static TextEditingController userNameController = TextEditingController();
-  static TextEditingController passwordController = TextEditingController();
-  static bool isValidationPassed = false;
-  static int currentIndex = 0;
-  static DateTime? lastBackPressed;
-  static ScrollController? scrollController;
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isValidationPassed = false;
+  int currentIndex = 0;
+  DateTime? lastBackPressed;
+  ScrollController? scrollController;
+
+  Timer? _debounce;
+  bool showClear = false;
+  UserCubit? _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    userNameController.addListener(_onSearchChanged);
+
+    // Delay retrieving the cubit until after the first frame so BlocProvider exists
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        _cubit = UserCubit.get(context);
+        // if user typed before cubit was ready, trigger search
+        final query = userNameController.text.trim();
+        if (_cubit != null && query.isNotEmpty) {
+          _cubit!.searchVendor(page: '1', query: query, context: context);
+        }
+      } catch (e) {
+        _cubit = null;
+      }
+    });
+  }
+
+  void _onSearchChanged() {
+    final cubit = _cubit;
+    final text = userNameController.text;
+    print('🔎 _onSearchChanged fired, text="$text", cubitReady=${cubit!=null}');
+    setState(() {
+      showClear = text.isNotEmpty;
+    });
+    if (cubit == null) return;
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      final query = userNameController.text.trim();
+      print('🔎 debounce triggered for query: "$query"');
+      if (query.isEmpty) {
+        cubit.vendorSearchQuery = '';
+        cubit.getVendor(page: '1', context: context);
+      } else {
+        cubit.searchVendor(page: '1', query: query, context: context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    userNameController.removeListener(_onSearchChanged);
+    userNameController.dispose();
+    passwordController.dispose();
+    scrollController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +103,18 @@ class Home extends StatelessWidget {
         listener: (context,state){},
         builder: (context,state){
           var cubit=UserCubit.get(context);
+
+          // Ensure _cubit is assigned when BlocProvider is ready and
+          // trigger a pending search if the user typed before cubit existed.
+          if (_cubit == null) {
+            _cubit = cubit;
+            final pendingQuery = userNameController.text.trim();
+            if (pendingQuery.isNotEmpty) {
+              print('🔎 triggering pending search for: "$pendingQuery"');
+              _cubit!.searchVendor(page: '1', query: pendingQuery, context: context);
+            }
+          }
+
           return SafeArea(
             child: WillPopScope(
               onWillPop: () async {
@@ -71,16 +146,15 @@ class Home extends StatelessWidget {
                                     if (scrollInfo.metrics.pixels >=
                                             scrollInfo.metrics.maxScrollExtent - 50 &&
                                         cubit.vendorModel != null &&
-                                        cubit.vendorModel!.paginationVendor
-                                                .currentPage <
-                                            cubit.vendorModel!.paginationVendor
-                                                .totalPages &&
-                                        !cubit.isVendorLoadingMore) {
-                                      int nextPage = cubit
-                                              .vendorModel!.paginationVendor.currentPage +
-                                          1;
-                                      cubit.getVendor(
-                                          page: '$nextPage', context: context);
+                                        cubit.vendorModel!.paginationVendor.currentPage <
+                                            cubit.vendorModel!.paginationVendor.totalPages &&
+                                        !(cubit.isVendorLoadingMore || cubit.isVendorSearchLoadingMore)) {
+                                      int nextPage = cubit.vendorModel!.paginationVendor.currentPage + 1;
+                                      if (cubit.vendorSearchQuery.isEmpty) {
+                                        cubit.getVendor(page: '$nextPage', context: context);
+                                      } else {
+                                        cubit.searchVendor(page: '$nextPage', query: cubit.vendorSearchQuery, context: context);
+                                      }
                                     }
                                     return false;
                                   },
@@ -120,7 +194,33 @@ class Home extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(height: 18,),
+                                        SizedBox(height: 12,),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                          child: CustomSearchField(
+                                            controller: userNameController,
+
+                                            hintText: "بحث عن متجر...",
+
+                                            onChanged: (value) {
+                                              _onSearchChanged(); // search debounce
+                                              setState(() {});
+                                            },
+
+                                            onClear: () {
+                                              userNameController.clear();
+
+                                              final cubit = _cubit;
+                                              if (cubit == null) return;
+
+                                              cubit.vendorSearchQuery = '';
+                                              cubit.getVendor(page: '1', context: context);
+
+                                              setState(() {});
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(height: 14,),
                                         Column(
                                           children: [
                                             ConditionalBuilder(
@@ -159,7 +259,7 @@ class Home extends StatelessWidget {
                                                         autoPlayCurve: Curves.fastOutSlowIn,
                                                         scrollDirection: Axis.horizontal,
                                                         onPageChanged: (index, reason) {
-                                                          currentIndex=index;
+                                                          setState((){ currentIndex = index; });
                                                           cubit.slid();
                                                         },
                                                       ),
@@ -192,10 +292,22 @@ class Home extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(height: 26,),
+                                        SizedBox(height: 8,),
                                         ConditionalBuilder(
                                             condition: cubit.vendorModel != null,
                                             builder: (c){
+                                              if (cubit.allVendors.isEmpty) {
+                                                return Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 40.0),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'لا توجد نتائج',
+                                                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+
                                               return GridView.custom(
                                                 physics: const NeverScrollableScrollPhysics(),
                                                 shrinkWrap: true,
@@ -293,7 +405,7 @@ class Home extends StatelessWidget {
                                             },
                                             fallback: (c)=>Center(child: CircularProgress())),
                                         SizedBox(height: 30,),
-                                        if (cubit.isVendorLoadingMore)
+                                        if (cubit.isVendorLoadingMore || cubit.isVendorSearchLoadingMore)
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Center(

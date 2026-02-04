@@ -45,4 +45,8 @@ class GetProductsVendorLoadingState extends UserStates {}
 class GetProductsVendorSuccessState extends UserStates {}
 class GetProductsVendorErrorState extends UserStates {}
 
+class SearchVendorLoadingState extends UserStates {}
+class SearchVendorSuccessState extends UserStates {}
+class SearchVendorErrorState extends UserStates {}
+
 
