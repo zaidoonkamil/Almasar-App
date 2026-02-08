@@ -32,6 +32,7 @@ class GetActiveOrders {
   List<dynamic> statusHistory;
   List<Item>? items;
   User user;
+  User vendor;
   Delivery delivery;
   dynamic rating;
 
@@ -54,6 +55,7 @@ class GetActiveOrders {
     required this.statusHistory,
     required this.items,
     required this.user,
+    required this.vendor,
     required this.delivery,
     required this.rating,
   });
@@ -73,6 +75,7 @@ class GetActiveOrders {
     isAccepted: json["isAccepted"],
     rejectionReason: json["rejectionReason"],
     createdAt: DateTime.parse(json["createdAt"]),
+    vendor: User.fromJson(json["vendor"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     statusHistory: (json["statusHistory"] as List? ?? []).toList(),
     items: json["items"] == null ? [] : List<Item>.from((json["items"] as List).map((x) => Item.fromJson(x))),

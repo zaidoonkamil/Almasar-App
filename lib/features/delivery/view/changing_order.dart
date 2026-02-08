@@ -306,6 +306,48 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 const SizedBox(height: 12),
                                                 Container(width: double.maxFinite,height: 2,color: Colors.grey,),
                                                 const SizedBox(height: 12),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      cubit.getActiveOrdersModel![index].vendor.name,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        final url = 'tel:${cubit.getActiveOrdersModel![index].vendor.phone}';
+                                                        await launch(
+                                                          url,
+                                                          enableJavaScript: true,
+                                                        ).catchError((e) {
+                                                          showToastError(
+                                                            text: e.toString(),
+                                                            context: context,
+                                                          );
+                                                        });
+                                                      },
+                                                      child: Row(
+                                                        children: [
+                                                          Text( cubit.getActiveOrdersModel![index].phone,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+                                                          const SizedBox(width: 6),
+                                                          const Icon(Icons.phone_outlined, color: Colors.grey),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 6),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(cubit.getActiveOrdersModel![index].vendor.location,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
+                                                    const SizedBox(width: 6),
+                                                    const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 6),
                                                 SizedBox(
                                                   height: 90,
                                                   child: ListView.builder(
