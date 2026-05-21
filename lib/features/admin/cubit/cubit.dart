@@ -395,6 +395,7 @@ class AdminCubit extends Cubit<AdminStates> {
       emit(GetActiveOrderSuccessState());
     }).catchError((error) {
       if (isClosed) return;
+      print('Error: $error');
       emit(GetActiveOrderErrorState());
     });
   }
