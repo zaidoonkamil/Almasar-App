@@ -137,6 +137,26 @@ class Orders extends StatelessWidget {
                                                   ),
                                                   const SizedBox(height: 12),
                                                   Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      Text(
+                                                        cubit.orderModel!.orders[index].vendor?.name ?? "متجر غير معروف",
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 15,
+                                                          color: primaryColor,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 6),
+                                                      const Icon(
+                                                        Icons.store_mall_directory_outlined,
+                                                        color: primaryColor,
+                                                        size: 20,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                                                     children: [

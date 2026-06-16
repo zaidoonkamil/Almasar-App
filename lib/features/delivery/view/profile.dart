@@ -10,6 +10,7 @@ import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/custom_appbar.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../../user/view/how_as.dart';
+import '../../user/view/edit_profile.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -38,23 +39,43 @@ class ProfileDelivery extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit_outlined, color: primaryColor, size: 26),
+                                  onPressed: () {
+                                    navigateTo(
+                                      context,
+                                      EditProfileScreen(
+                                        initialName: cubit.profileModel!.name,
+                                        initialPhone: cubit.profileModel!.phone,
+                                        initialImageUrl: cubit.profileModel!.images.isNotEmpty
+                                            ? cubit.profileModel!.images[0]
+                                            : null,
+                                        userId: cubit.profileModel!.id.toString(),
+                                      ),
+                                    ).then((value) {
+                                      if (value == true) {
+                                        cubit.getProfile(context: context);
+                                      }
+                                    });
+                                  },
+                                ),
+                                const Spacer(),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
                                       cubit.profileModel!.name,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black87,
                                       ),
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Text(
                                       cubit.profileModel!.phone,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey,
@@ -62,16 +83,26 @@ class ProfileDelivery extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 6,),
-                                cubit.profileModel!.images.isEmpty?
-                                Image.asset('assets/images/Group 1171275632 (1).png'):
-                                ClipOval(
-                                  child: Image.network(
-                                    '$url/uploads/${cubit.profileModel!.images[0]}',
-                                    height: 70,
-                                    width: 80,
-                                  ),
-                                ),
+                                const SizedBox(width: 6,),
+                                cubit.profileModel!.images.isNotEmpty
+                                    ? Container(
+                                        width: 64,
+                                        height: 64,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            '$url/uploads/${cubit.profileModel!.images[0]}',
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) => Image.asset(
+                                              'assets/images/Group 1171275632 (1).png',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Image.asset('assets/images/Group 1171275632 (1).png'),
                               ],
                             ),
                           );

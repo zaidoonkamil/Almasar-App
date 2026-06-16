@@ -12,6 +12,8 @@ import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
+import '../../user/view/edit_profile.dart';
+import '../../../core/network/remote/dio_helper.dart';
 
 
 class ProfileUser extends StatelessWidget {
@@ -39,8 +41,30 @@ class ProfileUser extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: token != '' ? MainAxisAlignment.start : MainAxisAlignment.end,
                               children: [
+                                if (token != '')
+                                  IconButton(
+                                    icon: const Icon(Icons.edit_outlined, color: primaryColor, size: 26),
+                                    onPressed: () {
+                                      navigateTo(
+                                        context,
+                                        EditProfileScreen(
+                                          initialName: cubit.profileModel!.name,
+                                          initialPhone: cubit.profileModel!.phone,
+                                          initialImageUrl: cubit.profileModel!.images.isNotEmpty
+                                              ? cubit.profileModel!.images[0]
+                                              : null,
+                                          userId: cubit.profileModel!.id.toString(),
+                                        ),
+                                      ).then((value) {
+                                        if (value == true) {
+                                          cubit.getProfile(context: context);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                if (token != '') const Spacer(),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -64,10 +88,27 @@ class ProfileUser extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(width: 6,),
-                               Image.asset('assets/images/Group 1171275632 (1).png'),
+                                cubit.profileModel!.images.isNotEmpty
+                                    ? Container(
+                                        width: 64,
+                                        height: 64,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: ClipOval(
+                                          child: Image.network(
+                                            '$url/uploads/${cubit.profileModel!.images[0]}',
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) => Image.asset(
+                                              'assets/images/Group 1171275632 (1).png',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Image.asset('assets/images/Group 1171275632 (1).png'),
                               ],
                             ),
-
                           );
                         },
                         fallback: (c)=>Center(child: CircularProgressIndicator(color: primaryColor,))

@@ -24,6 +24,32 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(ValidationState());
   }
 
+  List<String> activeGovernorates = [];
+  String? selectedGovernorate;
+
+  void getGovernorates() {
+    emit(GetGovernoratesLoadingState());
+    DioHelper.getData(url: '/governorates').then((value) {
+      activeGovernorates = (value.data as List)
+          .map((item) => item['name'] as String)
+          .toList();
+      if (activeGovernorates.isNotEmpty && selectedGovernorate == null) {
+        selectedGovernorate = activeGovernorates[0];
+      }
+      emit(GetGovernoratesSuccessState());
+    }).catchError((error) {
+      print("❌ Error fetching governorates: $error");
+      activeGovernorates = ["صلاح الدين"];
+      selectedGovernorate = "صلاح الدين";
+      emit(GetGovernoratesSuccessState());
+    });
+  }
+
+  void changeGovernorate(String governorate) {
+    selectedGovernorate = governorate;
+    emit(ValidationState());
+  }
+
   List<XFile> selectedImages = [];
   Future<void> pickImages() async {
     final ImagePicker picker = ImagePicker();
@@ -57,6 +83,7 @@ class AuthCubit extends Cubit<AuthStates> {
     required String password,
     required String role,
     String? category,
+    String? governorate,
     required BuildContext context,
   }) async {
     emit(SignUpLoadingState());
@@ -76,6 +103,7 @@ class AuthCubit extends Cubit<AuthStates> {
             'password': password,
             'role': role,
             'category': category,
+            'governorate': governorate,
           },
           ListFormat.multiCompatible
       );
@@ -121,6 +149,7 @@ class AuthCubit extends Cubit<AuthStates> {
           'location': location,
           'password': password,
           'role': role,
+          'governorate': governorate,
         },
       ).then((value) {
         emit(SignUpSuccessState());

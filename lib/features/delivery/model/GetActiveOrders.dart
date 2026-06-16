@@ -75,7 +75,7 @@ class GetActiveOrders {
     isAccepted: json["isAccepted"],
     rejectionReason: json["rejectionReason"],
     createdAt: DateTime.parse(json["createdAt"]),
-    vendor: User.fromJson(json["vendor"]),
+    vendor: json["vendor"] == null ? User(id: 0, name: '', phone: '', location: '') : User.fromJson(json["vendor"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     statusHistory: (json["statusHistory"] as List? ?? []).toList(),
     items: json["items"] == null ? [] : List<Item>.from((json["items"] as List).map((x) => Item.fromJson(x))),

@@ -1,42 +1,30 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/constant.dart';
 import 'package:delivery_app/core/widgets/show_toast.dart';
-import 'package:delivery_app/features/auth/view/login.dart';
-import 'package:delivery_app/features/auth/view/register.dart';
-import 'package:delivery_app/features/user/view/orders.dart';
-import 'package:delivery_app/features/user/view/request_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/ navigation/navigation.dart';
 import '../../../../core/styles/themes.dart';
-import '../../../../core/widgets/circular_progress.dart';
-import '../../../../core/widgets/custom_form_field.dart';
-import '../../../../core/widgets/custom_text_field.dart';
 import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/widgets/StatCard.dart';
 import '../../../core/widgets/custom_appbar.dart';
-import '../../user/cubit/cubit.dart';
-import '../../user/cubit/states.dart';
 import '../../user/view/how_as.dart';
+import '../../user/view/edit_profile.dart';
+import '../cubit/cubit.dart';
+import '../cubit/states.dart';
 
 class ProfileVendor extends StatelessWidget {
-  const ProfileVendor({super.key, required this.name, required this.phone, required this.image});
-
-  final String image;
-  final String name;
-  final String phone;
+  const ProfileVendor({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => UserCubit(),
-      child: BlocConsumer<UserCubit,UserStates>(
+      create: (BuildContext context) => VendorCubit()..getProfile(context: context),
+      child: BlocConsumer<VendorCubit,VendorStates>(
         listener: (context,state){},
         builder: (context,state){
-          var cubit=UserCubit.get(context);
+          var cubit=VendorCubit.get(context);
           return SafeArea(
             child: Scaffold(
               body: SingleChildScrollView(
@@ -45,28 +33,49 @@ class ProfileVendor extends StatelessWidget {
                   children: [
                     CustomAppbarBack(),
                     SizedBox(height: 64,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Row(
+                    ConditionalBuilder(
+                      condition: cubit.profileModel != null,
+                      builder: (context) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: Row(
                             children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit_outlined, color: primaryColor, size: 26),
+                                onPressed: () {
+                                  navigateTo(
+                                    context,
+                                    EditProfileScreen(
+                                      initialName: cubit.profileModel!.name,
+                                      initialPhone: cubit.profileModel!.phone,
+                                      initialImageUrl: cubit.profileModel!.images.isNotEmpty
+                                          ? cubit.profileModel!.images[0]
+                                          : null,
+                                      userId: cubit.profileModel!.id.toString(),
+                                    ),
+                                  ).then((value) {
+                                    if (value == true) {
+                                      cubit.getProfile(context: context);
+                                    }
+                                  });
+                                },
+                              ),
+                              const Spacer(),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    name,
-                                    style: TextStyle(
+                                    cubit.profileModel!.name,
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
                                     ),
                                   ),
-                                  SizedBox(height: 4,),
+                                  const SizedBox(height: 4,),
                                   Text(
-                                    phone,
-                                    style: TextStyle(
+                                    cubit.profileModel!.phone,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey,
@@ -74,19 +83,32 @@ class ProfileVendor extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 6,),
-                             image==''?Image.asset('assets/images/Group 1171275632 (1).png'):
-                             ClipOval(
-                                child: Image.network(
-                                  '$url/uploads/$image',
-                                  height: 70,
-                                  width: 80,
-                                ),
-                              ),
+                              const SizedBox(width: 6,),
+                              cubit.profileModel!.images.isNotEmpty
+                                  ? Container(
+                                      width: 64,
+                                      height: 64,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          '$url/uploads/${cubit.profileModel!.images[0]}',
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) => Image.asset(
+                                            'assets/images/Group 1171275632 (1).png',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Image.asset('assets/images/Group 1171275632 (1).png'),
                             ],
                           ),
-
-                        ],
+                        );
+                      },
+                      fallback: (context) => const Center(
+                        child: CircularProgressIndicator(color: primaryColor),
                       ),
                     ),
                     Padding(

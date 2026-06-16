@@ -49,6 +49,7 @@ class Order {
   DateTime createdAt;
   DateTime updatedAt;
   List<StatusHistory> statusHistory;
+  Vendor? vendor;
 
   Order({
     required this.id,
@@ -68,6 +69,7 @@ class Order {
     required this.createdAt,
     required this.updatedAt,
     required this.statusHistory,
+    this.vendor,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -88,6 +90,7 @@ class Order {
     updatedAt: DateTime.parse(json["updatedAt"]),
     items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
     statusHistory: List<StatusHistory>.from(json["statusHistory"].map((x) => StatusHistory.fromJson(x))),
+    vendor: json["vendor"] == null ? null : Vendor.fromJson(json["vendor"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -108,6 +111,7 @@ class Order {
     "updatedAt": updatedAt.toIso8601String(),
     "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),
     "statusHistory": List<dynamic>.from(statusHistory.map((x) => x.toJson())),
+    "vendor": vendor?.toJson(),
   };
 }
 
@@ -229,5 +233,33 @@ class Pagination {
     "totalOrders": totalOrders,
     "totalPages": totalPages,
     "currentPage": currentPage,
+  };
+}
+
+class Vendor {
+  int id;
+  String name;
+  String phone;
+  String location;
+
+  Vendor({
+    required this.id,
+    required this.name,
+    required this.phone,
+    required this.location,
+  });
+
+  factory Vendor.fromJson(Map<String, dynamic> json) => Vendor(
+    id: json["id"],
+    name: json["name"],
+    phone: json["phone"] ?? "",
+    location: json["location"] ?? "",
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "phone": phone,
+    "location": location,
   };
 }

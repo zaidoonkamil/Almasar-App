@@ -32,7 +32,7 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AuthCubit(),
+      create: (BuildContext context) => AuthCubit()..getGovernorates(),
       child: BlocConsumer<AuthCubit, AuthStates>(
         listener: (context, state) {
           if (state is SignUpSuccessState) {
@@ -155,16 +155,56 @@ class Register extends StatelessWidget {
                                       },
                                     ),
                                     const SizedBox(height: 16),
+                                    Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.05),
+                                              blurRadius: 5,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: DropdownButtonFormField<String>(
+                                          value: cubit.activeGovernorates.contains(cubit.selectedGovernorate) ? cubit.selectedGovernorate : null,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            prefixIcon: Icon(Icons.map_outlined, color: Colors.grey),
+                                          ),
+                                          hint: const Text('المحافظة'),
+                                          isExpanded: true,
+                                          icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                          dropdownColor: Colors.white,
+                                          items: cubit.activeGovernorates.map((String gov) {
+                                            return DropdownMenuItem<String>(
+                                              value: gov,
+                                              child: Text(gov),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            if (newValue != null) {
+                                              cubit.changeGovernorate(newValue);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
                                     CustomTextField(
                                       controller: locationController,
-                                      hintText: 'العنوان',
+                                      hintText: 'تفاصيل العنوان الكامل (الحي / الشارع)',
 
                                       prefixIcon: Icons.location_on_outlined,
                                       keyboardType: TextInputType.text,
                                       validate: (String? value) {
                                         if (value!.isEmpty) {
                                           cubit.validation();
-                                          return 'رجائا اخل العنوان';
+                                          return 'رجائا ادخل تفاصيل العنوان';
                                         }
                                         return null;
                                       },
@@ -221,6 +261,7 @@ class Register extends StatelessWidget {
                                                       .text
                                                       .trim(),
                                                   role: 'user',
+                                                  governorate: cubit.selectedGovernorate,
                                                   context: context,
                                                 );
                                               } else {
@@ -353,16 +394,56 @@ class Register extends StatelessWidget {
                                       },
                                     ),
                                     const SizedBox(height: 16),
+                                    Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.05),
+                                              blurRadius: 5,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: DropdownButtonFormField<String>(
+                                          value: cubit.activeGovernorates.contains(cubit.selectedGovernorate) ? cubit.selectedGovernorate : null,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            prefixIcon: Icon(Icons.map_outlined, color: Colors.grey),
+                                          ),
+                                          hint: const Text('المحافظة'),
+                                          isExpanded: true,
+                                          icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                          dropdownColor: Colors.white,
+                                          items: cubit.activeGovernorates.map((String gov) {
+                                            return DropdownMenuItem<String>(
+                                              value: gov,
+                                              child: Text(gov),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            if (newValue != null) {
+                                              cubit.changeGovernorate(newValue);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
                                     CustomTextField(
                                       controller: locationController2,
-                                      hintText: 'العنوان',
+                                      hintText: 'تفاصيل العنوان الكامل (الحي / الشارع)',
 
                                       prefixIcon: Icons.location_on_outlined,
                                       keyboardType: TextInputType.text,
                                       validate: (String? value) {
                                         if (value!.isEmpty) {
                                           cubit.validation();
-                                          return 'رجائا اخل العنوان';
+                                          return 'رجائا ادخل تفاصيل العنوان';
                                         }
                                         return null;
                                       },
@@ -483,6 +564,7 @@ class Register extends StatelessWidget {
                                                       .trim(),
                                                   role: 'vendor',
                                                   category: cubit.selectedCategory,
+                                                  governorate: cubit.selectedGovernorate,
                                                   context: context,
                                                 );
                                               } else {

@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/network/remote/dio_helper.dart';
-import 'package:delivery_app/features/user/view/orders.dart';
 import 'package:delivery_app/features/vendor/view/profile.dart';
 import 'package:delivery_app/features/user/view/request_delivery.dart';
 import 'package:flutter/material.dart';
@@ -90,11 +89,10 @@ class HomeVendor extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
                                         child: GestureDetector(
-                                          onTap:(){
-                                            navigateTo(context, ProfileVendor(
-                                              name: cubit.profileModel!.name,
-                                              phone: cubit.profileModel!.phone,
-                                              image: cubit.profileModel!.images[0],));
+                                          onTap: () {
+                                            navigateTo(context, const ProfileVendor()).then((value) {
+                                              cubit.getProfile(context: context);
+                                            });
                                           },
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
@@ -113,15 +111,33 @@ class HomeVendor extends StatelessWidget {
                                                   Text(
                                                     textAlign: TextAlign.right,
                                                     cubit.profileModel!.name,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 22,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(width: 8,),
-                                              Image.asset('assets/images/Group 1171275632.png'),
+                                              const SizedBox(width: 8,),
+                                              cubit.profileModel!.images.isNotEmpty
+                                                  ? Container(
+                                                      width: 54,
+                                                      height: 54,
+                                                      decoration: const BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: ClipOval(
+                                                        child: Image.network(
+                                                          '$url/uploads/${cubit.profileModel!.images[0]}',
+                                                          fit: BoxFit.cover,
+                                                          errorBuilder: (context, error, stackTrace) => Image.asset(
+                                                            'assets/images/Group 1171275632.png',
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Image.asset('assets/images/Group 1171275632.png'),
                                             ],
                                           ),
                                         ),

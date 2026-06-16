@@ -14,4 +14,8 @@ class SignUpLoadingState extends AuthStates {}
 class SignUpSuccessState extends AuthStates {}
 class SignUpErrorState extends AuthStates {}
 
+class GetGovernoratesLoadingState extends AuthStates {}
+class GetGovernoratesSuccessState extends AuthStates {}
+class GetGovernoratesErrorState extends AuthStates {}
+
 

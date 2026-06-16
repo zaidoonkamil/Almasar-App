@@ -141,6 +141,26 @@ class AllOrdersAdmin extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 12),
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  cubit.orders[index].vendor?.name ?? "متجر غير معروف",
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: primaryColor,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 6),
+                                                const Icon(
+                                                  Icons.store_mall_directory_outlined,
+                                                  color: primaryColor,
+                                                  size: 24,
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(

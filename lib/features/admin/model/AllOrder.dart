@@ -74,6 +74,7 @@ class Order {
   List<StatusHistory> statusHistory;
   User user;
   dynamic delivery;
+  Vendor? vendor;
 
   Order({
     required this.id,
@@ -95,6 +96,7 @@ class Order {
     required this.statusHistory,
     required this.user,
     required this.delivery,
+    this.vendor,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -117,6 +119,7 @@ class Order {
     statusHistory: List<StatusHistory>.from(json["statusHistory"].map((x) => StatusHistory.fromJson(x))),
     user: User.fromJson(json["user"]),
     delivery: json["delivery"] == null ? null : Delivery.fromJson(json["delivery"]),
+    vendor: json["vendor"] == null ? null : Vendor.fromJson(json["vendor"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -139,6 +142,7 @@ class Order {
     "statusHistory": List<dynamic>.from(statusHistory.map((x) => x.toJson())),
     "user": user.toJson(),
     "delivery": delivery?.toJson(),
+    "vendor": vendor?.toJson(),
   };
 }
 
@@ -315,5 +319,33 @@ class Product {
     "title": title,
     "price": price,
     "images": List<dynamic>.from(images.map((x) => x)),
+  };
+}
+
+class Vendor {
+  int id;
+  String name;
+  String phone;
+  String location;
+
+  Vendor({
+    required this.id,
+    required this.name,
+    required this.phone,
+    required this.location,
+  });
+
+  factory Vendor.fromJson(Map<String, dynamic> json) => Vendor(
+    id: json["id"] ?? 0,
+    name: json["name"] ?? '',
+    phone: json["phone"] ?? '',
+    location: json["location"] ?? '',
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "phone": phone,
+    "location": location,
   };
 }

@@ -73,7 +73,27 @@ class Login extends StatelessWidget {
                     key: formKey,
                     child: Column(
                       children: [
-                        SizedBox(height: 140),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (Navigator.canPop(context)) {
+                                  navigateBack(context);
+                                } else {
+                                  navigateAndFinish(context, const BottomNavBarUser());
+                                }
+                              },
+                              child: const Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: 26,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 80),
                         Image.asset('assets/images/logo.png', height: 100),
                         const SizedBox(height: 12),
                         const Text(
