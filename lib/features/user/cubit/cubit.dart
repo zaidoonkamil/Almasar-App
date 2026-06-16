@@ -1,6 +1,7 @@
 import 'package:delivery_app/core/widgets/constant.dart';
 import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:delivery_app/features/user/cubit/states.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:delivery_app/features/user/model/GetCartModel.dart';
 import 'package:delivery_app/features/user/model/ProductsVendorModel.dart';
 import 'package:dio/dio.dart';
@@ -19,6 +20,8 @@ class UserCubit extends Cubit<UserStates> {
 
   List<Datum> allVendors = [];
   bool isVendorLoadingMore = false;
+  double? latitude;
+  double? longitude;
 
   static UserCubit get(context) => BlocProvider.of(context);
 
@@ -79,7 +82,7 @@ class UserCubit extends Cubit<UserStates> {
 
   ProfileModel? profileModel;
   void getProfile({required BuildContext context,}) {
-    if(token == ''){
+    if(token == '' || id == ''){
       profileModel = ProfileModel(
         id: 1,
         name: "ضيف",
@@ -118,6 +121,8 @@ class UserCubit extends Cubit<UserStates> {
     required String deliveryFee,
     required String notes,
     required BuildContext context,
+    double? latitude,
+    double? longitude,
   }){
     emit(AddOrderLoadingState());
     DioHelper.postData(
@@ -130,6 +135,8 @@ class UserCubit extends Cubit<UserStates> {
         'orderAmount': orderAmount,
         'deliveryFee': deliveryFee,
         'notes': notes,
+        if (latitude != null) 'latitude': latitude,
+        if (longitude != null) 'longitude': longitude,
       },
     ).then((value) {
       emit(AddOrderSuccessState());
@@ -153,9 +160,14 @@ class UserCubit extends Cubit<UserStates> {
   bool isLastPage = false;
   GetOrder? orderModel;
   void getOrder({required String page, BuildContext? context,}) {
+    if (page == '1') {
+      orders = [];
+      isLastPage = false;
+      currentPage = 1;
+    }
     emit(GetOrderLoadingState());
     DioHelper.getData(
-      url: '/orders/$id?$page',
+      url: '/orders/$id?page=$page',
     ).then((value) {
       orderModel = GetOrder.fromJson(value.data);
       orders.addAll(orderModel!.orders);
@@ -176,6 +188,49 @@ class UserCubit extends Cubit<UserStates> {
       }
     });
   }
+
+  void submitDeliveryRating({
+    required int deliveryId,
+    required int orderId,
+    required double rating,
+    required BuildContext context,
+  }) {
+    emit(SubmitRatingLoadingState());
+    DioHelper.postData(
+      url: '/delivery-rating',
+      data: {
+        'deliveryId': deliveryId,
+        'userId': id,
+        'orderId': orderId,
+        'rating': rating,
+        'comment': '',
+      },
+    ).then((value) {
+      showToastSuccess(
+        text: "تم إرسال التقييم بنجاح",
+        context: context,
+      );
+      emit(SubmitRatingSuccessState());
+      orders = [];
+      getOrder(page: '1', context: context);
+    }).catchError((error) {
+      if (error is DioError) {
+        String errorMsg = "حدث خطأ أثناء إرسال التقييم";
+        if (error.response?.data is Map && error.response?.data["error"] != null) {
+          errorMsg = error.response?.data["error"];
+        }
+        showToastError(
+          text: errorMsg,
+          context: context,
+        );
+        emit(SubmitRatingErrorState());
+      } else {
+        print("Unknown Error: $error");
+        emit(SubmitRatingErrorState());
+      }
+    });
+  }
+
 
   PaginationVendor? paginationVendor;
   VendorModel? vendorModel;
@@ -440,6 +495,8 @@ class UserCubit extends Cubit<UserStates> {
     required String notes,
     required List<Map<String, dynamic>> products,
     required BuildContext context,
+    double? latitude,
+    double? longitude,
   }){
     emit(AddOrderCartLoadingState());
     DioHelper.postData(
@@ -451,6 +508,8 @@ class UserCubit extends Cubit<UserStates> {
         'notes': notes,
         'userId': id,
         'products': products,
+        if (latitude != null) 'latitude': latitude,
+        if (longitude != null) 'longitude': longitude,
       },
     ).then((value) {
       emit(AddOrderCartSuccessState());
@@ -470,4 +529,53 @@ class UserCubit extends Cubit<UserStates> {
     });
   }
 
+  void getCurrentLocation({required BuildContext context}) async {
+    emit(GetUserLocationLoadingState());
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      showToastInfo(
+        text: 'خدمة تحديد الموقع غير مفعلة',
+        context: context,
+      );
+      emit(GetUserLocationErrorState());
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        showToastInfo(
+          text: 'تم رفض صلاحية الموقع',
+          context: context,
+        );
+        emit(GetUserLocationErrorState());
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      showToastInfo(
+        text: 'الصلاحية مرفوضة بشكل دائم',
+        context: context,
+      );
+      emit(GetUserLocationErrorState());
+      return;
+    }
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      latitude = position.latitude;
+      longitude = position.longitude;
+      emit(GetUserLocationSuccessState());
+    } catch (e) {
+      print("Error getting location: $e");
+      emit(GetUserLocationErrorState());
+    }
+  }
 }

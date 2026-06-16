@@ -53,5 +53,8 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>نحتاج إذن لحفظ الصور داخل المعرض.</string>
 
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>نحتاج إلى الوصول إلى موقعك لتحديد عنوان التوصيل بدقة وسرعة.</string>
+
 </dict>
 </plist>

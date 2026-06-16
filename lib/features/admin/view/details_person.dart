@@ -25,6 +25,8 @@ class DetailsPerson extends StatelessWidget {
     required this.role,
     required this.createdAt,
     required this.sponsorshipAmount,
+    this.ratingAverage,
+    this.ratingCount,
   });
 
   final String image;
@@ -35,6 +37,8 @@ class DetailsPerson extends StatelessWidget {
   final String role;
   final String createdAt;
   final String sponsorshipAmount;
+  final double? ratingAverage;
+  final int? ratingCount;
 
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -148,6 +152,15 @@ class DetailsPerson extends StatelessWidget {
                                   Text(role,style: TextStyle(fontSize: 14),),
                                   SizedBox(height: 10,),
                                   Text(formattedDate,style: TextStyle(fontSize: 14),),
+                                  if (role == 'delivery') ...[
+                                    SizedBox(height: 10,),
+                                    Text(
+                                      (ratingCount != null && ratingCount! > 0)
+                                          ? '⭐ ${ratingAverage!.toStringAsFixed(1)} ($ratingCount تقييم)'
+                                          : 'لا توجد تقييمات بعد',
+                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.amber),
+                                    ),
+                                  ],
                                 ],
                               ),
                               Spacer(),
@@ -163,6 +176,10 @@ class DetailsPerson extends StatelessWidget {
                                   Text(':الصلاحياة',style: TextStyle(fontSize: 13),),
                                   SizedBox(height: 10,),
                                   Text(':تاريخ الانشاء',style: TextStyle(fontSize: 13),),
+                                  if (role == 'delivery') ...[
+                                    SizedBox(height: 10,),
+                                    const Text(':التقييم الإجمالي', style: TextStyle(fontSize: 13)),
+                                  ],
                                 ],
                               ),
                             ],

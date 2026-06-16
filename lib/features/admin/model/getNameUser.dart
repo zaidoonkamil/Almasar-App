@@ -17,6 +17,8 @@ class GetNameUser {
   String role;
   DateTime createdAt;
   DateTime updatedAt;
+  double? ratingAverage;
+  int? ratingCount;
 
   GetNameUser({
     required this.id,
@@ -29,6 +31,8 @@ class GetNameUser {
     required this.role,
     required this.createdAt,
     required this.updatedAt,
+    this.ratingAverage,
+    this.ratingCount,
   });
 
   factory GetNameUser.fromJson(Map<String, dynamic> json) => GetNameUser(
@@ -44,6 +48,8 @@ class GetNameUser {
     role: json["role"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
+    ratingAverage: json["ratingAverage"] == null ? null : (json["ratingAverage"] as num).toDouble(),
+    ratingCount: json["ratingCount"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -57,5 +63,7 @@ class GetNameUser {
     "role": role,
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
+    "ratingAverage": ratingAverage,
+    "ratingCount": ratingCount,
   };
 }

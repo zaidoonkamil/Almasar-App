@@ -68,6 +68,8 @@ class Order {
   String status;
   dynamic isAccepted;
   String rejectionReason;
+  double? latitude;
+  double? longitude;
   DateTime createdAt;
   DateTime updatedAt;
   List<Item>? items;
@@ -97,6 +99,8 @@ class Order {
     required this.user,
     required this.delivery,
     this.vendor,
+    this.latitude,
+    this.longitude,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -113,6 +117,8 @@ class Order {
     status: json["status"],
     isAccepted: json["isAccepted"],
     rejectionReason: json["rejectionReason"] ??'',
+    latitude: json["latitude"] == null ? null : (json["latitude"] as num).toDouble(),
+    longitude: json["longitude"] == null ? null : (json["longitude"] as num).toDouble(),
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
@@ -136,6 +142,8 @@ class Order {
     "status": status,
     "isAccepted": isAccepted,
     "rejectionReason": rejectionReason,
+    "latitude": latitude,
+    "longitude": longitude,
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
     "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),

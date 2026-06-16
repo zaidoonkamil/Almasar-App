@@ -185,6 +185,59 @@ class CompleteShopping extends StatelessWidget {
                                   prefixIcon: Icons.location_on_outlined,
                                 ),
                                 SizedBox(height: 16),
+                                BlocBuilder<UserCubit, UserStates>(
+                                  builder: (context, state) {
+                                    var userCubit = UserCubit.get(context);
+                                    bool hasLocation = userCubit.latitude != null && userCubit.longitude != null;
+                                    bool isLoading = state is GetUserLocationLoadingState;
+
+                                    return GestureDetector(
+                                      onTap: isLoading ? null : () {
+                                        userCubit.getCurrentLocation(context: context);
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: double.infinity,
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: isLoading
+                                              ? Colors.grey[350]
+                                              : hasLocation
+                                                  ? Colors.green
+                                                  : primaryColor.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(12),
+                                          border: Border.all(
+                                            color: hasLocation ? Colors.green : primaryColor,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: isLoading
+                                              ? CircularProgress(color: primaryColor)
+                                              : Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      hasLocation ? Icons.check_circle_outline : Icons.my_location,
+                                                      color: hasLocation ? Colors.white : primaryColor,
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      hasLocation ? 'تم تحديد الموقع بنجاح ✓' : 'تحديد الموقع الجغرافي الحالي',
+                                                      style: TextStyle(
+                                                        color: hasLocation ? Colors.white : primaryColor,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 16),
                                 CustomTextField(
                                   controller: noteController,
                                   hintText: 'ادخل ملاحضة(اختياري)',
@@ -232,6 +285,8 @@ class CompleteShopping extends StatelessWidget {
                                       products: products,
                                       context: context,
                                       idVendor: idVendor,
+                                      latitude: cubit.latitude,
+                                      longitude: cubit.longitude,
                                     );
                                   }
                                 },

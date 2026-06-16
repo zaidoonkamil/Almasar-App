@@ -27,6 +27,8 @@ class GetActiveOrders {
   String status;
   dynamic isAccepted;
   dynamic rejectionReason;
+  double? latitude;
+  double? longitude;
   DateTime createdAt;
   DateTime updatedAt;
   List<dynamic> statusHistory;
@@ -58,6 +60,8 @@ class GetActiveOrders {
     required this.vendor,
     required this.delivery,
     required this.rating,
+    this.latitude,
+    this.longitude,
   });
 
   factory GetActiveOrders.fromJson(Map<String, dynamic> json) => GetActiveOrders(
@@ -74,6 +78,8 @@ class GetActiveOrders {
     status: json["status"] ?? '',
     isAccepted: json["isAccepted"],
     rejectionReason: json["rejectionReason"],
+    latitude: json["latitude"] == null ? null : (json["latitude"] as num).toDouble(),
+    longitude: json["longitude"] == null ? null : (json["longitude"] as num).toDouble(),
     createdAt: DateTime.parse(json["createdAt"]),
     vendor: json["vendor"] == null ? User(id: 0, name: '', phone: '', location: '') : User.fromJson(json["vendor"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
@@ -100,6 +106,8 @@ class GetActiveOrders {
     "status": status,
     "isAccepted": isAccepted,
     "rejectionReason": rejectionReason,
+    "latitude": latitude,
+    "longitude": longitude,
     "createdAt": createdAt.toIso8601String(),
     "updatedAt": updatedAt.toIso8601String(),
     "statusHistory": List<dynamic>.from(statusHistory.map((x) => x)),

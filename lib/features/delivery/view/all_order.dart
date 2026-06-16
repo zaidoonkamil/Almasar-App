@@ -182,11 +182,50 @@ class AllOrdersDelivery extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Text(cubit.orderModel!.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
-                                                    const SizedBox(width: 6),
-                                                    const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                                    if (cubit.orderModel!.orders[index].latitude != null &&
+                                                        cubit.orderModel!.orders[index].longitude != null)
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          final lat = cubit.orderModel!.orders[index].latitude;
+                                                          final lng = cubit.orderModel!.orders[index].longitude;
+                                                          final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+                                                          try {
+                                                            await launch(url, enableJavaScript: true);
+                                                          } catch (e) {
+                                                            showToastError(text: e.toString(), context: context);
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.blue.withOpacity(0.1),
+                                                            borderRadius: BorderRadius.circular(6),
+                                                            border: Border.all(color: Colors.blue),
+                                                          ),
+                                                          child: const Row(
+                                                            children: [
+                                                              Icon(Icons.map, color: Colors.blue, size: 18),
+                                                              SizedBox(width: 4),
+                                                              Text(
+                                                                'خرائط جوجل',
+                                                                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 12),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    else
+                                                      const SizedBox(),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        Text(cubit.orderModel!.orders[index].address,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,),
+                                                        const SizedBox(width: 6),
+                                                        const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
                                               ],

@@ -143,7 +143,8 @@ class _HomeState extends State<Home> {
                                 Expanded(
                                   child: NotificationListener<ScrollNotification>(
                                   onNotification: (ScrollNotification scrollInfo) {
-                                    if (scrollInfo.metrics.pixels >=
+                                    if (scrollInfo is ScrollUpdateNotification &&
+                                        scrollInfo.metrics.pixels >=
                                             scrollInfo.metrics.maxScrollExtent - 50 &&
                                         cubit.vendorModel != null &&
                                         cubit.vendorModel!.paginationVendor.currentPage <
@@ -258,10 +259,9 @@ class _HomeState extends State<Home> {
                                                         const Duration(seconds: 1),
                                                         autoPlayCurve: Curves.fastOutSlowIn,
                                                         scrollDirection: Axis.horizontal,
-                                                        onPageChanged: (index, reason) {
-                                                          setState((){ currentIndex = index; });
-                                                          cubit.slid();
-                                                        },
+                                                         onPageChanged: (index, reason) {
+                                                           setState((){ currentIndex = index; });
+                                                         },
                                                       ),
                                                     ),
                                                     SizedBox(height: 8,),

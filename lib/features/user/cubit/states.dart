@@ -49,4 +49,11 @@ class SearchVendorLoadingState extends UserStates {}
 class SearchVendorSuccessState extends UserStates {}
 class SearchVendorErrorState extends UserStates {}
 
+class SubmitRatingLoadingState extends UserStates {}
+class SubmitRatingSuccessState extends UserStates {}
+class SubmitRatingErrorState extends UserStates {}
+
+class GetUserLocationLoadingState extends UserStates {}
+class GetUserLocationSuccessState extends UserStates {}
+class GetUserLocationErrorState extends UserStates {}
 

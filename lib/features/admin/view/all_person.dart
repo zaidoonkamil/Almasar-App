@@ -111,6 +111,8 @@ class AllPerson extends StatelessWidget {
                                                 createdAt:  cubit.getNameUserModel![index].createdAt.toString(),
                                               sponsorshipAmount: cubit.getNameUserModel![index].sponsorshipAmount.toString(),
                                               image: image,
+                                              ratingAverage: cubit.getNameUserModel![index].ratingAverage,
+                                              ratingCount: cubit.getNameUserModel![index].ratingCount,
                                             ),
                                             );
                                           },
@@ -133,7 +135,28 @@ class AllPerson extends StatelessWidget {
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Image.asset('assets/images/fluent_person-16-filled.png'),
+                                                Row(
+                                                  children: [
+                                                    Image.asset('assets/images/fluent_person-16-filled.png'),
+                                                    if (cubit.getNameUserModel![index].role == 'delivery' && cubit.getNameUserModel![index].ratingAverage != null && cubit.getNameUserModel![index].ratingAverage! > 0) ...[
+                                                      const SizedBox(width: 6),
+                                                      Row(
+                                                        children: [
+                                                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                                                          const SizedBox(width: 2),
+                                                          Text(
+                                                            cubit.getNameUserModel![index].ratingAverage!.toStringAsFixed(1),
+                                                            style: const TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.bold,
+                                                              color: Colors.amber,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ],
+                                                ),
                                                 Text(
                                                   cubit.getNameUserModel![index].name,
                                                   style: TextStyle(
