@@ -22,63 +22,55 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
 
   static DeliveryCubit get(context) => BlocProvider.of(context);
 
-  void slid(){
+  void slid() {
     emit(ValidationState());
   }
 
   void verifyToken({required BuildContext context}) {
     emit(VerifyTokenLoadingState());
-    DioHelper.getData(
-      url: '/verify-token',
-      token: token
-    ).then((value) {
-      bool isValid = value.data['valid'];
-      if (isValid) {
-        emit(VerifyTokenSuccessState());
-      } else {
-        signOut(context);
-        showToastError(text: "توكن غير صالح", context: context);
-        emit(VerifyTokenErrorState());
-      }
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        emit(VerifyTokenErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/verify-token', token: token)
+        .then((value) {
+          bool isValid = value.data['valid'];
+          if (isValid) {
+            emit(VerifyTokenSuccessState());
+          } else {
+            signOut(context);
+            showToastError(text: "توكن غير صالح", context: context);
+            emit(VerifyTokenErrorState());
+          }
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context);
+            emit(VerifyTokenErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
-  deliveryStatus({required BuildContext context, required bool isActive,}){
+  deliveryStatus({required BuildContext context, required bool isActive}) {
     emit(DeliveryStatusLoadingState());
     DioHelper.putData(
-      url: '/delivery/$id/status',
-      token: token,
-      data:
-      {
-        'isActive': isActive,
-      },
-    ).then((value) {
-      profileModel = profileModel!.copyWith(isActive: !profileModel!.isActive);
-      showToastSuccess(
-        text:"تم تحديث الحالة بنجاح",
-        context: context,
-      );
-      emit(DeliveryStatusSuccessState());
-    }).catchError((error)
-    {
-      if (error is DioError) {
-        showToastError(
-          text:"حدث خطأ",
-          context: context,
-        );
-        emit(DeliveryStatusErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+          url: '/delivery/$id/status',
+          token: token,
+          data: {'isActive': isActive},
+        )
+        .then((value) {
+          profileModel = profileModel!.copyWith(
+            isActive: !profileModel!.isActive,
+          );
+          showToastSuccess(text: "تم تحديث الحالة بنجاح", context: context);
+          emit(DeliveryStatusSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: "حدث خطأ", context: context);
+            emit(DeliveryStatusErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   void getCurrentLocation({required BuildContext context}) async {
@@ -88,9 +80,7 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      showToastInfo(
-        text: 'خدمة تحديد الموقع غير مفعلة',
-        context: context,);
+      showToastInfo(text: 'خدمة تحديد الموقع غير مفعلة', context: context);
       return;
     }
 
@@ -98,18 +88,13 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        showToastInfo(
-          text: 'تم رفض صلاحية الموقع',
-          context: context,);
+        showToastInfo(text: 'تم رفض صلاحية الموقع', context: context);
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      showToastInfo(
-        text: 'الصلاحية مرفوضة بشكل دائم',
-        context: context,
-      );
+      showToastInfo(text: 'الصلاحية مرفوضة بشكل دائم', context: context);
       return;
     }
 
@@ -120,113 +105,106 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     print('الموقع الحالي: ${position.latitude}, ${position.longitude}');
 
     DioHelper.postData(
-      url: '/delivery-locations',
-      data:
-      {
-        'deliveryId': id,
-        'latitude': position.latitude.toString(),
-        'longitude': position.longitude.toString(),
-      },
-    ).then((value) {
-      showToastSuccess(
-        text: "تم تحديد الموقع بنجاح",
-        context: context,
-      );
-      emit(AddLocationSuccessState());
-    }).catchError((error)
-    {
-      if (error is DioError) {
-        print('Dio Error Status Code: ${error.response?.statusCode}');
-        print('Dio Error Data: ${error.response?.data}');
-        showToastError(
-          text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
-          context: context,
-        );
-      }
-    });
+          url: '/delivery-locations',
+          data: {
+            'deliveryId': id,
+            'latitude': position.latitude.toString(),
+            'longitude': position.longitude.toString(),
+          },
+        )
+        .then((value) {
+          showToastSuccess(text: "تم تحديد الموقع بنجاح", context: context);
+          emit(AddLocationSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            print('Dio Error Status Code: ${error.response?.statusCode}');
+            print('Dio Error Data: ${error.response?.data}');
+            showToastError(
+              text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
+              context: context,
+            );
+          }
+        });
   }
 
   ProfileModel? profileModel;
-  void getProfile({required BuildContext context,}) {
+  void getProfile({required BuildContext context}) {
     emit(GetProfileLoadingState());
-    DioHelper.getData(
-        url: '/users/$id',
-        token: token
-    ).then((value) {
-      profileModel = ProfileModel.fromJson(value.data);
-      emit(GetProfileSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        print(error.toString());
-        emit(GetProfileErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/users/$id', token: token)
+        .then((value) {
+          profileModel = ProfileModel.fromJson(value.data);
+          emit(GetProfileSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context);
+            print(error.toString());
+            emit(GetProfileErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   List<GetAds> getAdsModel = [];
-  void getAds({BuildContext? context,}) {
+  void getAds({BuildContext? context}) {
     emit(GetAdsLoadingState());
-    DioHelper.getData(
-      url: '/ads',
-    ).then((value) {
-      getAdsModel = (value.data as List)
-          .map((item) => GetAds.fromJson
-        (item as Map<String, dynamic>)).toList();
-      emit(GetAdsSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
-        emit(GetAdsErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/ads')
+        .then((value) {
+          getAdsModel =
+              (value.data as List)
+                  .map((item) => GetAds.fromJson(item as Map<String, dynamic>))
+                  .toList();
+          emit(GetAdsSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context!);
+            print(error.toString());
+            emit(GetAdsErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   GetDashboard? getDashboard;
-  void getDashboardDelivery({BuildContext? context,}) {
+  void getDashboardDelivery({BuildContext? context}) {
     emit(GetDashboardDeliveryLoadingState());
-    DioHelper.getData(
-      url: '/delivery/$id/dashboard',
-    ).then((value) {
-      getDashboard = GetDashboard.fromJson(value.data);
-      emit(GetDashboardDeliverySuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
-        emit(GetDashboardDeliveryErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/delivery/$id/dashboard')
+        .then((value) {
+          getDashboard = GetDashboard.fromJson(value.data);
+          emit(GetDashboardDeliverySuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context!);
+            print(error.toString());
+            emit(GetDashboardDeliveryErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   GetTodayDashboard? getTodayDashboard;
-  void getTodayDashboardDelivery({BuildContext? context,}) {
+  void getTodayDashboardDelivery({BuildContext? context}) {
     emit(GetTodayDashboardDeliveryLoadingState());
-    DioHelper.getData(
-      url: '/delivery/$id/today-dashboard',
-    ).then((value) {
-      getTodayDashboard = GetTodayDashboard.fromJson(value.data);
-      emit(GetTodayDashboardDeliverySuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
-        emit(GetTodayDashboardDeliveryErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/delivery/$id/today-dashboard')
+        .then((value) {
+          getTodayDashboard = GetTodayDashboard.fromJson(value.data);
+          emit(GetTodayDashboardDeliverySuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context!);
+            print(error.toString());
+            emit(GetTodayDashboardDeliveryErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   List<Order> orders = [];
@@ -234,34 +212,37 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   int currentPage = 1;
   bool isLastPage = false;
   GetAllOrders? orderModel;
-  void getOrder({required String page, BuildContext? context,required String id}) {
+  void getOrder({
+    required String page,
+    BuildContext? context,
+    required String id,
+  }) {
     emit(GetOrderLoadingState());
-    DioHelper.getData(
-      url: '/delivery/$id/all-orders-delivery?$page',
-    ).then((value) {
-      orderModel = GetAllOrders.fromJson(value.data);
-      orders.addAll(orderModel!.orders);
-      pagination = orderModel!.pagination;
-      currentPage = pagination!.currentPage;
-      if (currentPage >= pagination!.totalPages) {
-        isLastPage = true;
-      }
-      emit(GetOrderSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
-        emit(GetOrderErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/delivery/$id/all-orders-delivery?$page')
+        .then((value) {
+          orderModel = GetAllOrders.fromJson(value.data);
+          orders.addAll(orderModel!.orders);
+          pagination = orderModel!.pagination;
+          currentPage = pagination!.currentPage;
+          if (currentPage >= pagination!.totalPages) {
+            isLastPage = true;
+          }
+          emit(GetOrderSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context!);
+            print(error.toString());
+            emit(GetOrderErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   void startAutoRefresh({required BuildContext context}) {
     getActiveOrder(context: context);
-   Timer.periodic(Duration(minutes: 3), (timer) {
+    Timer.periodic(Duration(minutes: 3), (timer) {
       getActiveOrder(context: context);
     });
   }
@@ -269,113 +250,105 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   List<GetActiveOrders>? getActiveOrdersModel;
   void getActiveOrder({required BuildContext context}) {
     emit(GetActiveOrderLoadingState());
-    DioHelper.getData(
-      url: '/delivery/$id/firststatus-orders-delivery',
-    ).then((value) {
-      List<GetActiveOrders> newData = (value.data as List)
-          .map((item) => GetActiveOrders.fromJson(item))
-          .toList();
-      if (!listEquals(getActiveOrdersModel, newData)) {
-        getActiveOrdersModel = newData;
-        emit(GetActiveOrderSuccessState());
-      }
-      emit(GetActiveOrderSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        print(error.toString());
-        emit(GetActiveOrderErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/delivery/$id/firststatus-orders-delivery')
+        .then((value) {
+          List<GetActiveOrders> newData =
+              (value.data as List)
+                  .map((item) => GetActiveOrders.fromJson(item))
+                  .toList();
+          if (!listEquals(getActiveOrdersModel, newData)) {
+            getActiveOrdersModel = newData;
+            emit(GetActiveOrderSuccessState());
+          }
+          emit(GetActiveOrderSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context);
+            print(error.toString());
+            emit(GetActiveOrderErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
-  deliveryAccept({required BuildContext context, required bool accept, required String idOrder,required String rejectionReason,}){
+  deliveryAccept({
+    required BuildContext context,
+    required bool accept,
+    required String idOrder,
+    required String rejectionReason,
+  }) {
     Map<String, dynamic> data;
-    if(accept == false){
+    if (accept == false) {
       data = {
-            'accept': accept,
-            'deliveryId': id,
-            'rejectionReason': rejectionReason,
-          };
-    }else{
-      data = {
-            'accept': accept,
-            'deliveryId': id,
-          };
+        'accept': accept,
+        'deliveryId': id,
+        'rejectionReason': rejectionReason,
+      };
+    } else {
+      data = {'accept': accept, 'deliveryId': id};
     }
     emit(DeliveryAcceptLoadingState());
-    DioHelper.putData(
-      url: '/order/$idOrder/delivery-accept',
-      data: data,
-    ).then((value) {
-      if (accept==false) {
-        getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
-      }else{
-        getActiveOrdersModel?.firstWhere((order) => order.id.toString() == idOrder,
-        ).isAccepted = true;
-      }
+    DioHelper.putData(url: '/order/$idOrder/delivery-accept', data: data)
+        .then((value) {
+          if (accept == false) {
+            getActiveOrdersModel?.removeWhere(
+              (order) => order.id.toString() == idOrder,
+            );
+          } else {
+            getActiveOrdersModel
+                ?.firstWhere((order) => order.id.toString() == idOrder)
+                .isAccepted = true;
+          }
 
-      emit(DeliveryAcceptSuccessState());
-    }).catchError((error)
-    {
-      if (error is DioError) {
-        showToastError(
-          text:"حدث خطأ",
-          context: context,
-        );
-        emit(DeliveryAcceptErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+          emit(DeliveryAcceptSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: "حدث خطأ", context: context);
+            emit(DeliveryAcceptErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
-  changeStatusOrder({required BuildContext context, required String status, required String idOrder, required String note,}){
+  changeStatusOrder({
+    required BuildContext context,
+    required String status,
+    required String idOrder,
+    required String note,
+  }) {
     emit(ChangeStatusOrderLoadingState());
     Map<String, dynamic> data;
-    if(status == "استرجاع الطلب" || status == "تبديل الطلب"){
-      data={
-        'status':status,
-        'note':note,
-      };
-    }else{
-       data={
-        'status':status,
-      };
+    if (status == "استرجاع الطلب" || status == "تبديل الطلب") {
+      data = {'status': status, 'note': note};
+    } else {
+      data = {'status': status};
     }
 
-    DioHelper.putData(
-      url: '/orders/$idOrder/status',
-      token: token,
-      data: data,
-    ).then((value) {
-      getActiveOrdersModel?.removeWhere((order) => order.id.toString() == idOrder);
-      showToastSuccess(
-        text:"تمت العملية بنجاح",
-        context: context,
-      );
-      emit(ChangeStatusOrderSuccessState());
-    }).catchError((error)
-    {
-      if (error is DioError) {
-        print("Unknown Error: $error");
+    DioHelper.putData(url: '/orders/$idOrder/status', token: token, data: data)
+        .then((value) {
+          getActiveOrdersModel?.removeWhere(
+            (order) => order.id.toString() == idOrder,
+          );
+          showToastSuccess(text: "تمت العملية بنجاح", context: context);
+          emit(ChangeStatusOrderSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            print("Unknown Error: $error");
 
-        showToastError(
-          text:"حدث خطأ",
-          context: context,
-        );
-        emit(ChangeStatusOrderErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+            showToastError(text: "حدث خطأ", context: context);
+            emit(ChangeStatusOrderErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
-
-// void connectToSocket() {
+  // void connectToSocket() {
   //   SocketHelper.connect();
   //
   //   SocketHelper.onEvent("connect", (_) {
@@ -410,8 +383,4 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
   //     }
   //   });
   // }
-
-
-
-
 }

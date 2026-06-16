@@ -14,7 +14,7 @@ class AuthCubit extends Cubit<AuthStates> {
 
   static AuthCubit get(context) => BlocProvider.of(context);
 
-  void validation(){
+  void validation() {
     emit(ValidationState());
   }
 
@@ -29,20 +29,23 @@ class AuthCubit extends Cubit<AuthStates> {
 
   void getGovernorates() {
     emit(GetGovernoratesLoadingState());
-    DioHelper.getData(url: '/governorates').then((value) {
-      activeGovernorates = (value.data as List)
-          .map((item) => item['name'] as String)
-          .toList();
-      if (activeGovernorates.isNotEmpty && selectedGovernorate == null) {
-        selectedGovernorate = activeGovernorates[0];
-      }
-      emit(GetGovernoratesSuccessState());
-    }).catchError((error) {
-      print("❌ Error fetching governorates: $error");
-      activeGovernorates = ["صلاح الدين"];
-      selectedGovernorate = "صلاح الدين";
-      emit(GetGovernoratesSuccessState());
-    });
+    DioHelper.getData(url: '/governorates')
+        .then((value) {
+          activeGovernorates =
+              (value.data as List)
+                  .map((item) => item['name'] as String)
+                  .toList();
+          if (activeGovernorates.isNotEmpty && selectedGovernorate == null) {
+            selectedGovernorate = activeGovernorates[0];
+          }
+          emit(GetGovernoratesSuccessState());
+        })
+        .catchError((error) {
+          print("❌ Error fetching governorates: $error");
+          activeGovernorates = ["صلاح الدين"];
+          selectedGovernorate = "صلاح الدين";
+          emit(GetGovernoratesSuccessState());
+        });
   }
 
   void changeGovernorate(String governorate) {
@@ -75,7 +78,6 @@ class AuthCubit extends Cubit<AuthStates> {
     }
   }
 
-
   signUp({
     required String name,
     required String phone,
@@ -95,25 +97,23 @@ class AuthCubit extends Cubit<AuthStates> {
         return;
       }
 
-      FormData formData = FormData.fromMap(
-          {
-            'name': name,
-            'phone': phone,
-            'location': location,
-            'password': password,
-            'role': role,
-            'category': category,
-            'governorate': governorate,
-          },
-          ListFormat.multiCompatible
-      );
+      FormData formData = FormData.fromMap({
+        'name': name,
+        'phone': phone,
+        'location': location,
+        'password': password,
+        'role': role,
+        'category': category,
+        'governorate': governorate,
+      }, ListFormat.multiCompatible);
 
       for (var file in selectedImages) {
         formData.files.add(
           MapEntry(
             "images",
             await MultipartFile.fromFile(
-              file.path, filename: file.name,
+              file.path,
+              filename: file.name,
               contentType: MediaType('image', 'jpeg'),
             ),
           ),
@@ -121,86 +121,83 @@ class AuthCubit extends Cubit<AuthStates> {
       }
 
       DioHelper.postData(
-        url: '/users',
-        data: formData,
-        options: Options(headers: {"Content-Type": "multipart/form-data"}),
-      ).then((value) {
-        emit(SignUpSuccessState());
-      }).catchError((error) {
-        if (error is DioError) {
-          print("Error Data: ${error.response?.data}");
-          String errorMessage = handleDioError(error.response?.data);
-          showToastError(
-            text: errorMessage,
-            context: context,
-          );
-          emit(SignUpErrorState());
-        } else {
-          print("Unknown Error: $error");
-        }
-      });
-
+            url: '/users',
+            data: formData,
+            options: Options(headers: {"Content-Type": "multipart/form-data"}),
+          )
+          .then((value) {
+            emit(SignUpSuccessState());
+          })
+          .catchError((error) {
+            if (error is DioException) {
+              print("Error Data: ${error.response?.data}");
+              String errorMessage = handleDioError(error.response?.data);
+              showToastError(text: errorMessage, context: context);
+              emit(SignUpErrorState());
+            } else {
+              print("Unknown Error: $error");
+            }
+          });
     } else {
       DioHelper.postData(
-        url: '/users',
-        data: {
-          'name': name,
-          'phone': phone,
-          'location': location,
-          'password': password,
-          'role': role,
-          'governorate': governorate,
-        },
-      ).then((value) {
-        emit(SignUpSuccessState());
-      }).catchError((error) {
-        if (error is DioError) {
-          print("Error Data: ${error.response?.data}");
-          String errorMessage = handleDioError(error.response?.data);
-          showToastError(
-            text: errorMessage,
-            context: context,
-          );
-          emit(SignUpErrorState());
-        } else {
-          print("Unknown Error: $error");
-        }
-      });
+            url: '/users',
+            data: {
+              'name': name,
+              'phone': phone,
+              'location': location,
+              'password': password,
+              'role': role,
+              'governorate': governorate,
+            },
+          )
+          .then((value) {
+            emit(SignUpSuccessState());
+          })
+          .catchError((error) {
+            if (error is DioException) {
+              print("Error Data: ${error.response?.data}");
+              String errorMessage = handleDioError(error.response?.data);
+              showToastError(text: errorMessage, context: context);
+              emit(SignUpErrorState());
+            } else {
+              print("Unknown Error: $error");
+            }
+          });
     }
   }
-
 
   String? token;
   String? role;
   String? id;
 
-  signIn({required String phone, required String password, required BuildContext context,}){
+  signIn({
+    required String phone,
+    required String password,
+    required BuildContext context,
+  }) {
     emit(LoginLoadingState());
     DioHelper.postData(
-      url: '/login',
-      data:
-      {
-        'phone': phone,
-        'password': password,
-      },
-    ).then((value) {
-     token=value.data['token'];
-     role=value.data['user']['role'];
-     id=value.data['user']['id'].toString();
-     registerDevice(id!);
-      emit(LoginSuccessState());
-    }).catchError((error)
-    {
-      if (error is DioError) {
-        showToastError(
-          text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
-          context: context,
-        );
-        emit(LoginErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+          url: '/login',
+          data: {'phone': phone, 'password': password},
+        )
+        .then((value) {
+          token = value.data['token'];
+          role = value.data['user']['role'];
+          id = value.data['user']['id'].toString();
+          registerDevice(id!);
+          emit(LoginSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(
+              text: error.response?.data["error"] ?? "حدث خطأ غير معروف",
+              context: context,
+            );
+            emit(LoginErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   Future<void> registerDevice(String userId) async {
@@ -210,10 +207,7 @@ class AuthCubit extends Cubit<AuthStates> {
       try {
         final response = await DioHelper.postData(
           url: "/register-device",
-          data: {
-            "user_id": userId,
-            "player_id": playerId,
-          },
+          data: {"user_id": userId, "player_id": playerId},
         );
 
         if (response.statusCode == 200) {
@@ -228,6 +222,4 @@ class AuthCubit extends Cubit<AuthStates> {
       print("❌ لم يتم الحصول على player_id من OneSignal");
     }
   }
-
-
 }

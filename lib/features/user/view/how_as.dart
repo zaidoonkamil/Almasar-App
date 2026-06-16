@@ -1,10 +1,7 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/ navigation/navigation.dart';
-import '../../../core/styles/themes.dart';
 import '../../../core/widgets/constant.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
@@ -16,26 +13,30 @@ class HowAs extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => UserCubit(),
-      child: BlocConsumer<UserCubit,UserStates>(
-        listener: (context,state){},
-        builder: (context,state){
-          var cubit=UserCubit.get(context);
+      child: BlocConsumer<UserCubit, UserStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var cubit = UserCubit.get(context);
           return SafeArea(
             child: Scaffold(
               body: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 24),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 24,
+                  ),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                              onTap: (){
-                                navigateBack(context);
-                              },
-                              child: Icon(Icons.arrow_back_ios_new)),
+                            onTap: () {
+                              navigateBack(context);
+                            },
+                            child: Icon(Icons.arrow_back_ios_new),
+                          ),
                           const Text(
                             textAlign: TextAlign.right,
                             'من نحن',
@@ -46,9 +47,12 @@ class HowAs extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 26,),
+                      SizedBox(height: 26),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 22),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 22,
+                        ),
                         width: double.maxFinite,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
@@ -64,7 +68,7 @@ class HowAs extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
-                            SizedBox(height: 12,),
+                            SizedBox(height: 12),
                             Row(
                               children: [
                                 Expanded(
@@ -80,7 +84,7 @@ class HowAs extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 12,),
+                            SizedBox(height: 12),
                           ],
                         ),
                       ),

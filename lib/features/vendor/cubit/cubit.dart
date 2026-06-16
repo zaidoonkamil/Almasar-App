@@ -14,83 +14,77 @@ import '../../user/model/GetOrder.dart';
 import '../../user/model/ProfileModel.dart';
 import '../model/GetProductsModel.dart';
 
-
 class VendorCubit extends Cubit<VendorStates> {
   VendorCubit() : super(VendorInitialState());
 
   static VendorCubit get(context) => BlocProvider.of(context);
 
-  void slid(){
+  void slid() {
     emit(ValidationState());
   }
 
   void verifyToken({required BuildContext context}) {
     emit(VerifyTokenLoadingState());
-    DioHelper.getData(
-        url: '/verify-token',
-        token: token
-    ).then((value) {
-      bool isValid = value.data['valid'];
-      if (isValid) {
-        emit(VerifyTokenSuccessState());
-      } else {
-        signOut(context);
-        showToastError(text: "توكن غير صالح", context: context);
-        emit(VerifyTokenErrorState());
-      }
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        emit(VerifyTokenErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/verify-token', token: token)
+        .then((value) {
+          bool isValid = value.data['valid'];
+          if (isValid) {
+            emit(VerifyTokenSuccessState());
+          } else {
+            signOut(context);
+            showToastError(text: "توكن غير صالح", context: context);
+            emit(VerifyTokenErrorState());
+          }
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context);
+            emit(VerifyTokenErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
-
   List<GetAds> getAdsModel = [];
-  void getAds({BuildContext? context,}) {
+  void getAds({BuildContext? context}) {
     emit(GetAdsLoadingState());
-    DioHelper.getData(
-      url: '/ads',
-    ).then((value) {
-      getAdsModel = (value.data as List)
-          .map((item) => GetAds.fromJson
-        (item as Map<String, dynamic>)).toList();
-      emit(GetAdsSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
-        emit(GetAdsErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/ads')
+        .then((value) {
+          getAdsModel =
+              (value.data as List)
+                  .map((item) => GetAds.fromJson(item as Map<String, dynamic>))
+                  .toList();
+          emit(GetAdsSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context!);
+            print(error.toString());
+            emit(GetAdsErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   ProfileModel? profileModel;
-  void getProfile({required BuildContext context,}) {
+  void getProfile({required BuildContext context}) {
     emit(GetProfileLoadingState());
-    DioHelper.getData(
-      url: '/users/$id',
-      token: token
-    ).then((value) {
-      profileModel = ProfileModel.fromJson(value.data);
-      emit(GetProfileSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        print(error.toString());
-        emit(GetProfileErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/users/$id', token: token)
+        .then((value) {
+          profileModel = ProfileModel.fromJson(value.data);
+          emit(GetProfileSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context);
+            print(error.toString());
+            emit(GetProfileErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
   List<Products> allProducts = [];
@@ -107,36 +101,33 @@ class VendorCubit extends Cubit<VendorStates> {
       isProductLoadingMore = true;
       emit(GetProductsSuccessState());
     }
-    DioHelper.getData(
-        url: '/vendor/$id/products?page=$page',
-        token: token
-    ).then((value) {
-      getProductsModel = GetProductsModel.fromJson(value.data);
-      if (page == '1') {
-        allProducts = getProductsModel!.products;
-      } else {
-        allProducts.addAll(getProductsModel!.products);
-        isProductLoadingMore = false;
-      }
-      paginations = getProductsModel!.pagination;
-      currentPages = paginations!.currentPage;
-      if (currentPages >= paginations!.totalPages) {
-        isLastPages = true;
-      }
-      emit(GetProductsSuccessState());
-    }).catchError((error) {
-      isProductLoadingMore = false;
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context,);
-        print(error.toString());
-        emit(GetProductsErrorStates());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/vendor/$id/products?page=$page', token: token)
+        .then((value) {
+          getProductsModel = GetProductsModel.fromJson(value.data);
+          if (page == '1') {
+            allProducts = getProductsModel!.products;
+          } else {
+            allProducts.addAll(getProductsModel!.products);
+            isProductLoadingMore = false;
+          }
+          paginations = getProductsModel!.pagination;
+          currentPages = paginations!.currentPage;
+          if (currentPages >= paginations!.totalPages) {
+            isLastPages = true;
+          }
+          emit(GetProductsSuccessState());
+        })
+        .catchError((error) {
+          isProductLoadingMore = false;
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context);
+            print(error.toString());
+            emit(GetProductsErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
-
 
   List<XFile> selectedImages = [];
   Future<void> pickImages() async {
@@ -163,56 +154,70 @@ class VendorCubit extends Cubit<VendorStates> {
     }
   }
 
-  addProducts({required String title, required String description, required String idVendor, required String price,required BuildContext context,}) async {
+  addProducts({
+    required String title,
+    required String description,
+    required String idVendor,
+    required String price,
+    required BuildContext context,
+  }) async {
     emit(AddProductsLoadingState());
 
-      if (selectedImages.isEmpty) {
-        showToastInfo(text: "الرجاء اختيار صور أولاً!", context: context);
-        emit(AddProductsErrorStates());
-        return;
-      }
+    if (selectedImages.isEmpty) {
+      showToastInfo(text: "الرجاء اختيار صور أولاً!", context: context);
+      emit(AddProductsErrorStates());
+      return;
+    }
 
-      FormData formData = FormData.fromMap(
-          {
-            'title': title,
-            'description': description,
-            'price': price,
-          },
-          ListFormat.multiCompatible
-      );
+    FormData formData = FormData.fromMap({
+      'title': title,
+      'description': description,
+      'price': price,
+    }, ListFormat.multiCompatible);
 
-      for (var file in selectedImages) {
-        formData.files.add(
-          MapEntry(
-            "images",
-            await MultipartFile.fromFile(
-              file.path, filename: file.name,
-              contentType: MediaType('image', 'jpeg'),
-            ),
+    for (var file in selectedImages) {
+      formData.files.add(
+        MapEntry(
+          "images",
+          await MultipartFile.fromFile(
+            file.path,
+            filename: file.name,
+            contentType: MediaType('image', 'jpeg'),
           ),
-        );
-      }
+        ),
+      );
+    }
 
-      DioHelper.postData(
-        url: '/vendor/$idVendor/products',
-        data: formData,
-        options: Options(headers: {"Content-Type": "multipart/form-data"}),
-      ).then((value) {
-        emit(AddProductsSuccessState());
-      }).catchError((error) {
-        if (error is DioError) {
-          showToastError(
-            text: handleDioError(error.response?.data),
-            context: context,
-          );
-          emit(AddProductsErrorStates());
-        } else {
-          print("Unknown Error: $error");
-        }
-      });
+    DioHelper.postData(
+          url: '/vendor/$idVendor/products',
+          data: formData,
+          options: Options(headers: {"Content-Type": "multipart/form-data"}),
+        )
+        .then((value) {
+          emit(AddProductsSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(
+              text: handleDioError(error.response?.data),
+              context: context,
+            );
+            emit(AddProductsErrorStates());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
 
-  Future<void> updateProduct({required String vendorId, required String productId, required String title, required String description, required String price, required List<String> removeImages, required BuildContext context}) async {
+  Future<void> updateProduct({
+    required String vendorId,
+    required String productId,
+    required String title,
+    required String description,
+    required String price,
+    required List<String> removeImages,
+    required BuildContext context,
+  }) async {
     emit(UpdateProductLoadingState());
 
     try {
@@ -220,7 +225,8 @@ class VendorCubit extends Cubit<VendorStates> {
         'title': title,
         'description': description,
         'price': price,
-        'removeImages': removeImages.isNotEmpty ? jsonEncode(removeImages) : null,
+        'removeImages':
+            removeImages.isNotEmpty ? jsonEncode(removeImages) : null,
       }, ListFormat.multiCompatible);
 
       // add new images if selected
@@ -229,7 +235,8 @@ class VendorCubit extends Cubit<VendorStates> {
           MapEntry(
             "images",
             await MultipartFile.fromFile(
-              file.path, filename: file.name,
+              file.path,
+              filename: file.name,
               contentType: MediaType('image', 'jpeg'),
             ),
           ),
@@ -239,10 +246,12 @@ class VendorCubit extends Cubit<VendorStates> {
       final response = await DioHelper.dio!.put(
         '/vendor/$vendorId/products/$productId',
         data: formData,
-        options: Options(headers: {
-          'Authorization': token,
-          'Content-Type': 'multipart/form-data',
-        }),
+        options: Options(
+          headers: {
+            'Authorization': token,
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -253,8 +262,11 @@ class VendorCubit extends Cubit<VendorStates> {
         emit(UpdateProductErrorState());
       }
     } catch (error) {
-      if (error is DioError) {
-        showToastError(text: handleDioError(error.response?.data), context: context);
+      if (error is DioException) {
+        showToastError(
+          text: handleDioError(error.response?.data),
+          context: context,
+        );
         emit(UpdateProductErrorState());
       } else {
         print('Unknown Error: $error');
@@ -268,29 +280,27 @@ class VendorCubit extends Cubit<VendorStates> {
   int currentPage = 1;
   bool isLastPage = false;
   GetOrder? orderModel;
-  void getOrder({required String page, BuildContext? context,}) {
+  void getOrder({required String page, BuildContext? context}) {
     emit(GetOrderLoadingState());
-    DioHelper.getData(
-      url: '/vendor/$id/orders?page=$page',
-    ).then((value) {
-      orderModel = GetOrder.fromJson(value.data);
-      orders.addAll(orderModel!.orders);
-      pagination = orderModel!.pagination;
-      currentPage = pagination!.currentPage;
-      if (currentPage >= pagination!.totalPages) {
-        isLastPage = true;
-      }
-      emit(GetOrderSuccessState());
-    }).catchError((error) {
-      if (error is DioError) {
-        showToastError(text: error.toString(),
-          context: context!,);
-        print(error.toString());
-        emit(GetOrderErrorState());
-      }else {
-        print("Unknown Error: $error");
-      }
-    });
+    DioHelper.getData(url: '/vendor/$id/orders?page=$page')
+        .then((value) {
+          orderModel = GetOrder.fromJson(value.data);
+          orders.addAll(orderModel!.orders);
+          pagination = orderModel!.pagination;
+          currentPage = pagination!.currentPage;
+          if (currentPage >= pagination!.totalPages) {
+            isLastPage = true;
+          }
+          emit(GetOrderSuccessState());
+        })
+        .catchError((error) {
+          if (error is DioException) {
+            showToastError(text: error.toString(), context: context!);
+            print(error.toString());
+            emit(GetOrderErrorState());
+          } else {
+            print("Unknown Error: $error");
+          }
+        });
   }
-
 }

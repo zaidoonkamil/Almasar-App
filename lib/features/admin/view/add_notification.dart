@@ -107,7 +107,7 @@ class AddNotification extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Container(width: 46, height: 20),
+                          SizedBox(width: 46, height: 20),
                         ],
                       ),
                     ),
@@ -203,11 +203,12 @@ class AddNotification extends StatelessWidget {
                                                     .validate()) {
                                                   cubit.addNotification(
                                                     context: context,
-                                                    title: tittleController1
-                                                        .text
-                                                        .trim(),
-                                                    desc: descController1.text
-                                                        .trim(),
+                                                    title:
+                                                        tittleController1.text
+                                                            .trim(),
+                                                    desc:
+                                                        descController1.text
+                                                            .trim(),
                                                     role: '',
                                                   );
                                                 }
@@ -244,8 +245,8 @@ class AddNotification extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          fallback: (c) =>
-                                              CircularProgressIndicator(
+                                          fallback:
+                                              (c) => CircularProgressIndicator(
                                                 color: primaryColor,
                                               ),
                                         ),
@@ -370,11 +371,13 @@ class AddNotification extends StatelessWidget {
                                                                     height: 12,
                                                                   ),
                                                                   Container(
-                                                                    width: double
-                                                                        .maxFinite,
+                                                                    width:
+                                                                        double
+                                                                            .maxFinite,
                                                                     height: 1,
-                                                                    color: Colors
-                                                                        .grey,
+                                                                    color:
+                                                                        Colors
+                                                                            .grey,
                                                                   ),
                                                                   SizedBox(
                                                                     height: 12,
@@ -412,13 +415,15 @@ class AddNotification extends StatelessWidget {
                                                     .validate()) {
                                                   cubit.addNotification(
                                                     context: context,
-                                                    title: tittleController2
-                                                        .text
-                                                        .trim(),
-                                                    desc: descController2.text
-                                                        .trim(),
-                                                    role: roleController2.text
-                                                        .trim(),
+                                                    title:
+                                                        tittleController2.text
+                                                            .trim(),
+                                                    desc:
+                                                        descController2.text
+                                                            .trim(),
+                                                    role:
+                                                        roleController2.text
+                                                            .trim(),
                                                   );
                                                 }
                                               },
@@ -454,8 +459,8 @@ class AddNotification extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          fallback: (c) =>
-                                              CircularProgressIndicator(
+                                          fallback:
+                                              (c) => CircularProgressIndicator(
                                                 color: primaryColor,
                                               ),
                                         ),

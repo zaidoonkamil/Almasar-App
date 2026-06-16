@@ -8,7 +8,6 @@ import '../../../core/ navigation/navigation.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/circular_progress.dart';
 import '../../../core/widgets/custom_text_field.dart';
-import '../../auth/cubit/cubit.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -188,50 +187,85 @@ class CompleteShopping extends StatelessWidget {
                                 BlocBuilder<UserCubit, UserStates>(
                                   builder: (context, state) {
                                     var userCubit = UserCubit.get(context);
-                                    bool hasLocation = userCubit.latitude != null && userCubit.longitude != null;
-                                    bool isLoading = state is GetUserLocationLoadingState;
+                                    bool hasLocation =
+                                        userCubit.latitude != null &&
+                                        userCubit.longitude != null;
+                                    bool isLoading =
+                                        state is GetUserLocationLoadingState;
 
                                     return GestureDetector(
-                                      onTap: isLoading ? null : () {
-                                        userCubit.getCurrentLocation(context: context);
-                                      },
+                                      onTap:
+                                          isLoading
+                                              ? null
+                                              : () {
+                                                userCubit.getCurrentLocation(
+                                                  context: context,
+                                                );
+                                              },
                                       child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
+                                        duration: const Duration(
+                                          milliseconds: 300,
+                                        ),
                                         width: double.infinity,
                                         height: 48,
                                         decoration: BoxDecoration(
-                                          color: isLoading
-                                              ? Colors.grey[350]
-                                              : hasLocation
+                                          color:
+                                              isLoading
+                                                  ? Colors.grey[350]
+                                                  : hasLocation
                                                   ? Colors.green
-                                                  : primaryColor.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(12),
+                                                  : primaryColor.withOpacity(
+                                                    0.1,
+                                                  ),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                           border: Border.all(
-                                            color: hasLocation ? Colors.green : primaryColor,
+                                            color:
+                                                hasLocation
+                                                    ? Colors.green
+                                                    : primaryColor,
                                             width: 1.5,
                                           ),
                                         ),
                                         child: Center(
-                                          child: isLoading
-                                              ? CircularProgress(color: primaryColor)
-                                              : Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      hasLocation ? Icons.check_circle_outline : Icons.my_location,
-                                                      color: hasLocation ? Colors.white : primaryColor,
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    Text(
-                                                      hasLocation ? 'تم تحديد الموقع بنجاح ✓' : 'تحديد الموقع الجغرافي الحالي',
-                                                      style: TextStyle(
-                                                        color: hasLocation ? Colors.white : primaryColor,
-                                                        fontWeight: FontWeight.bold,
-                                                        fontSize: 15,
+                                          child:
+                                              isLoading
+                                                  ? CircularProgress(
+                                                    color: primaryColor,
+                                                  )
+                                                  : Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        hasLocation
+                                                            ? Icons
+                                                                .check_circle_outline
+                                                            : Icons.my_location,
+                                                        color:
+                                                            hasLocation
+                                                                ? Colors.white
+                                                                : primaryColor,
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        hasLocation
+                                                            ? 'تم تحديد الموقع بنجاح ✓'
+                                                            : 'تحديد الموقع الجغرافي الحالي',
+                                                        style: TextStyle(
+                                                          color:
+                                                              hasLocation
+                                                                  ? Colors.white
+                                                                  : primaryColor,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                         ),
                                       ),
                                     );
@@ -303,16 +337,18 @@ class CompleteShopping extends StatelessWidget {
                                       ConditionalBuilder(
                                         condition:
                                             state is! AddOrderLoadingState,
-                                        builder: (c) => Text(
-                                          'التاكيد',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        fallback: (c) => CircularProgress(
-                                          color: Colors.white,
-                                        ),
+                                        builder:
+                                            (c) => Text(
+                                              'التاكيد',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                        fallback:
+                                            (c) => CircularProgress(
+                                              color: Colors.white,
+                                            ),
                                       ),
                                     ],
                                   ),

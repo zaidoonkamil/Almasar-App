@@ -1,6 +1,4 @@
-
 import 'package:delivery_app/core/%20navigation/navigation.dart';
-import 'package:delivery_app/features/auth/view/login.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/network/local/cache_helper.dart';
@@ -22,18 +20,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     OnboardingData(
       image: 'assets/images/Take Away-pana.png',
       title: " نوصل طلباتك بسرعة فائقة",
-      description: "نضمن لك سرعة استثنائية في توصيل الطلبات من خلال شبكة توصيل متطورة وفريق محترف",
+      description:
+          "نضمن لك سرعة استثنائية في توصيل الطلبات من خلال شبكة توصيل متطورة وفريق محترف",
     ),
     OnboardingData(
       image: 'assets/images/Mobile-rafiki.png',
       title: "تابع طلبك لحظة بلحظة",
-      description: "نوفر لك ميزة التتبع المباشر، حيث يمكنك معرفة موقع طلبك في أي وقت حتى لحظة وصوله إليك",
-
+      description:
+          "نوفر لك ميزة التتبع المباشر، حيث يمكنك معرفة موقع طلبك في أي وقت حتى لحظة وصوله إليك",
     ),
     OnboardingData(
       image: 'assets/images/Mailbox-rafiki.png',
       title: 'قم بتحليل نتائجك وتتبعها',
-      description: "نحن هنا دائمًا لمساعدتك! فريق الدعم لدينا متاح 24/7 لحل أي استفسار لضمان تجربة توصيل سلسة ومرضية",
+      description:
+          "نحن هنا دائمًا لمساعدتك! فريق الدعم لدينا متاح 24/7 لحل أي استفسار لضمان تجربة توصيل سلسة ومرضية",
     ),
   ];
 
@@ -44,7 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      CacheHelper.saveData(key: 'onBoarding',value: true );
+      CacheHelper.saveData(key: 'onBoarding', value: true);
       navigateAndFinish(context, BottomNavBarUser());
     }
   }
@@ -55,19 +55,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            SizedBox(height: 24,),
+            SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: (){
-                      CacheHelper.saveData(key: 'onBoarding',value: true );
+                    onTap: () {
+                      CacheHelper.saveData(key: 'onBoarding', value: true);
                       navigateAndFinish(context, BottomNavBarUser());
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(30),
@@ -106,10 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-                      Expanded(
-                        flex: 6,
-                        child: Image.asset(data.image),
-                      ),
+                      Expanded(flex: 6, child: Image.asset(data.image)),
                       const SizedBox(height: 20),
                       Text(
                         data.title,
@@ -144,25 +144,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
                       onboardingPages.length,
-                          (index) => buildDot(index == currentIndex),
+                      (index) => buildDot(index == currentIndex),
                     ),
                   ),
                   FloatingActionButton(
                     onPressed: nextPage,
                     backgroundColor: primaryColor,
                     shape: const CircleBorder(),
-                    child: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 24,),
+            SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
-
 
   Widget buildDot(bool isActive) {
     return AnimatedContainer(

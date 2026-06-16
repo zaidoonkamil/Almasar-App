@@ -1,4 +1,3 @@
-import 'package:delivery_app/core/styles/themes.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchField extends StatelessWidget {
@@ -41,10 +40,7 @@ class CustomSearchField extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              Icons.search,
-              color:  Colors.grey,
-            ),
+            Icon(Icons.search, color: Colors.grey),
             const SizedBox(width: 12),
 
             Expanded(
@@ -69,14 +65,19 @@ class CustomSearchField extends StatelessWidget {
                 onTap: isActive ? onClear : null,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color: isActive
-                        ? Colors.deepOrange.withOpacity(0.15)
-                        : Colors.grey.shade500.withOpacity(0.15),
+                    color:
+                        isActive
+                            ? Colors.deepOrange.withOpacity(0.15)
+                            : Colors.grey.shade500.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: isActive ? Colors.deepOrange : Colors.grey.shade500,
+                      color:
+                          isActive ? Colors.deepOrange : Colors.grey.shade500,
                       width: 1,
                     ),
                   ),
@@ -85,14 +86,13 @@ class CustomSearchField extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: isActive ? Colors.deepOrange : Colors.grey.shade500,
+                      color:
+                          isActive ? Colors.deepOrange : Colors.grey.shade500,
                     ),
                   ),
                 ),
               ),
             ),
-
-
           ],
         ),
       ),

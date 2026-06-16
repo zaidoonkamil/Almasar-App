@@ -45,16 +45,19 @@ class DetailsPerson extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AdminCubit()..getLatAndLong(context: context, id: id)
-        ..getFirstCall(sponsorshipAmount: sponsorshipAmount),
+      create:
+          (BuildContext context) =>
+              AdminCubit()
+                ..getLatAndLong(context: context, id: id)
+                ..getFirstCall(sponsorshipAmount: sponsorshipAmount),
       child: BlocConsumer<AdminCubit, AdminStates>(
         listener: (context, state) {
-          if(state is DeleteUserSuccessState){
-            navigateAndFinish(context, BottomNavBarAdmin(initialIndex: 2,));
+          if (state is DeleteUserSuccessState) {
+            navigateAndFinish(context, BottomNavBarAdmin(initialIndex: 2));
           }
         },
         builder: (context, state) {
-          var cubit=AdminCubit.get(context);
+          var cubit = AdminCubit.get(context);
           DateTime date = DateTime.parse(createdAt);
           String formattedDate = "${date.year}-${date.month}-${date.day}";
           return SafeArea(
@@ -83,11 +86,13 @@ class DetailsPerson extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               navigateBack(context);
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                              ),
                               child: Icon(Icons.arrow_back_ios_new),
                             ),
                           ),
@@ -112,20 +117,23 @@ class DetailsPerson extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Container(width: 46,height: 20,),
+                          SizedBox(width: 46, height: 20),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 20),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30,vertical: 14),
-                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 14),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 14,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: primaryColor,
-                          width: 1.0,
-                        ),
+                        border: Border.all(color: primaryColor, width: 1.0),
                         boxShadow: [
                           BoxShadow(
                             color: primaryColor.withOpacity(0.2),
@@ -143,22 +151,32 @@ class DetailsPerson extends StatelessWidget {
                               Spacer(),
                               Column(
                                 children: [
-                                  Text(name,style: TextStyle(fontSize: 14),),
-                                  SizedBox(height: 10,),
-                                  Text(phone,style: TextStyle(fontSize: 14),),
-                                  SizedBox(height: 10,),
-                                  Text(location,style: TextStyle(fontSize: 14),),
-                                  SizedBox(height: 10,),
-                                  Text(role,style: TextStyle(fontSize: 14),),
-                                  SizedBox(height: 10,),
-                                  Text(formattedDate,style: TextStyle(fontSize: 14),),
+                                  Text(name, style: TextStyle(fontSize: 14)),
+                                  SizedBox(height: 10),
+                                  Text(phone, style: TextStyle(fontSize: 14)),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    location,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(role, style: TextStyle(fontSize: 14)),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    formattedDate,
+                                    style: TextStyle(fontSize: 14),
+                                  ),
                                   if (role == 'delivery') ...[
-                                    SizedBox(height: 10,),
+                                    SizedBox(height: 10),
                                     Text(
                                       (ratingCount != null && ratingCount! > 0)
                                           ? '⭐ ${ratingAverage!.toStringAsFixed(1)} ($ratingCount تقييم)'
                                           : 'لا توجد تقييمات بعد',
-                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.amber),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.amber,
+                                      ),
                                     ),
                                   ],
                                 ],
@@ -167,145 +185,208 @@ class DetailsPerson extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(':الاسم',style: TextStyle(fontSize: 13),),
-                                  SizedBox(height: 10,),
-                                  Text(':الهاتف',style: TextStyle(fontSize: 13),),
-                                  SizedBox(height: 10,),
-                                  Text(':الموقع',style: TextStyle(fontSize: 13),),
-                                  SizedBox(height: 10,),
-                                  Text(':الصلاحياة',style: TextStyle(fontSize: 13),),
-                                  SizedBox(height: 10,),
-                                  Text(':تاريخ الانشاء',style: TextStyle(fontSize: 13),),
+                                  Text(
+                                    ':الاسم',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    ':الهاتف',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    ':الموقع',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    ':الصلاحياة',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    ':تاريخ الانشاء',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
                                   if (role == 'delivery') ...[
-                                    SizedBox(height: 10,),
-                                    const Text(':التقييم الإجمالي', style: TextStyle(fontSize: 13)),
+                                    SizedBox(height: 10),
+                                    const Text(
+                                      ':التقييم الإجمالي',
+                                      style: TextStyle(fontSize: 13),
+                                    ),
                                   ],
                                 ],
                               ),
                             ],
                           ),
-                         role=='delivery'? Column(
-                            children: [
-                              SizedBox(height: 20,),
-                              GestureDetector(
-                                onTap: (){
-                                  cubit.openMap(context: context);
-                                },
-                                child: Container(
-                                  height: 46,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.blue.withOpacity(0.3),
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          offset: const Offset(5, 5),
+                          role == 'delivery'
+                              ? Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  GestureDetector(
+                                    onTap: () {
+                                      cubit.openMap(context: context);
+                                    },
+                                    child: Container(
+                                      height: 46,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.blue.withOpacity(0.3),
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                            offset: const Offset(5, 5),
+                                          ),
+                                        ],
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: primaryColor,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'موقع الدلفري',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ],
-                                      borderRadius:  BorderRadius.circular(8),
-                                      color: primaryColor
+                                      ),
+                                    ),
                                   ),
-                                  child: Center(
-                                    child: Text('موقع الدلفري',
-                                      style: TextStyle(color: Colors.white,fontSize: 14 ),),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 10,),
-                              GestureDetector(
-                                onTap: (){
-                                  navigateTo(context, AllOrdersDelivery(id: id));
-                                },
-                                child: Container(
-                                  height: 46,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.blue.withOpacity(0.3),
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          offset: const Offset(5, 5),
+                                  SizedBox(height: 10),
+                                  GestureDetector(
+                                    onTap: () {
+                                      navigateTo(
+                                        context,
+                                        AllOrdersDelivery(id: id),
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 46,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.blue.withOpacity(0.3),
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                            offset: const Offset(5, 5),
+                                          ),
+                                        ],
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: primaryColor,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'كل الطلبات',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ],
-                                      borderRadius:  BorderRadius.circular(8),
-                                      color: primaryColor
+                                      ),
+                                    ),
                                   ),
-                                  child: Center(
-                                    child: Text('كل الطلبات',
-                                      style: TextStyle(color: Colors.white,fontSize: 14 ),),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ):Container(),
+                                ],
+                              )
+                              : Container(),
                         ],
                       ),
                     ),
                     SizedBox(height: 20),
-                    role == 'vendor'? Form(
-                      key: formKey,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: Column(
-                          children: [
-                            Row(
+                    role == 'vendor'
+                        ? Form(
+                          key: formKey,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                            ),
+                            child: Column(
                               children: [
-                                ConditionalBuilder(
-                                  condition: state is !SponsorshipVendorLoadingState,
-                                  builder: (context){
-                                    return GestureDetector(
-                                      onTap: (){
-                                        if(cubit.userNameController.text != ''){
-                                          cubit.sponsorshipVendor(context: context, id: id, sponsorshipAmount: cubit.userNameController.text.trim());
-                                        }else{
-                                          showToastError(text: 'رجائا ادخل قيمة', context: context);
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 20),
-                                        height: 48,
-                                        decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(0.2),
-                                                blurRadius: 10,
-                                                spreadRadius: 2,
-                                                offset: const Offset(5, 5),
+                                Row(
+                                  children: [
+                                    ConditionalBuilder(
+                                      condition:
+                                          state
+                                              is! SponsorshipVendorLoadingState,
+                                      builder: (context) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (cubit.userNameController.text !=
+                                                '') {
+                                              cubit.sponsorshipVendor(
+                                                context: context,
+                                                id: id,
+                                                sponsorshipAmount:
+                                                    cubit
+                                                        .userNameController
+                                                        .text
+                                                        .trim(),
+                                              );
+                                            } else {
+                                              showToastError(
+                                                text: 'رجائا ادخل قيمة',
+                                                context: context,
+                                              );
+                                            }
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                            ),
+                                            height: 48,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.2),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 2,
+                                                  offset: const Offset(5, 5),
+                                                ),
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: primaryColor,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'تعديل',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                ),
                                               ),
-                                            ],
-                                            borderRadius:  BorderRadius.circular(12),
-                                            color: primaryColor
-                                        ),
-                                        child: Center(
-                                          child: Text('تعديل',
-                                            style: TextStyle(color: Colors.white,fontSize: 14 ),),
-                                        ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      fallback:
+                                          (c) => CircularProgressIndicator(
+                                            color: primaryColor,
+                                          ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        controller: cubit.userNameController,
+                                        hintText: 'قيمة الاعلان',
+                                        prefixIcon: Icons.ads_click,
+                                        keyboardType: TextInputType.phone,
                                       ),
-                                    );
-                                  },
-                                  fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 8,),
-                                Expanded(
-                                  child: CustomTextField(
-                                    controller: cubit.userNameController,
-                                    hintText: 'قيمة الاعلان',
-                                    prefixIcon: Icons.ads_click,
-                                    keyboardType: TextInputType.phone,
-                                  ),
-                                ),
+                                SizedBox(height: 20),
                               ],
                             ),
-                            SizedBox(height: 20),
-                          ],
-                        ),
-                      ),
-                    ):Container(),
+                          ),
+                        )
+                        : Container(),
                     ConditionalBuilder(
-                      condition: state is !DeleteUserLoadingState,
-                      builder: (context){
+                      condition: state is! DeleteUserLoadingState,
+                      builder: (context) {
                         return GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -316,12 +397,19 @@ class DetailsPerson extends StatelessWidget {
                                   ),
                                   title: Column(
                                     children: [
-                                      Text("هل حقا ترغب في حذف المستخدم ؟",
+                                      Text(
+                                        "هل حقا ترغب في حذف المستخدم ؟",
                                         style: TextStyle(fontSize: 14),
-                                        textAlign: TextAlign.center,),
-                                      Text("سوف يشمل ذلك حذف جميع بيانات المستخدم هذا",
-                                        style: TextStyle(fontSize: 16,color: Colors.grey),
-                                        textAlign: TextAlign.center,),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "سوف يشمل ذلك حذف جميع بيانات المستخدم هذا",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ],
                                   ),
                                   content: Row(
@@ -331,19 +419,30 @@ class DetailsPerson extends StatelessWidget {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: Text("إلغاء",style: TextStyle(color: primaryColor),),
+                                        child: Text(
+                                          "إلغاء",
+                                          style: TextStyle(color: primaryColor),
+                                        ),
                                       ),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: primaryColor,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                         ),
                                         onPressed: () {
-                                          cubit.deleteUser(context: context, id: id);
+                                          cubit.deleteUser(
+                                            context: context,
+                                            id: id,
+                                          );
                                         },
-                                        child: Text("نعم",style: TextStyle(color: Colors.white),),
+                                        child: Text(
+                                          "نعم",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -356,35 +455,43 @@ class DetailsPerson extends StatelessWidget {
                             width: double.infinity,
                             height: 48,
                             decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                    offset: const Offset(5, 5),
-                                  ),
-                                ],
-                                borderRadius:  BorderRadius.circular(12),
-                                color: primaryColor
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                  offset: const Offset(5, 5),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(12),
+                              color: primaryColor,
                             ),
                             child: Center(
-                              child: Text('حذف المستخدم',
-                                style: TextStyle(color: Colors.white,fontSize: 14 ),),
+                              child: Text(
+                                'حذف المستخدم',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              ),
                             ),
                           ),
                         );
                       },
-                      fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                      fallback:
+                          (c) => CircularProgressIndicator(color: primaryColor),
                     ),
                     SizedBox(height: 20),
                     GestureDetector(
-                      onTap: (){
-                        navigateTo(context,
+                      onTap: () {
+                        navigateTo(
+                          context,
                           ProductsVendor(
-                          idVendor: id,
-                          image: image,
-                          name: name,
-                          phone: phone,),
+                            idVendor: id,
+                            image: image,
+                            name: name,
+                            phone: phone,
+                          ),
                         );
                       },
                       child: Container(
@@ -392,48 +499,51 @@ class DetailsPerson extends StatelessWidget {
                         width: double.infinity,
                         height: 48,
                         decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 10,
-                                spreadRadius: 2,
-                                offset: const Offset(5, 5),
-                              ),
-                            ],
-                            borderRadius:  BorderRadius.circular(12),
-                            color: primaryColor
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(5, 5),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                          color: primaryColor,
                         ),
                         child: Center(
-                          child: Text('رؤية المنتجات',
-                            style: TextStyle(color: Colors.white,fontSize: 14 ),),
+                          child: Text(
+                            'رؤية المنتجات',
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 20),
                     GestureDetector(
-                      onTap: (){
-                        navigateTo(context, AddProductss(
-                          idVendor: id,));
+                      onTap: () {
+                        navigateTo(context, AddProductss(idVendor: id));
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 20),
                         width: double.infinity,
                         height: 48,
                         decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 10,
-                                spreadRadius: 2,
-                                offset: const Offset(5, 5),
-                              ),
-                            ],
-                            borderRadius:  BorderRadius.circular(12),
-                            color: primaryColor
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(5, 5),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                          color: primaryColor,
                         ),
                         child: Center(
-                          child: Text('اضافة منتج',
-                            style: TextStyle(color: Colors.white,fontSize: 14 ),),
+                          child: Text(
+                            'اضافة منتج',
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          ),
                         ),
                       ),
                     ),

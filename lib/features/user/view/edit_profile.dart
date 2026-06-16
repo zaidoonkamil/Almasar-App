@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart';
 
-import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/constant.dart';
@@ -97,10 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       );
 
       if (response.statusCode == 200) {
-        showToastSuccess(
-          text: 'تم تحديث الملف الشخصي بنجاح',
-          context: context,
-        );
+        showToastSuccess(text: 'تم تحديث الملف الشخصي بنجاح', context: context);
         Navigator.pop(context, true);
       }
     } catch (error) {
@@ -112,15 +108,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         } else if (data is String) {
           errorMsg = data;
         }
-        showToastError(
-          text: errorMsg,
-          context: context,
-        );
+        showToastError(text: errorMsg, context: context);
       } else {
-        showToastError(
-          text: 'حدث خطأ غير متوقع',
-          context: context,
-        );
+        showToastError(text: 'حدث خطأ غير متوقع', context: context);
       }
     } finally {
       setState(() {
@@ -154,7 +144,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         children: [
           SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 32.0,
+            ),
             child: Form(
               key: _formKey,
               child: Column(
@@ -179,24 +172,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           ),
                           child: ClipOval(
-                            child: _pickedImage != null
-                                ? Image.file(
-                                    File(_pickedImage!.path),
-                                    fit: BoxFit.cover,
-                                  )
-                                : widget.initialImageUrl != null && widget.initialImageUrl!.isNotEmpty
+                            child:
+                                _pickedImage != null
+                                    ? Image.file(
+                                      File(_pickedImage!.path),
+                                      fit: BoxFit.cover,
+                                    )
+                                    : widget.initialImageUrl != null &&
+                                        widget.initialImageUrl!.isNotEmpty
                                     ? Image.network(
-                                        '$url/uploads/${widget.initialImageUrl}',
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) => Image.asset(
-                                          'assets/images/Group 1171275632 (1).png',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
+                                      '$url/uploads/${widget.initialImageUrl}',
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) => Image.asset(
+                                            'assets/images/Group 1171275632 (1).png',
+                                            fit: BoxFit.cover,
+                                          ),
+                                    )
                                     : Image.asset(
-                                        'assets/images/Group 1171275632 (1).png',
-                                        fit: BoxFit.cover,
-                                      ),
+                                      'assets/images/Group 1171275632 (1).png',
+                                      fit: BoxFit.cover,
+                                    ),
                           ),
                         ),
                         GestureDetector(

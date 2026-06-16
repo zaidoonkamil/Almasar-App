@@ -46,7 +46,10 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: statusColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -63,7 +66,7 @@ class OrderCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "$orderNumber",
+                      orderNumber,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -93,7 +96,13 @@ class OrderCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Expanded(child: Text(address, overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,)),
+                Expanded(
+                  child: Text(
+                    address,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
                 const SizedBox(width: 6),
                 const Icon(Icons.location_on, color: Colors.grey),
               ],
@@ -102,12 +111,7 @@ class OrderCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  date,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                  ),
-                ),
+                Text(date, style: TextStyle(color: Colors.grey[600])),
                 Row(
                   children: [
                     Text(

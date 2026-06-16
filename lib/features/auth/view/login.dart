@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:delivery_app/features/admin/navigation_bar_admin.dart';
 import 'package:delivery_app/features/auth/view/register.dart';
 import 'package:delivery_app/features/delivery/navigation_bar_Delivery.dart';
-import 'package:delivery_app/features/user/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -82,7 +81,10 @@ class Login extends StatelessWidget {
                                 if (Navigator.canPop(context)) {
                                   navigateBack(context);
                                 } else {
-                                  navigateAndFinish(context, const BottomNavBarUser());
+                                  navigateAndFinish(
+                                    context,
+                                    const BottomNavBarUser(),
+                                  );
                                 }
                               },
                               child: const Icon(
@@ -185,8 +187,10 @@ class Login extends StatelessWidget {
                               ),
                             );
                           },
-                          fallback: (c) =>
-                              CircularProgressIndicator(color: primaryColor),
+                          fallback:
+                              (c) => CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
                         ),
                         const SizedBox(height: 40),
                         Row(

@@ -1,7 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/circular_progress.dart';
 import 'package:delivery_app/core/widgets/constant.dart';
-import 'package:delivery_app/core/widgets/new_card_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -21,75 +20,102 @@ class Orders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => UserCubit()..getOrder(context: context, page: '1'),
-      child: BlocConsumer<UserCubit,UserStates>(
-        listener: (context,state){},
-        builder: (context,state){
-          var cubit=UserCubit.get(context);
+      create:
+          (BuildContext context) =>
+              UserCubit()..getOrder(context: context, page: '1'),
+      child: BlocConsumer<UserCubit, UserStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          var cubit = UserCubit.get(context);
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color(0xFFF5F5F8),
               body: Column(
                 children: [
                   CustomAppbar(),
-                  token != ''? Expanded(
-                    child: ConditionalBuilder(
-                      condition: cubit.orderModel != null,
-                      builder: (c){
-                        return ConditionalBuilder(
-                            condition: cubit.orders.isNotEmpty,
-                            builder: (c){
-                              return Column(
-                                children: [
-                                  SizedBox(height: 20,),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        const Text(
-                                          'تقرير الطلبيات',
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black87,
+                  token != ''
+                      ? Expanded(
+                        child: ConditionalBuilder(
+                          condition: cubit.orderModel != null,
+                          builder: (c) {
+                            return ConditionalBuilder(
+                              condition: cubit.orders.isNotEmpty,
+                              builder: (c) {
+                                return Column(
+                                  children: [
+                                    SizedBox(height: 20),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          const Text(
+                                            'تقرير الطلبيات',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 40),
-                                  Expanded(
-                                    child: NotificationListener<ScrollNotification>(
-                                      onNotification: (ScrollNotification scrollInfo) {
-                                        if (scrollInfo is ScrollUpdateNotification &&
-                                            scrollInfo.metrics.pixels >=
-                                                scrollInfo.metrics.maxScrollExtent - 50 &&
-                                            !cubit.isLastPage &&
-                                            state is! GetOrderLoadingState) {
-                                          cubit.getOrder(
-                                            page: (cubit.currentPage + 1).toString(),
-                                            context: context,
-                                          );
-                                        }
-                                        return false;
-                                      },
-                                      child: ListView.builder(
-                                          physics: AlwaysScrollableScrollPhysics(),
+                                    const SizedBox(height: 40),
+                                    Expanded(
+                                      child: NotificationListener<
+                                        ScrollNotification
+                                      >(
+                                        onNotification: (
+                                          ScrollNotification scrollInfo,
+                                        ) {
+                                          if (scrollInfo
+                                                  is ScrollUpdateNotification &&
+                                              scrollInfo.metrics.pixels >=
+                                                  scrollInfo
+                                                          .metrics
+                                                          .maxScrollExtent -
+                                                      50 &&
+                                              !cubit.isLastPage &&
+                                              state is! GetOrderLoadingState) {
+                                            cubit.getOrder(
+                                              page:
+                                                  (cubit.currentPage + 1)
+                                                      .toString(),
+                                              context: context,
+                                            );
+                                          }
+                                          return false;
+                                        },
+                                        child: ListView.builder(
+                                          physics:
+                                              AlwaysScrollableScrollPhysics(),
                                           itemCount: cubit.orders.length,
-                                          itemBuilder: (context,index){
+                                          itemBuilder: (context, index) {
                                             final order = cubit.orders[index];
-                                            DateTime dateTime = DateTime.parse(order.createdAt.toString());
-                                            String formattedDate = DateFormat('yyyy/M/d').format(dateTime);
-                                            return  Container(
-                                              margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+                                            DateTime dateTime = DateTime.parse(
+                                              order.createdAt.toString(),
+                                            );
+                                            String formattedDate = DateFormat(
+                                              'yyyy/M/d',
+                                            ).format(dateTime);
+                                            return Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 22,
+                                                    vertical: 8,
+                                                  ),
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(8),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.black54.withOpacity(0.2),
+                                                    color: Colors.black54
+                                                        .withOpacity(0.2),
                                                     blurRadius: 4,
                                                     spreadRadius: 1,
                                                     offset: const Offset(0, 2),
@@ -97,26 +123,34 @@ class Orders extends StatelessWidget {
                                                 ],
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(14),
+                                                padding: const EdgeInsets.all(
+                                                  14,
+                                                ),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
                                                       children: [
                                                         Row(
                                                           children: [
                                                             Text(
-                                                              "${index+1}",
+                                                              "${index + 1}",
                                                               style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                 fontSize: 14,
                                                               ),
                                                             ),
                                                             Text(
                                                               " طلب #",
                                                               style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                 fontSize: 14,
                                                               ),
                                                             ),
@@ -127,42 +161,84 @@ class Orders extends StatelessWidget {
                                                     const SizedBox(height: 12),
                                                     Container(
                                                       width: double.maxFinite,
-                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 10,
+                                                            vertical: 8,
+                                                          ),
                                                       decoration: BoxDecoration(
-                                                        color:order.status == 'تم الاستلام'?
-                                                        Colors.blue.withOpacity(0.1):order.status == 'تم التسليم'?
-                                                        Colors.green.withOpacity(0.1):order.status == 'استرجاع الطلب'?
-                                                        Colors.red.withOpacity(0.1):Colors.orange.withOpacity(0.2),
-                                                        borderRadius: BorderRadius.circular(12),
+                                                        color:
+                                                            order.status ==
+                                                                    'تم الاستلام'
+                                                                ? Colors.blue
+                                                                    .withOpacity(
+                                                                      0.1,
+                                                                    )
+                                                                : order.status ==
+                                                                    'تم التسليم'
+                                                                ? Colors.green
+                                                                    .withOpacity(
+                                                                      0.1,
+                                                                    )
+                                                                : order.status ==
+                                                                    'استرجاع الطلب'
+                                                                ? Colors.red
+                                                                    .withOpacity(
+                                                                      0.1,
+                                                                    )
+                                                                : Colors.orange
+                                                                    .withOpacity(
+                                                                      0.2,
+                                                                    ),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              12,
+                                                            ),
                                                       ),
                                                       child: Text(
                                                         order.status,
                                                         style: TextStyle(
-                                                          color: order.status == 'تم الاستلام'?
-                                                          Colors.blue:order.status == 'تم التسليم'?
-                                                          Colors.green:order.status == 'استرجاع الطلب'?
-                                                          Colors.red:Colors.orange,
-                                                          fontWeight: FontWeight.w600,
+                                                          color:
+                                                              order.status ==
+                                                                      'تم الاستلام'
+                                                                  ? Colors.blue
+                                                                  : order.status ==
+                                                                      'تم التسليم'
+                                                                  ? Colors.green
+                                                                  : order.status ==
+                                                                      'استرجاع الطلب'
+                                                                  ? Colors.red
+                                                                  : Colors
+                                                                      .orange,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                           fontSize: 14,
                                                         ),
-                                                        textAlign: TextAlign.center,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 12),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
                                                       children: [
                                                         Text(
-                                                          order.vendor?.name ?? "متجر غير معروف",
+                                                          order.vendor?.name ??
+                                                              "متجر غير معروف",
                                                           style: const TextStyle(
-                                                            fontWeight: FontWeight.bold,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                             fontSize: 15,
                                                             color: primaryColor,
                                                           ),
                                                         ),
-                                                        const SizedBox(width: 6),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
                                                         const Icon(
-                                                          Icons.store_mall_directory_outlined,
+                                                          Icons
+                                                              .store_mall_directory_outlined,
                                                           color: primaryColor,
                                                           size: 20,
                                                         ),
@@ -170,94 +246,173 @@ class Orders extends StatelessWidget {
                                                     ),
                                                     const SizedBox(height: 10),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Text(
                                                           formattedDate,
                                                           style: TextStyle(
-                                                            color: Colors.grey[600],
+                                                            color:
+                                                                Colors
+                                                                    .grey[600],
                                                           ),
                                                         ),
                                                         Row(
                                                           children: [
-                                                            Text( order.phone,
-                                                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
-                                                            const SizedBox(width: 6),
-                                                            const Icon(Icons.person, color: Colors.grey),
+                                                            Text(
+                                                              order.phone,
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 6,
+                                                            ),
+                                                            const Icon(
+                                                              Icons.person,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
                                                           ],
                                                         ),
                                                       ],
                                                     ),
                                                     const SizedBox(height: 6),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
                                                       children: [
-                                                        Expanded(child: Text(order.address,
-                                                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14), overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,)),
-                                                        const SizedBox(width: 6),
-                                                        const Icon(Icons.location_on, color: Colors.grey),
+                                                        Expanded(
+                                                          child: Text(
+                                                            order.address,
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 14,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            textAlign:
+                                                                TextAlign.end,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
+                                                        const Icon(
+                                                          Icons.location_on,
+                                                          color: Colors.grey,
+                                                        ),
                                                       ],
                                                     ),
                                                     const SizedBox(height: 6),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
-                                                        order.items != null && order.items!.isNotEmpty
-                                                            ?Container():Row(
-                                                          children: [
-                                                            Text(
-                                                              'د.ع ',
-                                                              style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 14,
-                                                                color: primaryColor,
-                                                              ),
+                                                        order.items != null &&
+                                                                order
+                                                                    .items!
+                                                                    .isNotEmpty
+                                                            ? Container()
+                                                            : Row(
+                                                              children: [
+                                                                Text(
+                                                                  'د.ع ',
+                                                                  style: const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        14,
+                                                                    color:
+                                                                        primaryColor,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  order
+                                                                      .deliveryFee
+                                                                      .toString(),
+                                                                  style: const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 6,
+                                                                ),
+                                                                Icon(
+                                                                  Icons
+                                                                      .delivery_dining,
+                                                                  color:
+                                                                      Colors
+                                                                          .grey,
+                                                                ),
+                                                              ],
                                                             ),
-                                                            Text(
-                                                              order.deliveryFee.toString(),
-                                                              style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
-                                                                fontSize: 14,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(width: 6),
-                                                            Icon(Icons.delivery_dining, color: Colors.grey),
-                                                          ],
-                                                        ),
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
                                                           children: [
                                                             Text(
                                                               ' د.ع ',
                                                               style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                 fontSize: 14,
-                                                                color: primaryColor,
+                                                                color:
+                                                                    primaryColor,
                                                               ),
                                                             ),
                                                             Text(
-                                                              order.orderAmount.toString(),
+                                                              order.orderAmount
+                                                                  .toString(),
                                                               style: const TextStyle(
-                                                                fontWeight: FontWeight.bold,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                                 fontSize: 14,
                                                               ),
                                                             ),
-                                                            const SizedBox(width: 6),
-                                                            Icon(Icons.price_change_outlined, color: Colors.grey),
+                                                            const SizedBox(
+                                                              width: 6,
+                                                            ),
+                                                            Icon(
+                                                              Icons
+                                                                  .price_change_outlined,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
                                                           ],
                                                         ),
                                                       ],
                                                     ),
                                                     const SizedBox(height: 6),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
                                                       children: [
                                                         Text(
                                                           ': ملاحظات',
-                                                          textAlign: TextAlign.end,
+                                                          textAlign:
+                                                              TextAlign.end,
                                                           style: const TextStyle(
-                                                            color: Colors.black54,
-                                                            fontWeight: FontWeight.bold,
+                                                            color:
+                                                                Colors.black54,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                             fontSize: 14,
                                                           ),
                                                         ),
@@ -265,194 +420,384 @@ class Orders extends StatelessWidget {
                                                     ),
                                                     Row(
                                                       children: [
-                                                        order.notes == ''? Expanded(
-                                                          child: Text(
-                                                            'لا يوجد',
-                                                            textAlign: TextAlign.end,
-                                                            style: const TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
+                                                        order.notes == ''
+                                                            ? Expanded(
+                                                              child: Text(
+                                                                'لا يوجد',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 14,
+                                                                ),
+                                                              ),
+                                                            )
+                                                            : Expanded(
+                                                              child: Text(
+                                                                order.notes,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 14,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ):Expanded(
-                                                          child: Text(
-                                                            order.notes,
-                                                            textAlign: TextAlign.end,
-                                                            style: const TextStyle(
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 14,
-                                                            ),
-                                                          ),
-                                                        ),
                                                       ],
                                                     ),
-                                                    order.items != null && order.items!.isNotEmpty ?Column(
-                                                      children: [
-                                                        const SizedBox(height: 12),
-                                                        Container(width: double.maxFinite,height: 2,color: Colors.grey,),
-                                                        const SizedBox(height: 12),
-                                                        SizedBox(
-                                                          height: 90,
-                                                          child: ListView.builder(
-                                                              physics: AlwaysScrollableScrollPhysics(),
-                                                              itemCount: order.items?.length,
-                                                              itemBuilder:(context,itemIndex){
-                                                                int number = int.parse(order.items![itemIndex].product.price.toString());
-                                                                return Column(
-                                                                  children: [
-                                                                    Row(
-                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                      children: [
-                                                                        SizedBox(width: 12,),
-                                                                        Expanded(
-                                                                          child: Column(
-                                                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                                                            children: [
-                                                                              Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                                                children: [
-                                                                                  Text(order.items![itemIndex].product.title.toString(),
-                                                                                  maxLines: 1,
-                                                                                  overflow: TextOverflow.ellipsis,),
-                                                                                ],
+                                                    order.items != null &&
+                                                            order
+                                                                .items!
+                                                                .isNotEmpty
+                                                        ? Column(
+                                                          children: [
+                                                            const SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            Container(
+                                                              width:
+                                                                  double
+                                                                      .maxFinite,
+                                                              height: 2,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 90,
+                                                              child: ListView.builder(
+                                                                physics:
+                                                                    AlwaysScrollableScrollPhysics(),
+                                                                itemCount:
+                                                                    order
+                                                                        .items
+                                                                        ?.length,
+                                                                itemBuilder: (
+                                                                  context,
+                                                                  itemIndex,
+                                                                ) {
+                                                                  int
+                                                                  number = int.parse(
+                                                                    order
+                                                                        .items![itemIndex]
+                                                                        .product
+                                                                        .price
+                                                                        .toString(),
+                                                                  );
+                                                                  return Column(
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          SizedBox(
+                                                                            width:
+                                                                                12,
+                                                                          ),
+                                                                          Expanded(
+                                                                            child: Column(
+                                                                              crossAxisAlignment:
+                                                                                  CrossAxisAlignment.end,
+                                                                              children: [
+                                                                                Row(
+                                                                                  mainAxisAlignment:
+                                                                                      MainAxisAlignment.end,
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      order.items![itemIndex].product.title.toString(),
+                                                                                      maxLines:
+                                                                                          1,
+                                                                                      overflow:
+                                                                                          TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height:
+                                                                                      4,
+                                                                                ),
+                                                                                Row(
+                                                                                  mainAxisAlignment:
+                                                                                      MainAxisAlignment.end,
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'د.ع',
+                                                                                      style: TextStyle(
+                                                                                        color:
+                                                                                            primaryColor,
+                                                                                      ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width:
+                                                                                          4,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      NumberFormat(
+                                                                                            '#,###',
+                                                                                          )
+                                                                                          .format(
+                                                                                            number,
+                                                                                          )
+                                                                                          .toString(),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                12,
+                                                                          ),
+                                                                          Container(
+                                                                            width:
+                                                                                64,
+                                                                            height:
+                                                                                64,
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                6,
                                                                               ),
-                                                                              SizedBox(height: 4,),
-                                                                              Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                                                children: [
-                                                                                  Text('د.ع',style: TextStyle(color: primaryColor),),
-                                                                                  SizedBox(width: 4,),
-                                                                                  Text(NumberFormat('#,###').format(number).toString()),
-                                                                                ],
+                                                                            ),
+                                                                            child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                6.0,
+                                                                              ),
+                                                                              child: Image.network(
+                                                                                '$url/uploads/${order.items![itemIndex].product.images[0].toString()}',
+                                                                                fit:
+                                                                                    BoxFit.fill,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            children: [
+                                                                              Text(
+                                                                                '${itemIndex + 1}',
+                                                                                style: TextStyle(
+                                                                                  color:
+                                                                                      primaryColor,
+                                                                                  fontSize:
+                                                                                      14,
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(
+                                                                                width:
+                                                                                    2,
+                                                                              ),
+                                                                              Text(
+                                                                                '#',
+                                                                                style: TextStyle(
+                                                                                  fontSize:
+                                                                                      18,
+                                                                                ),
                                                                               ),
                                                                             ],
                                                                           ),
-                                                                        ),
-                                                                        SizedBox(width: 12,),
-                                                                        Container(
-                                                                          width: 64,
-                                                                          height: 64,
-                                                                          decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.circular(6),
-                                                                          ),
-                                                                          child: ClipRRect(
-                                                                            borderRadius:
-                                                                            BorderRadius.circular(6.0),
-                                                                            child: Image.network(
-                                                                              '$url/uploads/${order.items![itemIndex].product.images[0].toString()}',
-                                                                              fit: BoxFit.fill,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Row(
-                                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                                          children: [
-                                                                            Text('${itemIndex+1}',style: TextStyle(color: primaryColor,fontSize: 14),),
-                                                                            SizedBox(width: 2,),
-                                                                            Text('#',style: TextStyle(fontSize: 18),),
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              }),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                        : const SizedBox(
+                                                          height: 12,
                                                         ),
-                                                      ],
-                                                    ):const SizedBox(height: 12),
-                                                    if (order.status == 'تم التسليم' && order.assignedDeliveryId != null) ...[
-                                                      const SizedBox(height: 12),
-                                                      Container(width: double.maxFinite, height: 1, color: Colors.grey[300]),
-                                                      const SizedBox(height: 12),
+                                                    if (order.status ==
+                                                            'تم التسليم' &&
+                                                        order.assignedDeliveryId !=
+                                                            null) ...[
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
+                                                      Container(
+                                                        width: double.maxFinite,
+                                                        height: 1,
+                                                        color: Colors.grey[300],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
                                                       Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
                                                           order.rating == null
                                                               ? ElevatedButton.icon(
-                                                                  onPressed: () {
-                                                                    _showRatingDialog(context, cubit, order);
-                                                                  },
-                                                                  icon: const Icon(Icons.star_border, size: 18, color: Colors.white),
-                                                                  label: const Text(
-                                                                    'تقييم المندوب',
-                                                                    style: TextStyle(
-                                                                      fontSize: 13,
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontFamily: 'cairo',
-                                                                      color: Colors.white,
-                                                                    ),
-                                                                  ),
-                                                                  style: ElevatedButton.styleFrom(
-                                                                    backgroundColor: primaryColor,
-                                                                    elevation: 0,
-                                                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                                                    shape: RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              : Row(
-                                                                  children: [
-                                                                    Text(
-                                                                      '⭐ ${order.rating!.rating.toStringAsFixed(1)}',
-                                                                      style: const TextStyle(
-                                                                        fontSize: 15,
-                                                                        fontWeight: FontWeight.bold,
-                                                                        color: Colors.amber,
-                                                                      ),
-                                                                    ),
-                                                                    const SizedBox(width: 4),
-                                                                    const Text(
-                                                                      '(تم التقييم)',
-                                                                      style: TextStyle(
-                                                                        fontSize: 12,
-                                                                        color: Colors.grey,
-                                                                        fontFamily: 'cairo',
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                onPressed: () {
+                                                                  _showRatingDialog(
+                                                                    context,
+                                                                    cubit,
+                                                                    order,
+                                                                  );
+                                                                },
+                                                                icon: const Icon(
+                                                                  Icons
+                                                                      .star_border,
+                                                                  size: 18,
+                                                                  color:
+                                                                      Colors
+                                                                          .white,
                                                                 ),
-                                                          Row(
-                                                            children: [
-                                                              Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                                label: const Text(
+                                                                  'تقييم المندوب',
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        13,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        'cairo',
+                                                                    color:
+                                                                        Colors
+                                                                            .white,
+                                                                  ),
+                                                                ),
+                                                                style: ElevatedButton.styleFrom(
+                                                                  backgroundColor:
+                                                                      primaryColor,
+                                                                  elevation: 0,
+                                                                  padding:
+                                                                      const EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            14,
+                                                                        vertical:
+                                                                            8,
+                                                                      ),
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          8,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                              : Row(
                                                                 children: [
-                                                                  const Text(
-                                                                    'مندوب التوصيل',
-                                                                    style: TextStyle(
-                                                                      fontSize: 11,
-                                                                      color: Colors.grey,
-                                                                      fontFamily: 'cairo',
+                                                                  Text(
+                                                                    '⭐ ${order.rating!.rating.toStringAsFixed(1)}',
+                                                                    style: const TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          Colors
+                                                                              .amber,
                                                                     ),
                                                                   ),
-                                                                  Text(
-                                                                    order.delivery?.name ?? 'المندوب',
-                                                                    style: const TextStyle(
-                                                                      fontSize: 14,
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontFamily: 'cairo',
+                                                                  const SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  const Text(
+                                                                    '(تم التقييم)',
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color:
+                                                                          Colors
+                                                                              .grey,
+                                                                      fontFamily:
+                                                                          'cairo',
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
-                                                              const SizedBox(width: 8),
+                                                          Row(
+                                                            children: [
+                                                              Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  const Text(
+                                                                    'مندوب التوصيل',
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          11,
+                                                                      color:
+                                                                          Colors
+                                                                              .grey,
+                                                                      fontFamily:
+                                                                          'cairo',
+                                                                    ),
+                                                                  ),
+                                                                  Text(
+                                                                    order
+                                                                            .delivery
+                                                                            ?.name ??
+                                                                        'المندوب',
+                                                                    style: const TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          'cairo',
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 8,
+                                                              ),
                                                               Container(
                                                                 width: 40,
                                                                 height: 40,
                                                                 decoration: BoxDecoration(
-                                                                  color: Colors.grey[200],
-                                                                  shape: BoxShape.circle,
+                                                                  color:
+                                                                      Colors
+                                                                          .grey[200],
+                                                                  shape:
+                                                                      BoxShape
+                                                                          .circle,
                                                                 ),
                                                                 child: ClipRRect(
-                                                                  borderRadius: BorderRadius.circular(20),
-                                                                  child: (order.delivery?.images != null && order.delivery!.images.isNotEmpty)
-                                                                      ? Image.network(
-                                                                          '$url/uploads/${order.delivery!.images[0]}',
-                                                                          fit: BoxFit.cover,
-                                                                          errorBuilder: (context, error, stackTrace) =>
-                                                                              const Icon(Icons.person, color: Colors.grey),
-                                                                        )
-                                                                      : const Icon(Icons.person, color: Colors.grey),
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        20,
+                                                                      ),
+                                                                  child:
+                                                                      (order.delivery?.images !=
+                                                                                  null &&
+                                                                              order.delivery!.images.isNotEmpty)
+                                                                          ? Image.network(
+                                                                            '$url/uploads/${order.delivery!.images[0]}',
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                            errorBuilder:
+                                                                                (
+                                                                                  context,
+                                                                                  error,
+                                                                                  stackTrace,
+                                                                                ) => const Icon(
+                                                                                  Icons.person,
+                                                                                  color:
+                                                                                      Colors.grey,
+                                                                                ),
+                                                                          )
+                                                                          : const Icon(
+                                                                            Icons.person,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
                                                                 ),
                                                               ),
                                                             ],
@@ -464,49 +809,59 @@ class Orders extends StatelessWidget {
                                                 ),
                                               ),
                                             );
-                                          }),
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              fallback:
+                                  (c) => Center(
+                                    child: Text('لا يوجد بيانات ليتم عرضها'),
+                                  ),
+                            );
+                          },
+                          fallback: (c) => Center(child: CircularProgress()),
+                        ),
+                      )
+                      : Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                navigateTo(context, Login());
+                              },
+                              child: Container(
+                                width: 180,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                      offset: const Offset(5, 5),
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: primaryColor,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'تسجيل الدخول',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
                                     ),
                                   ),
-                                ],
-                              );
-                            },
-                            fallback: (c)=>Center(child: Text('لا يوجد بيانات ليتم عرضها')));
-                      },
-                      fallback: (c)=>Center(child: CircularProgress()),
-                    ),
-                  ) :
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: (){
-                            navigateTo(context, Login());
-                          },
-                          child: Container(
-                            width: 180,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                    offset: const Offset(5, 5),
-                                  ),
-                                ],
-                                borderRadius:  BorderRadius.circular(30),
-                                color: primaryColor
+                                ),
+                              ),
                             ),
-                            child: Center(
-                              child: Text('تسجيل الدخول',
-                                style: TextStyle(color: Colors.white,fontSize: 14 ),),
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
                 ],
               ),
             ),
@@ -552,14 +907,24 @@ void _showRatingDialog(BuildContext context, UserCubit cubit, Order order) {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(35),
-                      child: (order.delivery?.images != null && order.delivery!.images.isNotEmpty)
-                          ? Image.network(
-                              '$url/uploads/${order.delivery!.images[0]}',
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.person, size: 40, color: Colors.grey),
-                            )
-                          : const Icon(Icons.person, size: 40, color: Colors.grey),
+                      child:
+                          (order.delivery?.images != null &&
+                                  order.delivery!.images.isNotEmpty)
+                              ? Image.network(
+                                '$url/uploads/${order.delivery!.images[0]}',
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (context, error, stackTrace) => const Icon(
+                                      Icons.person,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                              )
+                              : const Icon(
+                                Icons.person,
+                                size: 40,
+                                color: Colors.grey,
+                              ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -588,7 +953,9 @@ void _showRatingDialog(BuildContext context, UserCubit cubit, Order order) {
                       int starValue = index + 1;
                       return IconButton(
                         icon: Icon(
-                          starValue <= selectedRating ? Icons.star : Icons.star_border,
+                          starValue <= selectedRating
+                              ? Icons.star
+                              : Icons.star_border,
                           color: Colors.amber,
                           size: 36,
                         ),
@@ -659,4 +1026,3 @@ void _showRatingDialog(BuildContext context, UserCubit cubit, Order order) {
     },
   );
 }
-

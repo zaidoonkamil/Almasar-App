@@ -8,9 +8,7 @@ import '../../core/network/local/cache_helper.dart';
 import '../../core/widgets/constant.dart';
 import '../admin/navigation_bar_admin.dart';
 import '../auth/view/login.dart';
-import '../delivery/view/changing_order.dart';
 import '../user/navigation_bar_user.dart';
-import '../user/view/home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,37 +18,36 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 1), () {
       Widget? widget;
       bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
-      if(CacheHelper.getData(key: 'token') == null){
-        token='';
+      if (CacheHelper.getData(key: 'token') == null) {
+        token = '';
         if (onBoarding != null) {
           widget = const BottomNavBarUser();
         } else {
           widget = OnboardingScreen();
         }
-      }else{
-        if(CacheHelper.getData(key: 'role') == null){
+      } else {
+        if (CacheHelper.getData(key: 'role') == null) {
           widget = const Login();
-          adminOrUser='user';
-        }else{
+          adminOrUser = 'user';
+        } else {
           adminOrUser = CacheHelper.getData(key: 'role');
           if (adminOrUser == 'admin') {
             widget = BottomNavBarAdmin();
-          }else if(adminOrUser == 'delivery'){
+          } else if (adminOrUser == 'delivery') {
             widget = BottomNavBarDelivery();
-          }else if(adminOrUser == 'vendor'){
+          } else if (adminOrUser == 'vendor') {
             widget = HomeVendor();
-          }else{
+          } else {
             widget = BottomNavBarUser();
           }
         }
-        token = CacheHelper.getData(key: 'token') ;
-        id = CacheHelper.getData(key: 'id') ??'' ;
+        token = CacheHelper.getData(key: 'token');
+        id = CacheHelper.getData(key: 'id') ?? '';
       }
 
       navigateAndFinish(context, widget);
@@ -70,8 +67,8 @@ class _SplashScreenState extends State<SplashScreen> {
               child: SizedBox(
                 width: double.maxFinite,
                 height: double.maxFinite,
-                child: Center(child:
-                Image.asset('assets/images/logo.png',width: 180,),
+                child: Center(
+                  child: Image.asset('assets/images/logo.png', width: 180),
                 ),
               ),
             ),

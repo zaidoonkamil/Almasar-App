@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:delivery_app/features/vendor/cubit/states.dart';
@@ -88,34 +87,35 @@ class AddProducts extends StatelessWidget {
                             onTap: () {
                               cubit.pickImages();
                             },
-                            child: cubit.selectedImages.isEmpty
-                                ? Image.asset(
-                                    'assets/images/Group 1171275632 (1).png',
-                                  )
-                                : SizedBox(
-                                    height: 120,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: cubit.selectedImages.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: ClipOval(
-                                            child: Image.file(
-                                              File(
-                                                cubit
-                                                    .selectedImages[index]
-                                                    .path,
+                            child:
+                                cubit.selectedImages.isEmpty
+                                    ? Image.asset(
+                                      'assets/images/Group 1171275632 (1).png',
+                                    )
+                                    : SizedBox(
+                                      height: 120,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: cubit.selectedImages.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: ClipOval(
+                                              child: Image.file(
+                                                File(
+                                                  cubit
+                                                      .selectedImages[index]
+                                                      .path,
+                                                ),
+                                                height: 120,
+                                                width: 120,
+                                                fit: BoxFit.cover,
                                               ),
-                                              height: 120,
-                                              width: 120,
-                                              fit: BoxFit.cover,
                                             ),
-                                          ),
-                                        );
-                                      },
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
                           ),
                           const SizedBox(height: 40),
                           CustomTextField(
@@ -164,8 +164,8 @@ class AddProducts extends StatelessWidget {
                                   if (formKey.currentState!.validate()) {
                                     cubit.addProducts(
                                       title: titleController.text.trim(),
-                                      description: descriptionController.text
-                                          .trim(),
+                                      description:
+                                          descriptionController.text.trim(),
                                       price: priceController.text.trim(),
                                       context: context,
                                       idVendor: idVendor,
@@ -199,8 +199,10 @@ class AddProducts extends StatelessWidget {
                                 ),
                               );
                             },
-                            fallback: (c) =>
-                                CircularProgressIndicator(color: primaryColor),
+                            fallback:
+                                (c) => CircularProgressIndicator(
+                                  color: primaryColor,
+                                ),
                           ),
                           const SizedBox(height: 40),
                         ],

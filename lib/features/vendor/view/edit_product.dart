@@ -102,7 +102,7 @@ class _EditProductState extends State<EditProduct> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: ClipOval(
                                         child: Image.network(
-                                          '${url}/uploads/${currentImages[index]}',
+                                          '$url/uploads/${currentImages[index]}',
                                           height: 100,
                                           width: 100,
                                           fit: BoxFit.cover,
@@ -146,32 +146,35 @@ class _EditProductState extends State<EditProduct> {
                           onTap: () {
                             cubit.pickImages();
                           },
-                          child: cubit.selectedImages.isEmpty
-                              ? Image.asset(
-                                  'assets/images/Group 1171275632 (1).png',
-                                )
-                              : SizedBox(
-                                  height: 120,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: cubit.selectedImages.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: ClipOval(
-                                          child: Image.file(
-                                            File(
-                                              cubit.selectedImages[index].path,
+                          child:
+                              cubit.selectedImages.isEmpty
+                                  ? Image.asset(
+                                    'assets/images/Group 1171275632 (1).png',
+                                  )
+                                  : SizedBox(
+                                    height: 120,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: cubit.selectedImages.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: ClipOval(
+                                            child: Image.file(
+                                              File(
+                                                cubit
+                                                    .selectedImages[index]
+                                                    .path,
+                                              ),
+                                              height: 120,
+                                              width: 120,
+                                              fit: BoxFit.cover,
                                             ),
-                                            height: 120,
-                                            width: 120,
-                                            fit: BoxFit.cover,
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
                         ),
 
                         const SizedBox(height: 24),
@@ -225,8 +228,8 @@ class _EditProductState extends State<EditProduct> {
                                     vendorId: widget.idVendor,
                                     productId: widget.product.id.toString(),
                                     title: titleController.text.trim(),
-                                    description: descriptionController.text
-                                        .trim(),
+                                    description:
+                                        descriptionController.text.trim(),
                                     price: priceController.text.trim(),
                                     removeImages: removedImages,
                                     context: context,
@@ -260,8 +263,10 @@ class _EditProductState extends State<EditProduct> {
                               ),
                             );
                           },
-                          fallback: (c) =>
-                              CircularProgressIndicator(color: primaryColor),
+                          fallback:
+                              (c) => CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
                         ),
                         const SizedBox(height: 40),
                       ],

@@ -111,10 +111,7 @@ class Register extends StatelessWidget {
                               unselectedBackgroundColor: Colors.white,
                               labelStyle: TextStyle(color: Colors.white),
                               height: 56,
-                              tabs: [
-                                Tab(text: "كمستخدم"),
-                                Tab(text: "كتاجر"),
-                              ],
+                              tabs: [Tab(text: "كمستخدم"), Tab(text: "كتاجر")],
                             ),
                           ],
                         ),
@@ -158,34 +155,54 @@ class Register extends StatelessWidget {
                                     Directionality(
                                       textDirection: TextDirection.rtl,
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.05),
+                                              color: Colors.black.withOpacity(
+                                                0.05,
+                                              ),
                                               blurRadius: 5,
                                               offset: const Offset(0, 3),
                                             ),
                                           ],
                                         ),
                                         child: DropdownButtonFormField<String>(
-                                          value: cubit.activeGovernorates.contains(cubit.selectedGovernorate) ? cubit.selectedGovernorate : null,
+                                          initialValue:
+                                              cubit.activeGovernorates.contains(
+                                                    cubit.selectedGovernorate,
+                                                  )
+                                                  ? cubit.selectedGovernorate
+                                                  : null,
                                           decoration: const InputDecoration(
                                             border: InputBorder.none,
-                                            prefixIcon: Icon(Icons.map_outlined, color: Colors.grey),
+                                            prefixIcon: Icon(
+                                              Icons.map_outlined,
+                                              color: Colors.grey,
+                                            ),
                                           ),
                                           hint: const Text('المحافظة'),
                                           isExpanded: true,
-                                          icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.grey,
+                                          ),
                                           dropdownColor: Colors.white,
-                                          items: cubit.activeGovernorates.map((String gov) {
-                                            return DropdownMenuItem<String>(
-                                              value: gov,
-                                              child: Text(gov),
-                                            );
-                                          }).toList(),
+                                          items:
+                                              cubit.activeGovernorates.map((
+                                                String gov,
+                                              ) {
+                                                return DropdownMenuItem<String>(
+                                                  value: gov,
+                                                  child: Text(gov),
+                                                );
+                                              }).toList(),
                                           onChanged: (String? newValue) {
                                             if (newValue != null) {
                                               cubit.changeGovernorate(newValue);
@@ -197,7 +214,8 @@ class Register extends StatelessWidget {
                                     const SizedBox(height: 16),
                                     CustomTextField(
                                       controller: locationController,
-                                      hintText: 'تفاصيل العنوان الكامل (الحي / الشارع)',
+                                      hintText:
+                                          'تفاصيل العنوان الكامل (الحي / الشارع)',
 
                                       prefixIcon: Icons.location_on_outlined,
                                       keyboardType: TextInputType.text,
@@ -250,18 +268,21 @@ class Register extends StatelessWidget {
                                               if (passwordController.text ==
                                                   rePasswordController.text) {
                                                 cubit.signUp(
-                                                  name: userNameController.text
-                                                      .trim(),
-                                                  phone: phoneController.text
-                                                      .trim(),
-                                                  location: locationController
-                                                      .text
-                                                      .trim(),
-                                                  password: passwordController
-                                                      .text
-                                                      .trim(),
+                                                  name:
+                                                      userNameController.text
+                                                          .trim(),
+                                                  phone:
+                                                      phoneController.text
+                                                          .trim(),
+                                                  location:
+                                                      locationController.text
+                                                          .trim(),
+                                                  password:
+                                                      passwordController.text
+                                                          .trim(),
                                                   role: 'user',
-                                                  governorate: cubit.selectedGovernorate,
+                                                  governorate:
+                                                      cubit.selectedGovernorate,
                                                   context: context,
                                                 );
                                               } else {
@@ -305,8 +326,8 @@ class Register extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      fallback: (c) =>
-                                          CircularProgressIndicator(
+                                      fallback:
+                                          (c) => CircularProgressIndicator(
                                             color: primaryColor,
                                           ),
                                     ),
@@ -344,27 +365,28 @@ class Register extends StatelessWidget {
                                       onTap: () {
                                         cubit.pickImages();
                                       },
-                                      child: cubit.selectedImages.isEmpty
-                                          ? Image.asset(
-                                              'assets/images/Group 1171275632 (1).png',
-                                            )
-                                          : Padding(
-                                              padding: const EdgeInsets.all(
-                                                5.0,
-                                              ),
-                                              child: ClipOval(
-                                                child: Image.file(
-                                                  File(
-                                                    cubit
-                                                        .selectedImages[0]
-                                                        .path,
+                                      child:
+                                          cubit.selectedImages.isEmpty
+                                              ? Image.asset(
+                                                'assets/images/Group 1171275632 (1).png',
+                                              )
+                                              : Padding(
+                                                padding: const EdgeInsets.all(
+                                                  5.0,
+                                                ),
+                                                child: ClipOval(
+                                                  child: Image.file(
+                                                    File(
+                                                      cubit
+                                                          .selectedImages[0]
+                                                          .path,
+                                                    ),
+                                                    height: 120,
+                                                    width: 120,
+                                                    fit: BoxFit.cover,
                                                   ),
-                                                  height: 120,
-                                                  width: 120,
-                                                  fit: BoxFit.cover,
                                                 ),
                                               ),
-                                            ),
                                     ),
                                     const SizedBox(height: 20),
                                     CustomTextField(
@@ -397,34 +419,54 @@ class Register extends StatelessWidget {
                                     Directionality(
                                       textDirection: TextDirection.rtl,
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.05),
+                                              color: Colors.black.withOpacity(
+                                                0.05,
+                                              ),
                                               blurRadius: 5,
                                               offset: const Offset(0, 3),
                                             ),
                                           ],
                                         ),
                                         child: DropdownButtonFormField<String>(
-                                          value: cubit.activeGovernorates.contains(cubit.selectedGovernorate) ? cubit.selectedGovernorate : null,
+                                          initialValue:
+                                              cubit.activeGovernorates.contains(
+                                                    cubit.selectedGovernorate,
+                                                  )
+                                                  ? cubit.selectedGovernorate
+                                                  : null,
                                           decoration: const InputDecoration(
                                             border: InputBorder.none,
-                                            prefixIcon: Icon(Icons.map_outlined, color: Colors.grey),
+                                            prefixIcon: Icon(
+                                              Icons.map_outlined,
+                                              color: Colors.grey,
+                                            ),
                                           ),
                                           hint: const Text('المحافظة'),
                                           isExpanded: true,
-                                          icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.grey,
+                                          ),
                                           dropdownColor: Colors.white,
-                                          items: cubit.activeGovernorates.map((String gov) {
-                                            return DropdownMenuItem<String>(
-                                              value: gov,
-                                              child: Text(gov),
-                                            );
-                                          }).toList(),
+                                          items:
+                                              cubit.activeGovernorates.map((
+                                                String gov,
+                                              ) {
+                                                return DropdownMenuItem<String>(
+                                                  value: gov,
+                                                  child: Text(gov),
+                                                );
+                                              }).toList(),
                                           onChanged: (String? newValue) {
                                             if (newValue != null) {
                                               cubit.changeGovernorate(newValue);
@@ -436,7 +478,8 @@ class Register extends StatelessWidget {
                                     const SizedBox(height: 16),
                                     CustomTextField(
                                       controller: locationController2,
-                                      hintText: 'تفاصيل العنوان الكامل (الحي / الشارع)',
+                                      hintText:
+                                          'تفاصيل العنوان الكامل (الحي / الشارع)',
 
                                       prefixIcon: Icons.location_on_outlined,
                                       keyboardType: TextInputType.text,
@@ -452,26 +495,38 @@ class Register extends StatelessWidget {
                                     Directionality(
                                       textDirection: TextDirection.rtl,
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.05),
+                                              color: Colors.black.withOpacity(
+                                                0.05,
+                                              ),
                                               blurRadius: 5,
                                               offset: const Offset(0, 3),
                                             ),
                                           ],
                                         ),
                                         child: DropdownButtonFormField<String>(
-                                          value: cubit.selectedCategory,
+                                          initialValue: cubit.selectedCategory,
                                           decoration: const InputDecoration(
                                             border: InputBorder.none,
-                                            prefixIcon: Icon(Icons.category_outlined, color: Colors.grey),
+                                            prefixIcon: Icon(
+                                              Icons.category_outlined,
+                                              color: Colors.grey,
+                                            ),
                                           ),
                                           isExpanded: true,
-                                          icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.grey,
+                                          ),
                                           dropdownColor: Colors.white,
                                           items: const [
                                             DropdownMenuItem(
@@ -552,19 +607,23 @@ class Register extends StatelessWidget {
                                               if (passwordController2.text ==
                                                   rePasswordController2.text) {
                                                 cubit.signUp(
-                                                  name: userNameController2.text
-                                                      .trim(),
-                                                  phone: phoneController2.text
-                                                      .trim(),
-                                                  location: locationController2
-                                                      .text
-                                                      .trim(),
-                                                  password: passwordController2
-                                                      .text
-                                                      .trim(),
+                                                  name:
+                                                      userNameController2.text
+                                                          .trim(),
+                                                  phone:
+                                                      phoneController2.text
+                                                          .trim(),
+                                                  location:
+                                                      locationController2.text
+                                                          .trim(),
+                                                  password:
+                                                      passwordController2.text
+                                                          .trim(),
                                                   role: 'vendor',
-                                                  category: cubit.selectedCategory,
-                                                  governorate: cubit.selectedGovernorate,
+                                                  category:
+                                                      cubit.selectedCategory,
+                                                  governorate:
+                                                      cubit.selectedGovernorate,
                                                   context: context,
                                                 );
                                               } else {
@@ -608,8 +667,8 @@ class Register extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      fallback: (c) =>
-                                          CircularProgressIndicator(
+                                      fallback:
+                                          (c) => CircularProgressIndicator(
                                             color: primaryColor,
                                           ),
                                     ),

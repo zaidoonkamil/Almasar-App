@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/styles/themes.dart';
-import '../../../core/widgets/constant.dart';
 import '../../../core/widgets/custom_appbar.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/widgets/show_toast.dart';
@@ -212,12 +211,13 @@ class AddPerson extends StatelessWidget {
                                                       rePasswordController
                                                           .text) {
                                                     cubit.addPerson(
-                                                      name: userNameController
-                                                          .text
-                                                          .trim(),
-                                                      phone: phoneController
-                                                          .text
-                                                          .trim(),
+                                                      name:
+                                                          userNameController
+                                                              .text
+                                                              .trim(),
+                                                      phone:
+                                                          phoneController.text
+                                                              .trim(),
                                                       location:
                                                           locationController
                                                               .text
@@ -276,8 +276,8 @@ class AddPerson extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          fallback: (c) =>
-                                              CircularProgressIndicator(
+                                          fallback:
+                                              (c) => CircularProgressIndicator(
                                                 color: primaryColor,
                                               ),
                                         ),
@@ -321,27 +321,29 @@ class AddPerson extends StatelessWidget {
                                           onTap: () {
                                             cubit.pickImages2();
                                           },
-                                          child: cubit.selectedImages2.isEmpty
-                                              ? Image.asset(
-                                                  'assets/images/Group 1171275632 (1).png',
-                                                )
-                                              : Padding(
-                                                  padding: const EdgeInsets.all(
-                                                    5.0,
-                                                  ),
-                                                  child: ClipOval(
-                                                    child: Image.file(
-                                                      File(
-                                                        cubit
-                                                            .selectedImages2[0]
-                                                            .path,
+                                          child:
+                                              cubit.selectedImages2.isEmpty
+                                                  ? Image.asset(
+                                                    'assets/images/Group 1171275632 (1).png',
+                                                  )
+                                                  : Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          5.0,
+                                                        ),
+                                                    child: ClipOval(
+                                                      child: Image.file(
+                                                        File(
+                                                          cubit
+                                                              .selectedImages2[0]
+                                                              .path,
+                                                        ),
+                                                        height: 120,
+                                                        width: 120,
+                                                        fit: BoxFit.cover,
                                                       ),
-                                                      height: 120,
-                                                      width: 120,
-                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
-                                                ),
                                         ),
                                         const SizedBox(height: 20),
                                         CustomTextField(
@@ -425,12 +427,13 @@ class AddPerson extends StatelessWidget {
                                                       rePasswordController1
                                                           .text) {
                                                     cubit.addPerson(
-                                                      name: userNameController1
-                                                          .text
-                                                          .trim(),
-                                                      phone: phoneController1
-                                                          .text
-                                                          .trim(),
+                                                      name:
+                                                          userNameController1
+                                                              .text
+                                                              .trim(),
+                                                      phone:
+                                                          phoneController1.text
+                                                              .trim(),
                                                       location:
                                                           locationController1
                                                               .text
@@ -490,8 +493,8 @@ class AddPerson extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          fallback: (c) =>
-                                              CircularProgressIndicator(
+                                          fallback:
+                                              (c) => CircularProgressIndicator(
                                                 color: primaryColor,
                                               ),
                                         ),
@@ -609,12 +612,13 @@ class AddPerson extends StatelessWidget {
                                                       rePasswordController2
                                                           .text) {
                                                     cubit.addPerson(
-                                                      name: userNameController2
-                                                          .text
-                                                          .trim(),
-                                                      phone: phoneController2
-                                                          .text
-                                                          .trim(),
+                                                      name:
+                                                          userNameController2
+                                                              .text
+                                                              .trim(),
+                                                      phone:
+                                                          phoneController2.text
+                                                              .trim(),
                                                       location:
                                                           locationController2
                                                               .text
@@ -674,8 +678,8 @@ class AddPerson extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          fallback: (c) =>
-                                              CircularProgressIndicator(
+                                          fallback:
+                                              (c) => CircularProgressIndicator(
                                                 color: primaryColor,
                                               ),
                                         ),
