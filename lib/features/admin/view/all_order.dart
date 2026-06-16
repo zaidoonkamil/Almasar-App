@@ -152,15 +152,17 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 GestureDetector(
                                                   onTap: () async {
                                                     final url = 'tel:${cubit.orders[index].phone}';
-                                                    await launch(
-                                                      url,
-                                                      enableJavaScript: true,
-                                                    ).catchError((e) {
+                                                    try {
+                                                      await launch(
+                                                        url,
+                                                        enableJavaScript: true,
+                                                      );
+                                                    } catch (e) {
                                                       showToastError(
                                                         text: e.toString(),
                                                         context: context,
                                                       );
-                                                    });
+                                                    }
                                                   },
                                                   child: Row(
                                                     children: [
@@ -385,15 +387,17 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 GestureDetector(
                                                   onTap: () async {
                                                     final url = 'tel:${cubit.orders[index].delivery!.phone}';
-                                                    await launch(
-                                                      url,
-                                                      enableJavaScript: true,
-                                                    ).catchError((e) {
+                                                    try {
+                                                      await launch(
+                                                        url,
+                                                        enableJavaScript: true,
+                                                      );
+                                                    } catch (e) {
                                                       showToastError(
                                                         text: e.toString(),
                                                         context: context,
                                                       );
-                                                    });
+                                                    }
                                                   },
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.end,

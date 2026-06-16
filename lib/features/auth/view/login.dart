@@ -28,9 +28,9 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AuthCubit(),
-      child: BlocConsumer<AuthCubit,AuthStates>(
-        listener: (context,state){
-          if(state is LoginSuccessState){
+      child: BlocConsumer<AuthCubit, AuthStates>(
+        listener: (context, state) {
+          if (state is LoginSuccessState) {
             CacheHelper.saveData(
               key: 'token',
               value: AuthCubit.get(context).token,
@@ -60,8 +60,8 @@ class Login extends StatelessWidget {
             });
           }
         },
-          builder: (context,state){
-          var cubit=AuthCubit.get(context);
+        builder: (context, state) {
+          var cubit = AuthCubit.get(context);
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color(0xFFF5F5F5),
@@ -73,11 +73,8 @@ class Login extends StatelessWidget {
                     key: formKey,
                     child: Column(
                       children: [
-                        SizedBox(height: 140,),
-                        Image.asset(
-                          'assets/images/logo.png',
-                          height: 100,
-                        ),
+                        SizedBox(height: 140),
+                        Image.asset('assets/images/logo.png', height: 100),
                         const SizedBox(height: 12),
                         const Text(
                           'شركة المسار',
@@ -106,6 +103,7 @@ class Login extends StatelessWidget {
                               cubit.validation();
                               return 'رجائا اخل رقم الهاتف';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -114,51 +112,61 @@ class Login extends StatelessWidget {
                           hintText: 'كلمة السر',
                           prefixIcon: Icons.lock,
                           obscureText: true,
-                          suffixIcon: const Icon(Icons.visibility_off, color: Colors.grey),
+                          suffixIcon: const Icon(
+                            Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
                           validate: (String? value) {
                             if (value!.isEmpty) {
                               cubit.validation();
                               return 'رجائا اكتب كلمة السر';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 60),
                         ConditionalBuilder(
-                            condition: state is !LoginLoadingState,
-                            builder: (context){
-                              return GestureDetector(
-                                onTap: (){
-                                  if (formKey.currentState!.validate()) {
-                                    cubit.signIn(
-                                      phone: userNameController.text.trim(),
-                                      password: passwordController.text.trim(),
-                                      context: context
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 10,
-                                          spreadRadius: 2,
-                                          offset: const Offset(5, 5),
-                                        ),
-                                      ],
-                                      borderRadius:  BorderRadius.circular(12),
-                                      color: primaryColor
-                                  ),
-                                  child: Center(
-                                    child: Text('تسجيل الدخول',
-                                      style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                          condition: state is! LoginLoadingState,
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (formKey.currentState!.validate()) {
+                                  cubit.signIn(
+                                    phone: userNameController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                    context: context,
+                                  );
+                                }
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                      offset: const Offset(5, 5),
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: primaryColor,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'تسجيل الدخول',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
-                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                              ),
+                            );
+                          },
+                          fallback: (c) =>
+                              CircularProgressIndicator(color: primaryColor),
                         ),
                         const SizedBox(height: 40),
                         Row(
@@ -178,7 +186,7 @@ class Login extends StatelessWidget {
                             ),
                             const Text("لا تمتلك حساب ؟ "),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -186,8 +194,8 @@ class Login extends StatelessWidget {
               ),
             ),
           );
-          },
-          ),
+        },
+      ),
     );
   }
 }

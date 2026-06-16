@@ -13,7 +13,6 @@ import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-
 class AddPerson extends StatelessWidget {
   const AddPerson({super.key});
 
@@ -42,35 +41,32 @@ class AddPerson extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AdminCubit(),
-      child: BlocConsumer<AdminCubit,AdminStates>(
-        listener: (context,state){
-          if(state is AddPersonSuccessState){
-            AdminCubit.get(context).selectedImages2=[];
-            userNameController.text='';
-            phoneController.text='';
-            locationController.text='';
-            passwordController.text='';
-            rePasswordController.text='';
+      child: BlocConsumer<AdminCubit, AdminStates>(
+        listener: (context, state) {
+          if (state is AddPersonSuccessState) {
+            AdminCubit.get(context).selectedImages2 = [];
+            userNameController.text = '';
+            phoneController.text = '';
+            locationController.text = '';
+            passwordController.text = '';
+            rePasswordController.text = '';
 
-            userNameController1.text='';
-            phoneController1.text='';
-            locationController1.text='';
-            passwordController1.text='';
-            rePasswordController1.text='';
+            userNameController1.text = '';
+            phoneController1.text = '';
+            locationController1.text = '';
+            passwordController1.text = '';
+            rePasswordController1.text = '';
 
-            userNameController2.text='';
-            phoneController2.text='';
-            locationController2.text='';
-            passwordController2.text='';
-            rePasswordController2.text='';
-            showToastSuccess(
-              text: "تم انشاء الحساب بنجاح",
-              context: context,
-            );
+            userNameController2.text = '';
+            phoneController2.text = '';
+            locationController2.text = '';
+            passwordController2.text = '';
+            rePasswordController2.text = '';
+            showToastSuccess(text: "تم انشاء الحساب بنجاح", context: context);
           }
         },
-        builder: (context,state){
-          var cubit=AdminCubit.get(context);
+        builder: (context, state) {
+          var cubit = AdminCubit.get(context);
           return DefaultTabController(
             length: 3,
             initialIndex: 2,
@@ -80,29 +76,31 @@ class AddPerson extends StatelessWidget {
                 body: Column(
                   children: [
                     CustomAppbar(),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: ButtonsTabBar(
                         radius: 8,
                         contentPadding: EdgeInsets.symmetric(horizontal: 27),
                         borderWidth: 1,
-                        decoration: BoxDecoration(
-                          color: primaryColor,
-                        ),
+                        decoration: BoxDecoration(color: primaryColor),
                         splashColor: primaryColor,
-                        unselectedLabelStyle: TextStyle(color: Colors.grey,fontSize: 16),
+                        unselectedLabelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         unselectedBackgroundColor: Colors.white,
                         unselectedBorderColor: Colors.grey,
                         labelStyle: TextStyle(color: Colors.white),
                         height: 56,
-                        tabs:[
+                        tabs: [
                           Tab(text: "ادمن"),
                           Tab(text: "دليفري"),
                           Tab(text: "مستخدم"),
-                        ],),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 5),
                     Expanded(
                       child: TabBarView(
                         children: [
@@ -111,14 +109,17 @@ class AddPerson extends StatelessWidget {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0,
+                                  ),
                                   child: Form(
                                     key: formKey,
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 20,),
+                                        SizedBox(height: 20),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Text(
                                               'انشاء حساب ادمن',
@@ -139,6 +140,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل الاسم الثلاثي';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -151,6 +153,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل رقم الهاتف';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -158,12 +161,14 @@ class AddPerson extends StatelessWidget {
                                           controller: locationController,
                                           hintText: 'العنوان',
 
-                                          prefixIcon: Icons.location_on_outlined,
+                                          prefixIcon:
+                                              Icons.location_on_outlined,
                                           keyboardType: TextInputType.text,
                                           validate: (String? value) {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل العنوان';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -177,6 +182,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اكتب كلمة السر';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -186,6 +192,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اعد كتابة كلمة السر';
                                             }
+                                            return null;
                                           },
                                           hintText: 'اعد كتابة كلمة السر',
                                           prefixIcon: Icons.lock_outline,
@@ -194,25 +201,44 @@ class AddPerson extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 30),
                                         ConditionalBuilder(
-                                          condition: state is !AddPersonLoadingState,
-                                          builder: (context){
+                                          condition:
+                                              state is! AddPersonLoadingState,
+                                          builder: (context) {
                                             return GestureDetector(
-                                              onTap: (){
-                                                if (formKey.currentState!.validate()) {
-                                                  if(passwordController.text == rePasswordController.text){
+                                              onTap: () {
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  if (passwordController.text ==
+                                                      rePasswordController
+                                                          .text) {
                                                     cubit.addPerson(
-                                                      name: userNameController.text.trim(),
-                                                      phone: phoneController.text.trim(),
-                                                      location: locationController.text.trim(),
-                                                      password: passwordController.text.trim(),
+                                                      name: userNameController
+                                                          .text
+                                                          .trim(),
+                                                      phone: phoneController
+                                                          .text
+                                                          .trim(),
+                                                      location:
+                                                          locationController
+                                                              .text
+                                                              .trim(),
+                                                      password:
+                                                          passwordController
+                                                              .text
+                                                              .trim(),
                                                       role: 'admin',
                                                       context: context,
                                                     );
-                                                  }else{
-                                                    print(rePasswordController.text);
-                                                    print(passwordController.text);
+                                                  } else {
+                                                    print(
+                                                      rePasswordController.text,
+                                                    );
+                                                    print(
+                                                      passwordController.text,
+                                                    );
                                                     showToastError(
-                                                      text: "كلمة السر غير متطابقة",
+                                                      text:
+                                                          "كلمة السر غير متطابقة",
                                                       context: context,
                                                     );
                                                   }
@@ -222,25 +248,38 @@ class AddPerson extends StatelessWidget {
                                                 width: double.infinity,
                                                 height: 48,
                                                 decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black.withOpacity(0.2),
-                                                        blurRadius: 10,
-                                                        spreadRadius: 2,
-                                                        offset: const Offset(5, 5),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 2,
+                                                      offset: const Offset(
+                                                        5,
+                                                        5,
                                                       ),
-                                                    ],
-                                                    borderRadius:  BorderRadius.circular(12),
-                                                    color: primaryColor
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: primaryColor,
                                                 ),
                                                 child: Center(
-                                                  child: Text('انشاء الحساب',
-                                                    style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                                  child: Text(
+                                                    'انشاء الحساب',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
                                           },
-                                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                                          fallback: (c) =>
+                                              CircularProgressIndicator(
+                                                color: primaryColor,
+                                              ),
                                         ),
                                         const SizedBox(height: 40),
                                       ],
@@ -255,14 +294,17 @@ class AddPerson extends StatelessWidget {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0,
+                                  ),
                                   child: Form(
                                     key: formKey1,
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 20,),
+                                        SizedBox(height: 20),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Text(
                                               'انشاء حساب دليفري',
@@ -276,22 +318,31 @@ class AddPerson extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 20),
                                         GestureDetector(
-                                            onTap:(){
-                                              cubit.pickImages2();
-                                            },
-                                            child:
-                                            cubit.selectedImages2.isEmpty?
-                                            Image.asset('assets/images/Group 1171275632 (1).png'):Padding(
-                                              padding: const EdgeInsets.all(5.0),
-                                              child: ClipOval(
-                                                child: Image.file(
-                                                  File(cubit.selectedImages2[0].path),
-                                                  height: 120,
-                                                  width: 120,
-                                                  fit: BoxFit.cover,
+                                          onTap: () {
+                                            cubit.pickImages2();
+                                          },
+                                          child: cubit.selectedImages2.isEmpty
+                                              ? Image.asset(
+                                                  'assets/images/Group 1171275632 (1).png',
+                                                )
+                                              : Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    5.0,
+                                                  ),
+                                                  child: ClipOval(
+                                                    child: Image.file(
+                                                      File(
+                                                        cubit
+                                                            .selectedImages2[0]
+                                                            .path,
+                                                      ),
+                                                      height: 120,
+                                                      width: 120,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            )),
+                                        ),
                                         const SizedBox(height: 20),
                                         CustomTextField(
                                           controller: userNameController1,
@@ -301,6 +352,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل الاسم الثلاثي';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -313,6 +365,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل رقم الهاتف';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -320,12 +373,14 @@ class AddPerson extends StatelessWidget {
                                           controller: locationController1,
                                           hintText: 'العنوان',
 
-                                          prefixIcon: Icons.location_on_outlined,
+                                          prefixIcon:
+                                              Icons.location_on_outlined,
                                           keyboardType: TextInputType.text,
                                           validate: (String? value) {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل العنوان';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -339,6 +394,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اكتب كلمة السر';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -348,6 +404,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اعد كتابة كلمة السر';
                                             }
+                                            return null;
                                           },
                                           hintText: 'اعد كتابة كلمة السر',
                                           prefixIcon: Icons.lock_outline,
@@ -356,25 +413,46 @@ class AddPerson extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 60),
                                         ConditionalBuilder(
-                                          condition: state is !AddPersonLoadingState,
-                                          builder: (context){
+                                          condition:
+                                              state is! AddPersonLoadingState,
+                                          builder: (context) {
                                             return GestureDetector(
-                                              onTap: (){
-                                                if (formKey1.currentState!.validate()) {
-                                                  if(passwordController1.text == rePasswordController1.text){
+                                              onTap: () {
+                                                if (formKey1.currentState!
+                                                    .validate()) {
+                                                  if (passwordController1
+                                                          .text ==
+                                                      rePasswordController1
+                                                          .text) {
                                                     cubit.addPerson(
-                                                      name: userNameController1.text.trim(),
-                                                      phone: phoneController1.text.trim(),
-                                                      location: locationController1.text.trim(),
-                                                      password: passwordController1.text.trim(),
+                                                      name: userNameController1
+                                                          .text
+                                                          .trim(),
+                                                      phone: phoneController1
+                                                          .text
+                                                          .trim(),
+                                                      location:
+                                                          locationController1
+                                                              .text
+                                                              .trim(),
+                                                      password:
+                                                          passwordController1
+                                                              .text
+                                                              .trim(),
                                                       role: 'delivery',
                                                       context: context,
                                                     );
-                                                  }else{
-                                                    print(rePasswordController1.text);
-                                                    print(passwordController1.text);
+                                                  } else {
+                                                    print(
+                                                      rePasswordController1
+                                                          .text,
+                                                    );
+                                                    print(
+                                                      passwordController1.text,
+                                                    );
                                                     showToastError(
-                                                      text: "كلمة السر غير متطابقة",
+                                                      text:
+                                                          "كلمة السر غير متطابقة",
                                                       context: context,
                                                     );
                                                   }
@@ -384,25 +462,38 @@ class AddPerson extends StatelessWidget {
                                                 width: double.infinity,
                                                 height: 48,
                                                 decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black.withOpacity(0.2),
-                                                        blurRadius: 10,
-                                                        spreadRadius: 2,
-                                                        offset: const Offset(5, 5),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 2,
+                                                      offset: const Offset(
+                                                        5,
+                                                        5,
                                                       ),
-                                                    ],
-                                                    borderRadius:  BorderRadius.circular(12),
-                                                    color: primaryColor
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: primaryColor,
                                                 ),
                                                 child: Center(
-                                                  child: Text('انشاء الحساب',
-                                                    style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                                  child: Text(
+                                                    'انشاء الحساب',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
                                           },
-                                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                                          fallback: (c) =>
+                                              CircularProgressIndicator(
+                                                color: primaryColor,
+                                              ),
                                         ),
                                         const SizedBox(height: 40),
                                       ],
@@ -417,14 +508,17 @@ class AddPerson extends StatelessWidget {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0,
+                                  ),
                                   child: Form(
                                     key: formKey2,
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 20,),
+                                        SizedBox(height: 20),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Text(
                                               'انشاء حساب مستخدم',
@@ -445,6 +539,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل الاسم الثلاثي';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 26),
@@ -457,18 +552,21 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل رقم الهاتف';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 26),
                                         CustomTextField(
                                           controller: locationController2,
                                           hintText: 'العنوان',
-                                          prefixIcon: Icons.location_on_outlined,
+                                          prefixIcon:
+                                              Icons.location_on_outlined,
                                           keyboardType: TextInputType.text,
                                           validate: (String? value) {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل العنوان';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 26),
@@ -481,6 +579,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اكتب كلمة السر';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 26),
@@ -490,6 +589,7 @@ class AddPerson extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اعد كتابة كلمة السر';
                                             }
+                                            return null;
                                           },
                                           hintText: 'اعد كتابة كلمة السر',
                                           prefixIcon: Icons.lock_outline,
@@ -497,25 +597,46 @@ class AddPerson extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 30),
                                         ConditionalBuilder(
-                                          condition: state is !AddPersonLoadingState,
-                                          builder: (context){
+                                          condition:
+                                              state is! AddPersonLoadingState,
+                                          builder: (context) {
                                             return GestureDetector(
-                                              onTap: (){
-                                                if (formKey2.currentState!.validate()) {
-                                                  if(passwordController2.text == rePasswordController2.text){
+                                              onTap: () {
+                                                if (formKey2.currentState!
+                                                    .validate()) {
+                                                  if (passwordController2
+                                                          .text ==
+                                                      rePasswordController2
+                                                          .text) {
                                                     cubit.addPerson(
-                                                      name: userNameController2.text.trim(),
-                                                      phone: phoneController2.text.trim(),
-                                                      location: locationController2.text.trim(),
-                                                      password: passwordController2.text.trim(),
+                                                      name: userNameController2
+                                                          .text
+                                                          .trim(),
+                                                      phone: phoneController2
+                                                          .text
+                                                          .trim(),
+                                                      location:
+                                                          locationController2
+                                                              .text
+                                                              .trim(),
+                                                      password:
+                                                          passwordController2
+                                                              .text
+                                                              .trim(),
                                                       role: 'user',
                                                       context: context,
                                                     );
-                                                  }else{
-                                                    print(rePasswordController2.text);
-                                                    print(passwordController2.text);
+                                                  } else {
+                                                    print(
+                                                      rePasswordController2
+                                                          .text,
+                                                    );
+                                                    print(
+                                                      passwordController2.text,
+                                                    );
                                                     showToastError(
-                                                      text: "كلمة السر غير متطابقة",
+                                                      text:
+                                                          "كلمة السر غير متطابقة",
                                                       context: context,
                                                     );
                                                   }
@@ -525,25 +646,38 @@ class AddPerson extends StatelessWidget {
                                                 width: double.infinity,
                                                 height: 48,
                                                 decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black.withOpacity(0.2),
-                                                        blurRadius: 10,
-                                                        spreadRadius: 2,
-                                                        offset: const Offset(5, 5),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 2,
+                                                      offset: const Offset(
+                                                        5,
+                                                        5,
                                                       ),
-                                                    ],
-                                                    borderRadius:  BorderRadius.circular(12),
-                                                    color: primaryColor
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: primaryColor,
                                                 ),
                                                 child: Center(
-                                                  child: Text('انشاء الحساب',
-                                                    style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                                  child: Text(
+                                                    'انشاء الحساب',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
                                           },
-                                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                                          fallback: (c) =>
+                                              CircularProgressIndicator(
+                                                color: primaryColor,
+                                              ),
                                         ),
                                         const SizedBox(height: 40),
                                       ],

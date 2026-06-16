@@ -18,6 +18,12 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(ValidationState());
   }
 
+  String selectedCategory = 'مطاعم';
+  void changeCategory(String category) {
+    selectedCategory = category;
+    emit(ValidationState());
+  }
+
   List<XFile> selectedImages = [];
   Future<void> pickImages() async {
     final ImagePicker picker = ImagePicker();
@@ -44,7 +50,15 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
 
-  signUp({required String name, required String phone, required String location, required String password, required String role, required BuildContext context,}) async {
+  signUp({
+    required String name,
+    required String phone,
+    required String location,
+    required String password,
+    required String role,
+    String? category,
+    required BuildContext context,
+  }) async {
     emit(SignUpLoadingState());
 
     if (role == 'vendor') {
@@ -61,6 +75,7 @@ class AuthCubit extends Cubit<AuthStates> {
             'location': location,
             'password': password,
             'role': role,
+            'category': category,
           },
           ListFormat.multiCompatible
       );

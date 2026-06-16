@@ -23,26 +23,22 @@ class AddProductss extends StatelessWidget {
   static TextEditingController descriptionController = TextEditingController();
   static TextEditingController priceController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => VendorCubit(),
-      child: BlocConsumer<VendorCubit,VendorStates>(
-        listener: (context,state){
-          if(state is AddProductsSuccessState){
-            VendorCubit.get(context).selectedImages=[];
-            titleController.text='';
-            descriptionController.text='';
-            priceController.text='';
-            showToastSuccess(
-              text: 'تم اظافة المنتج بنجاح',
-              context: context,
-            );
+      child: BlocConsumer<VendorCubit, VendorStates>(
+        listener: (context, state) {
+          if (state is AddProductsSuccessState) {
+            VendorCubit.get(context).selectedImages = [];
+            titleController.text = '';
+            descriptionController.text = '';
+            priceController.text = '';
+            showToastSuccess(text: 'تم اظافة المنتج بنجاح', context: context);
           }
         },
-        builder: (context,state){
-          var cubit=VendorCubit.get(context);
+        builder: (context, state) {
+          var cubit = VendorCubit.get(context);
           return SafeArea(
             child: Scaffold(
               backgroundColor: const Color(0xFFF5F5F5),
@@ -69,10 +65,11 @@ class AddProductss extends StatelessWidget {
                   ],
                 ),
                 leading: GestureDetector(
-                    onTap: (){
-                      navigateAndFinish(context, MyProducts());
-                    },
-                    child: Icon(Icons.arrow_back_ios_new,color: Colors.black,)),
+                  onTap: () {
+                    navigateAndFinish(context, MyProducts());
+                  },
+                  child: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+                ),
               ),
               body: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
@@ -82,33 +79,37 @@ class AddProductss extends StatelessWidget {
                     key: formKey,
                     child: Column(
                       children: [
-                        SizedBox(height: 60,),
+                        SizedBox(height: 60),
                         GestureDetector(
                           onTap: () {
                             cubit.pickImages();
                           },
                           child: cubit.selectedImages.isEmpty
-                              ? Image.asset('assets/images/Group 1171275632 (1).png')
+                              ? Image.asset(
+                                  'assets/images/Group 1171275632 (1).png',
+                                )
                               : SizedBox(
-                            height: 120,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: cubit.selectedImages.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: ClipOval(
-                                    child: Image.file(
-                                      File(cubit.selectedImages[index].path),
-                                      height: 120,
-                                      width: 120,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  height: 120,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: cubit.selectedImages.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ClipOval(
+                                          child: Image.file(
+                                            File(
+                                              cubit.selectedImages[index].path,
+                                            ),
+                                            height: 120,
+                                            width: 120,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          ),
+                                ),
                         ),
                         const SizedBox(height: 40),
                         CustomTextField(
@@ -119,6 +120,7 @@ class AddProductss extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'رجائا اخل اسم المنتج';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -131,6 +133,7 @@ class AddProductss extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'رجائا اخل سعر المنتج';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -143,18 +146,20 @@ class AddProductss extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'رجائا اخل وصف المنتج';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 40),
                         ConditionalBuilder(
-                          condition: state is !AddProductsLoadingState,
-                          builder: (context){
+                          condition: state is! AddProductsLoadingState,
+                          builder: (context) {
                             return GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 if (formKey.currentState!.validate()) {
                                   cubit.addProducts(
                                     title: titleController.text.trim(),
-                                    description: descriptionController.text.trim(),
+                                    description: descriptionController.text
+                                        .trim(),
                                     price: priceController.text.trim(),
                                     context: context,
                                     idVendor: idVendor,
@@ -165,25 +170,31 @@ class AddProductss extends StatelessWidget {
                                 width: double.infinity,
                                 height: 48,
                                 decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 10,
-                                        spreadRadius: 2,
-                                        offset: const Offset(5, 5),
-                                      ),
-                                    ],
-                                    borderRadius:  BorderRadius.circular(12),
-                                    color: primaryColor
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                      offset: const Offset(5, 5),
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: primaryColor,
                                 ),
                                 child: Center(
-                                  child: Text('اظافة المنتج',
-                                    style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                  child: Text(
+                                    'اظافة المنتج',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
                                 ),
                               ),
                             );
                           },
-                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                          fallback: (c) =>
+                              CircularProgressIndicator(color: primaryColor),
                         ),
                         const SizedBox(height: 40),
                       ],

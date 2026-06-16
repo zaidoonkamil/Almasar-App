@@ -13,7 +13,6 @@ import '../../../core/widgets/show_toast.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-
 class AddNotification extends StatelessWidget {
   const AddNotification({super.key});
 
@@ -26,28 +25,30 @@ class AddNotification extends StatelessWidget {
   static TextEditingController roleController2 = TextEditingController();
   static TextEditingController tittleController1 = TextEditingController();
   static TextEditingController descController1 = TextEditingController();
-  static List<String> role=['user','vendor','admin','delivery',];
-
+  static List<String> role = ['user', 'vendor', 'admin', 'delivery'];
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AdminCubit(),
-      child: BlocConsumer<AdminCubit,AdminStates>(
-        listener: (context,state){
-          if(state is AddNotificationSuccessState){
-            tittleController2.text='';
-            descController2.text='';
-            roleController2.text='';
+      child: BlocConsumer<AdminCubit, AdminStates>(
+        listener: (context, state) {
+          if (state is AddNotificationSuccessState) {
+            tittleController2.text = '';
+            descController2.text = '';
+            roleController2.text = '';
 
-            tittleController1.text='';
-            descController1.text='';
+            tittleController1.text = '';
+            descController1.text = '';
 
-            showToastSuccess(text: "تمت عملية ارسال الاشعار بنجاح", context: context);
+            showToastSuccess(
+              text: "تمت عملية ارسال الاشعار بنجاح",
+              context: context,
+            );
           }
         },
-        builder: (context,state){
-          var cubit=AdminCubit.get(context);
+        builder: (context, state) {
+          var cubit = AdminCubit.get(context);
           return DefaultTabController(
             length: 2,
             initialIndex: 1,
@@ -75,11 +76,13 @@ class AddNotification extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               navigateBack(context);
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                              ),
                               child: Icon(Icons.arrow_back_ios_new),
                             ),
                           ),
@@ -104,32 +107,34 @@ class AddNotification extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Container(width: 46,height: 20,),
+                          Container(width: 46, height: 20),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: ButtonsTabBar(
                         radius: 8,
                         contentPadding: EdgeInsets.symmetric(horizontal: 27),
                         borderWidth: 1,
-                        decoration: BoxDecoration(
-                          color: primaryColor,
-                        ),
+                        decoration: BoxDecoration(color: primaryColor),
                         splashColor: primaryColor,
-                        unselectedLabelStyle: TextStyle(color: Colors.grey,fontSize: 16),
+                        unselectedLabelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                         unselectedBackgroundColor: Colors.white,
                         unselectedBorderColor: Colors.grey,
                         labelStyle: TextStyle(color: Colors.white),
                         height: 56,
-                        tabs:[
+                        tabs: [
                           Tab(text: "كل المستخدمين"),
                           Tab(text: "مجموعة مخصصة"),
-                        ],),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 5),
                     Expanded(
                       child: TabBarView(
                         children: [
@@ -138,14 +143,17 @@ class AddNotification extends StatelessWidget {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0,
+                                  ),
                                   child: Form(
                                     key: formKey1,
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 40,),
+                                        SizedBox(height: 40),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Text(
                                               'انشاء اشعار للكل',
@@ -166,6 +174,7 @@ class AddNotification extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل العنوان';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -178,21 +187,28 @@ class AddNotification extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل الوصف';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
                                         const SizedBox(height: 60),
                                         ConditionalBuilder(
-                                          condition: state is !AddNotificationLoadingState,
-                                          builder: (context){
+                                          condition:
+                                              state
+                                                  is! AddNotificationLoadingState,
+                                          builder: (context) {
                                             return GestureDetector(
-                                              onTap: (){
-                                                if (formKey1.currentState!.validate()) {
+                                              onTap: () {
+                                                if (formKey1.currentState!
+                                                    .validate()) {
                                                   cubit.addNotification(
-                                                      context: context,
-                                                      title: tittleController1.text.trim(),
-                                                      desc: descController1.text.trim(),
-                                                    role: ''
+                                                    context: context,
+                                                    title: tittleController1
+                                                        .text
+                                                        .trim(),
+                                                    desc: descController1.text
+                                                        .trim(),
+                                                    role: '',
                                                   );
                                                 }
                                               },
@@ -200,25 +216,38 @@ class AddNotification extends StatelessWidget {
                                                 width: double.infinity,
                                                 height: 48,
                                                 decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black.withOpacity(0.2),
-                                                        blurRadius: 10,
-                                                        spreadRadius: 2,
-                                                        offset: const Offset(5, 5),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 2,
+                                                      offset: const Offset(
+                                                        5,
+                                                        5,
                                                       ),
-                                                    ],
-                                                    borderRadius:  BorderRadius.circular(12),
-                                                    color: primaryColor
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: primaryColor,
                                                 ),
                                                 child: Center(
-                                                  child: Text('ارسال الاشعار',
-                                                    style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                                  child: Text(
+                                                    'ارسال الاشعار',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
                                           },
-                                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                                          fallback: (c) =>
+                                              CircularProgressIndicator(
+                                                color: primaryColor,
+                                              ),
                                         ),
                                         const SizedBox(height: 40),
                                       ],
@@ -233,14 +262,17 @@ class AddNotification extends StatelessWidget {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0,
+                                  ),
                                   child: Form(
                                     key: formKey2,
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 40,),
+                                        SizedBox(height: 40),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             const Text(
                                               'انشاء اشعار مخصص',
@@ -261,6 +293,7 @@ class AddNotification extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل العنوان';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -273,6 +306,7 @@ class AddNotification extends StatelessWidget {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل الوصف';
                                             }
+                                            return null;
                                           },
                                         ),
                                         const SizedBox(height: 16),
@@ -280,12 +314,15 @@ class AddNotification extends StatelessWidget {
                                           controller: roleController2,
                                           hintText: 'ارسال الى',
                                           keyboardType: TextInputType.none,
-                                          onTap: (){
+                                          onTap: () {
                                             showModalBottomSheet(
                                               context: context,
                                               backgroundColor: Colors.white,
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                                      top: Radius.circular(16),
+                                                    ),
                                               ),
                                               builder: (BuildContext context) {
                                                 return Container(
@@ -293,82 +330,134 @@ class AddNotification extends StatelessWidget {
                                                   padding: EdgeInsets.all(16),
                                                   child: Column(
                                                     children: [
-                                                      Text("اختر لمن تريد الارسال",style: TextStyle(color: primaryColor),),
+                                                      Text(
+                                                        "اختر لمن تريد الارسال",
+                                                        style: TextStyle(
+                                                          color: primaryColor,
+                                                        ),
+                                                      ),
                                                       SizedBox(height: 12),
-                                                      Container(width: double.maxFinite,height: 1,color: Colors.grey,),
+                                                      Container(
+                                                        width: double.maxFinite,
+                                                        height: 1,
+                                                        color: Colors.grey,
+                                                      ),
                                                       SizedBox(height: 12),
                                                       Expanded(
                                                         child: ListView.builder(
-                                                          itemCount: role.length,
-                                                            itemBuilder:(c,i){
-                                                          return GestureDetector(
-                                                            onTap: (){
-                                                              roleController2.text=role[i];
-                                                              navigateBack(context);
-                                                            },
-                                                            child: Column(
-                                                              children: [
-                                                                Text(role[i],style: TextStyle(fontSize: 16),),
-                                                                SizedBox(height: 12),
-                                                                Container(width: double.maxFinite,height: 1,color: Colors.grey,),
-                                                                SizedBox(height: 12),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        }),
+                                                          itemCount:
+                                                              role.length,
+                                                          itemBuilder: (c, i) {
+                                                            return GestureDetector(
+                                                              onTap: () {
+                                                                roleController2
+                                                                        .text =
+                                                                    role[i];
+                                                                navigateBack(
+                                                                  context,
+                                                                );
+                                                              },
+                                                              child: Column(
+                                                                children: [
+                                                                  Text(
+                                                                    role[i],
+                                                                    style: TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 12,
+                                                                  ),
+                                                                  Container(
+                                                                    width: double
+                                                                        .maxFinite,
+                                                                    height: 1,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 12,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
                                                 );
                                               },
                                             );
-
                                           },
                                           prefixIcon: Icons.person_outline,
                                           validate: (String? value) {
                                             if (value!.isEmpty) {
                                               return 'رجائا اخل ارسال الى';
                                             }
+                                            return null;
                                           },
                                         ),
 
                                         const SizedBox(height: 60),
                                         ConditionalBuilder(
-                                          condition: state is !AddNotificationLoadingState,
-                                          builder: (context){
+                                          condition:
+                                              state
+                                                  is! AddNotificationLoadingState,
+                                          builder: (context) {
                                             return GestureDetector(
-                                              onTap: (){
-                                                if (formKey2.currentState!.validate()) {
+                                              onTap: () {
+                                                if (formKey2.currentState!
+                                                    .validate()) {
                                                   cubit.addNotification(
-                                                      context: context,
-                                                      title: tittleController2.text.trim(),
-                                                      desc: descController2.text.trim(),
-                                                      role: roleController2.text.trim());
+                                                    context: context,
+                                                    title: tittleController2
+                                                        .text
+                                                        .trim(),
+                                                    desc: descController2.text
+                                                        .trim(),
+                                                    role: roleController2.text
+                                                        .trim(),
+                                                  );
                                                 }
                                               },
                                               child: Container(
                                                 width: double.infinity,
                                                 height: 48,
                                                 decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black.withOpacity(0.2),
-                                                        blurRadius: 10,
-                                                        spreadRadius: 2,
-                                                        offset: const Offset(5, 5),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 10,
+                                                      spreadRadius: 2,
+                                                      offset: const Offset(
+                                                        5,
+                                                        5,
                                                       ),
-                                                    ],
-                                                    borderRadius:  BorderRadius.circular(12),
-                                                    color: primaryColor
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: primaryColor,
                                                 ),
                                                 child: Center(
-                                                  child: Text('ارسال الاشعار',
-                                                    style: TextStyle(color: Colors.white,fontSize: 18 ),),
+                                                  child: Text(
+                                                    'ارسال الاشعار',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             );
                                           },
-                                          fallback: (c)=> CircularProgressIndicator(color: primaryColor,),
+                                          fallback: (c) =>
+                                              CircularProgressIndicator(
+                                                color: primaryColor,
+                                              ),
                                         ),
                                         const SizedBox(height: 40),
                                       ],

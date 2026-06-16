@@ -292,7 +292,8 @@ class _HomeState extends State<Home> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(height: 8,),
+                                        _buildCategoryBar(context, cubit),
+                                        const SizedBox(height: 4,),
                                         ConditionalBuilder(
                                             condition: cubit.vendorModel != null,
                                             builder: (c){
@@ -427,6 +428,92 @@ class _HomeState extends State<Home> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildCategoryBar(BuildContext context, UserCubit cubit) {
+    final List<String> categories = ['الكل', 'مطاعم', 'غذائية', 'صيدليات', 'ملابس', 'كهربائيات', 'انشائية', 'أخرى'];
+
+    final Map<String, IconData> categoryIcons = {
+      'الكل': Icons.grid_view_rounded,
+      'مطاعم': Icons.restaurant_rounded,
+      'غذائية': Icons.local_grocery_store_rounded,
+      'صيدليات': Icons.local_pharmacy_rounded,
+      'ملابس': Icons.checkroom_rounded,
+      'كهربائيات': Icons.electrical_services_rounded,
+      'انشائية': Icons.construction_rounded,
+      'أخرى': Icons.more_horiz_rounded,
+    };
+
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        height: 54,
+        margin: const EdgeInsets.symmetric(vertical: 4.0),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          itemCount: categories.length,
+          itemBuilder: (context, index) {
+            final String cat = categories[index];
+            final bool isSelected = cubit.selectedCategory == cat;
+            final IconData? icon = categoryIcons[cat];
+
+            return GestureDetector(
+              onTap: () {
+                cubit.changeCategory(
+                  cat,
+                  context,
+                  query: userNameController.text.trim(),
+                );
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                decoration: BoxDecoration(
+                  color: isSelected ? primaryColor : Colors.white,
+                  borderRadius: BorderRadius.circular(30.0),
+                  border: Border.all(
+                    color: isSelected ? Colors.transparent : const Color(0xFFE5E5EA),
+                    width: 1.0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isSelected 
+                          ? primaryColor.withOpacity(0.3) 
+                          : Colors.black.withOpacity(0.03),
+                      blurRadius: 6.0,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (icon != null) ...[
+                      Icon(
+                        icon,
+                        size: 16,
+                        color: isSelected ? Colors.white : const Color(0xFF8E8E93),
+                      ),
+                      const SizedBox(width: 6.0),
+                    ],
+                    Text(
+                      cat,
+                      style: TextStyle(
+                        fontSize: 13.0,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                        color: isSelected ? Colors.white : const Color(0xFF1C1C1E),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -23,7 +23,7 @@ class ThemeService {
         colorScheme: ColorScheme.dark(),
         buttonColor: Colors.black87
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       labelColor: Colors.black87,
       dividerColor: primaryColor,
     ),

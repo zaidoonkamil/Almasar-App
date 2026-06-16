@@ -1,7 +1,5 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../widgets/constant.dart';
-
 final urlSocket = "https://backendalmasar.khayrat-alrahman.com";
 
 class SocketHelper {
@@ -13,18 +11,15 @@ class SocketHelper {
       return;
     }
 
-    _socket = IO.io(
-      urlSocket,
-      <String, dynamic>{
-        'transports': ['websocket'],
-        'autoConnect': true,
-        'reconnection': true,
-        'reconnectionDelay': 2000,
-        'reconnectionAttempts': 5,
-        'rejectUnauthorized': false,
-        'secure': true,
-      },
-    );
+    _socket = IO.io(urlSocket, <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': true,
+      'reconnection': true,
+      'reconnectionDelay': 2000,
+      'reconnectionAttempts': 5,
+      'rejectUnauthorized': false,
+      'secure': true,
+    });
 
     _socket!.connect();
 
@@ -71,5 +66,4 @@ class SocketHelper {
   }
 
   /// التحقق من حالة الاتصال
-
 }

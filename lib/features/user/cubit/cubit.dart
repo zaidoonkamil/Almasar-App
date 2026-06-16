@@ -181,6 +181,17 @@ class UserCubit extends Cubit<UserStates> {
   VendorModel? vendorModel;
   String vendorSearchQuery = '';
   bool isVendorSearchLoadingMore = false;
+  String selectedCategory = 'الكل';
+
+  void changeCategory(String category, BuildContext context, {String query = ''}) {
+    selectedCategory = category;
+    emit(ValidationState());
+    if (query.isNotEmpty) {
+      searchVendor(page: '1', query: query, context: context);
+    } else {
+      getVendor(page: '1', context: context);
+    }
+  }
 
   void getVendor({required String page,required BuildContext context,}) {
     if (page == '1') {
@@ -192,7 +203,7 @@ class UserCubit extends Cubit<UserStates> {
     }
 
     DioHelper.getData(
-      url: '/vendorbysponsored?page=$page',
+      url: '/vendorbysponsored?page=$page&category=$selectedCategory',
     ).then((value) {
       vendorModel = VendorModel.fromJson(value.data);
       if (page == '1') {
@@ -228,7 +239,7 @@ class UserCubit extends Cubit<UserStates> {
     }
 
     DioHelper.getData(
-      url: '/vendor-search?search=$query&page=$page&limit=$limit',
+      url: '/vendor-search?search=$query&page=$page&limit=$limit&category=$selectedCategory',
     ).then((value) {
       print('🔎 searchVendor response keys: ${value.data.keys}');
       vendorModel = VendorModel.fromJson(value.data);
