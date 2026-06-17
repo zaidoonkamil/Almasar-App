@@ -79,7 +79,7 @@ class _BottomNavBarUserState extends State<BottomNavBarUser> {
                 Image.asset('assets/images/fluent_person-16-regular (1).png'),
               ),
               BottomNavigationBarItem(
-                label: "اضافة",
+                label: "طلب خاص",
                 icon:  currentIndex==1?Image.asset('assets/images/material-symbols_orders-rounded.png'):
                 Image.asset('assets/images/material-symbols_orders-outline-rounded.png'),
               ),

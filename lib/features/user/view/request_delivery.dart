@@ -63,27 +63,42 @@ class RequestDelivery extends StatelessWidget {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Column(
-                                          children: [
-                                            const Text(
-                                              'طلب مندوب',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black87,
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              const Text(
+                                                'طلب خاص',
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black87,
+                                                ),
                                               ),
-                                            ),
-                                            const Text(
-                                              'معلومــــات المستلم',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black87,
+                                              const SizedBox(height: 4),
+                                              const Text(
+                                                'أرسل مندوباً خاصاً لتوصيل أي شحنة أو طلبية مع تحديد تفاصيلها وموقعها الجغرافي بسهولة.',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54,
+                                                  height: 1.4,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                                maxLines: 2,
                                               ),
-                                              textAlign: TextAlign.end,
-                                            ),
-                                          ],
+                                              const SizedBox(height: 8),
+                                              const Text(
+                                                'معلومــــات المستلم',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black87,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -248,7 +263,7 @@ class RequestDelivery extends StatelessWidget {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                'طلب مندوب',
+                                                'طلب خاص',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18,

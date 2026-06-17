@@ -1,5 +1,6 @@
 import 'package:delivery_app/core/styles/themes.dart';
 import 'package:delivery_app/core/widgets/constant.dart';
+import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:delivery_app/features/user/cubit/chat_cubit.dart';
 import 'package:delivery_app/features/user/cubit/chat_states.dart';
 import 'package:delivery_app/features/user/model/chat_message.dart';
@@ -82,6 +83,12 @@ class _ChatScreenState extends State<ChatScreen> {
               state is ChatReceivedNewMessageState ||
               state is ChatSendMessageSuccessState) {
             WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+          }
+          if (state is ChatSendNotificationSuccessState) {
+            showToastSuccess(text: 'تم إرسال إشعار الوصول للزبون بنجاح 📍', context: context);
+          }
+          if (state is ChatSendNotificationErrorState) {
+            showToastError(text: state.error, context: context);
           }
         },
         builder: (context, state) {
@@ -168,6 +175,93 @@ class _ChatScreenState extends State<ChatScreen> {
                             fontWeight: FontWeight.bold,
                             fontFamily: 'cairo',
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (!isChatClosed && widget.otherUserRole.toLowerCase() == 'user')
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blueAccent, Colors.blue[700]!],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blueAccent.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'تنبيه الوصول السريع 📍',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  fontFamily: 'cairo',
+                                  height: 1.2,
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                'اضغط لإرسال رسالة وإشعار وصول فوري لهاتف الزبون.',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 11,
+                                  fontFamily: 'cairo',
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            cubit.sendArrivalNotification(
+                              orderId: widget.orderId,
+                              receiverId: widget.otherUserId,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.blueAccent,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          ),
+                          child: state is ChatSendNotificationLoadingState
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.blueAccent,
+                                  ),
+                                )
+                              : const Text(
+                                  'أنا في الموقع',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    fontFamily: 'cairo',
+                                  ),
+                                ),
                         ),
                       ],
                     ),

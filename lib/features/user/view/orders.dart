@@ -450,7 +450,12 @@ class Orders extends StatelessWidget {
                                                         ),
                                                       ],
                                                     ),
-                                                    const SizedBox(height: 6),
+                                                    const SizedBox(height: 12),
+                                                    OrderTracker(
+                                                      status: order.status,
+                                                      hasDelivery: order.assignedDeliveryId != null,
+                                                    ),
+                                                    const SizedBox(height: 12),
                                                     Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment.end,
@@ -1152,4 +1157,186 @@ void _showRatingDialog(BuildContext context, UserCubit cubit, Order order) {
       );
     },
   );
+}
+
+class OrderTracker extends StatelessWidget {
+  final String status;
+  final bool hasDelivery;
+
+  const OrderTracker({
+    super.key,
+    required this.status,
+    required this.hasDelivery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    int currentStep = 0;
+    bool isReturned = status == 'استرجاع الطلب';
+    bool isDelivered = status == 'تم التسليم';
+
+    if (isDelivered) {
+      currentStep = 2;
+    } else if (hasDelivery) {
+      currentStep = 1;
+    } else {
+      currentStep = 0;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F9FA),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                isReturned
+                    ? 'تم استرجاع الطلب'
+                    : isDelivered
+                        ? 'تم التوصيل بنجاح'
+                        : hasDelivery
+                            ? 'جاري التوصيل مع المندوب'
+                            : 'تم استلام الطلب وبانتظار المندوب',
+                style: TextStyle(
+                  fontFamily: 'cairo',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: isReturned
+                      ? Colors.red
+                      : isDelivered
+                          ? Colors.green
+                          : hasDelivery
+                              ? Colors.blue
+                              : Colors.orange,
+                ),
+              ),
+              const Text(
+                'حالة تتبع الطلب',
+                style: TextStyle(
+                  fontFamily: 'cairo',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                _buildStepCircle(
+                  icon: Icons.storefront,
+                  isActive: currentStep >= 0,
+                  isCompleted: currentStep > 0 || isDelivered,
+                  color: Colors.orange,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 2,
+                    color: currentStep >= 1 ? Colors.blue : Colors.grey[300],
+                  ),
+                ),
+                _buildStepCircle(
+                  icon: Icons.delivery_dining,
+                  isActive: currentStep >= 1,
+                  isCompleted: currentStep > 1 || isDelivered,
+                  color: Colors.blue,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 2,
+                    color: currentStep >= 2 ? Colors.green : Colors.grey[300],
+                  ),
+                ),
+                _buildStepCircle(
+                  icon: isReturned ? Icons.replay : Icons.home,
+                  isActive: currentStep >= 2 || isReturned,
+                  isCompleted: isDelivered || isReturned,
+                  color: isReturned ? Colors.red : Colors.green,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 70,
+                child: Text(
+                  'استلم المتجر',
+                  style: TextStyle(
+                    fontFamily: 'cairo',
+                    fontSize: 9,
+                    fontWeight: currentStep >= 0 ? FontWeight.bold : FontWeight.normal,
+                    color: currentStep >= 0 ? Colors.black87 : Colors.grey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                width: 70,
+                child: Text(
+                  'بيد المندوب',
+                  style: TextStyle(
+                    fontFamily: 'cairo',
+                    fontSize: 9,
+                    fontWeight: currentStep >= 1 ? FontWeight.bold : FontWeight.normal,
+                    color: currentStep >= 1 ? Colors.black87 : Colors.grey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                width: 70,
+                child: Text(
+                  isReturned ? 'تم الاسترجاع' : 'تم التسليم',
+                  style: TextStyle(
+                    fontFamily: 'cairo',
+                    fontSize: 9,
+                    fontWeight: currentStep >= 2 || isReturned ? FontWeight.bold : FontWeight.normal,
+                    color: currentStep >= 2 || isReturned ? (isReturned ? Colors.red : Colors.green) : Colors.grey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepCircle({
+    required IconData icon,
+    required bool isActive,
+    required bool isCompleted,
+    required Color color,
+  }) {
+    return Container(
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: isCompleted ? color : isActive ? Colors.white : Colors.grey[100],
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isCompleted ? color : isActive ? color : Colors.grey[300]!,
+          width: 2,
+        ),
+      ),
+      child: Icon(
+        isCompleted ? Icons.check : icon,
+        size: 16,
+        color: isCompleted ? Colors.white : isActive ? color : Colors.grey[400],
+      ),
+    );
+  }
 }

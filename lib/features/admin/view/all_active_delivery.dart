@@ -1,8 +1,6 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/circular_progress.dart';
 import 'package:delivery_app/features/admin/view/changing_order.dart';
-import 'package:delivery_app/features/admin/view/details_person.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

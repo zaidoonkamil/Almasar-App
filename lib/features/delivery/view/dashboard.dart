@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/%20navigation/navigation.dart';
 import 'package:delivery_app/core/widgets/circular_progress.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/styles/themes.dart';
-import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/widgets/StatCard.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';

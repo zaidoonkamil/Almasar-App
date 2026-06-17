@@ -7,7 +7,6 @@ import 'package:delivery_app/features/user/model/ProductsVendorModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../../../core/network/remote/dio_helper.dart';
 import '../model/GetAdsModel.dart';
@@ -442,10 +441,7 @@ class UserCubit extends Cubit<UserStates> {
                 errorMessage = data;
               }
             }
-            showToastError(
-              text: errorMessage,
-              context: context,
-            );
+            showToastError(text: errorMessage, context: context);
             emit(GetCartErrorStates());
           } else {
             print("Unknown Error: $error");

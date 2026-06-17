@@ -124,6 +124,40 @@ class ChatCubit extends Cubit<ChatStates> {
     });
   }
 
+  // Send push notification to user when representative arrives
+  void sendArrivalNotification({
+    required int orderId,
+    required int receiverId,
+  }) {
+    emit(ChatSendNotificationLoadingState());
+
+    // 1. Send the chat message first
+    sendMessage(
+      orderId: orderId,
+      receiverId: receiverId,
+      text: "📍 لقد وصلت إلى موقع التوصيل وأنا بانتظارك بالخارج.",
+    );
+
+    // 2. Send the push notification via API
+    DioHelper.postData(
+      url: '/send-notification-to-user',
+      data: {
+        'userId': receiverId,
+        'title': 'المندوب وصل! 📍',
+        'message': 'لقد وصل المندوب إلى موقعك وهو بانتظارك بالخارج. يرجى استلام الطلب.',
+      },
+      token: token,
+    ).then((value) {
+      emit(ChatSendNotificationSuccessState());
+    }).catchError((error) {
+      String errorMsg = "فشل إرسال إشعار الوصول";
+      if (error is DioException && error.response?.data is Map) {
+        errorMsg = error.response?.data["error"] ?? errorMsg;
+      }
+      emit(ChatSendNotificationErrorState(errorMsg));
+    });
+  }
+
   // Mark messages as read
   void markMessagesAsRead({required int orderId, required int senderId}) {
     DioHelper.putData(

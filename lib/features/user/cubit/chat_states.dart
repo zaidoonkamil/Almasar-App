@@ -18,3 +18,10 @@ class ChatSendMessageErrorState extends ChatStates {
 
 class ChatReceivedNewMessageState extends ChatStates {}
 class ChatMarkReadSuccessState extends ChatStates {}
+
+class ChatSendNotificationLoadingState extends ChatStates {}
+class ChatSendNotificationSuccessState extends ChatStates {}
+class ChatSendNotificationErrorState extends ChatStates {
+  final String error;
+  ChatSendNotificationErrorState(this.error);
+}
