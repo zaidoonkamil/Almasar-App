@@ -7,8 +7,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/ navigation/navigation.dart';
-import '../../../../core/styles/themes.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/styles/themes.dart';
 import '../../../core/widgets/CustomSearchField.dart' show CustomSearchField;
 import '../../../core/widgets/circular_progress.dart';
 import '../../../core/widgets/show_toast.dart';

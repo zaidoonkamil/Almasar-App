@@ -1,6 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-final urlSocket = "https://backendalmasar.khayrat-alrahman.com";
+final urlSocket = "https://backendalmasar.napoltech.com";
 
 class SocketHelper {
   static IO.Socket? _socket;

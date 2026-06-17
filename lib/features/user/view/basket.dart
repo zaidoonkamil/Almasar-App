@@ -5,21 +5,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/ navigation/navigation.dart';
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/styles/themes.dart';
-import '../../../core/widgets/circular_progress.dart';
-import '../../../core/widgets/custom_appbar.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
-import 'complete_shopping.dart';
-import 'details.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/circular_progress.dart';
+import 'package:delivery_app/core/widgets/custom_appbar.dart';
+import 'package:delivery_app/features/user/cubit/cubit.dart';
+import 'package:delivery_app/features/user/cubit/states.dart';
+import 'package:delivery_app/features/user/view/complete_shopping.dart';
+import 'package:delivery_app/features/user/view/details.dart';
 
 class Basket extends StatelessWidget {
   const Basket({super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (token == '') {
+      return SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              CustomAppbar(),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        navigateTo(context, Login());
+                      },
+                      child: Container(
+                        width: 180,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(5, 5),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(30),
+                          color: primaryColor,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'تسجيل الدخول',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return BlocProvider(
       create: (BuildContext context) => UserCubit()..getCart(context: context),
       child: BlocConsumer<UserCubit,UserStates>(

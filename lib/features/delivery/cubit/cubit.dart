@@ -218,7 +218,7 @@ class DeliveryCubit extends Cubit<DeliveryStates> {
     required String id,
   }) {
     emit(GetOrderLoadingState());
-    DioHelper.getData(url: '/delivery/$id/all-orders-delivery?$page')
+    DioHelper.getData(url: '/delivery/$id/all-orders-delivery?page=$page')
         .then((value) {
           orderModel = GetAllOrders.fromJson(value.data);
           orders.addAll(orderModel!.orders);

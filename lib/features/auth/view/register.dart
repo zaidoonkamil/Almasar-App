@@ -6,28 +6,48 @@ import 'package:delivery_app/core/widgets/show_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/ navigation/navigation.dart';
-import '../../../core/styles/themes.dart';
-import '../../../core/widgets/custom_text_field.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/custom_text_field.dart';
+import 'package:delivery_app/features/auth/cubit/cubit.dart';
+import 'package:delivery_app/features/auth/cubit/states.dart';
 import 'login.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({super.key});
 
-  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  static TextEditingController userNameController = TextEditingController();
-  static TextEditingController phoneController = TextEditingController();
-  static TextEditingController locationController = TextEditingController();
-  static TextEditingController passwordController = TextEditingController();
-  static TextEditingController rePasswordController = TextEditingController();
-  static GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
-  static TextEditingController userNameController2 = TextEditingController();
-  static TextEditingController phoneController2 = TextEditingController();
-  static TextEditingController locationController2 = TextEditingController();
-  static TextEditingController passwordController2 = TextEditingController();
-  static TextEditingController rePasswordController2 = TextEditingController();
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController rePasswordController = TextEditingController();
+  final GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
+  final TextEditingController userNameController2 = TextEditingController();
+  final TextEditingController phoneController2 = TextEditingController();
+  final TextEditingController locationController2 = TextEditingController();
+  final TextEditingController passwordController2 = TextEditingController();
+  final TextEditingController rePasswordController2 = TextEditingController();
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    phoneController.dispose();
+    locationController.dispose();
+    passwordController.dispose();
+    rePasswordController.dispose();
+    userNameController2.dispose();
+    phoneController2.dispose();
+    locationController2.dispose();
+    passwordController2.dispose();
+    rePasswordController2.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

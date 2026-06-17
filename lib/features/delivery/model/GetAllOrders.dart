@@ -51,6 +51,7 @@ class Order {
   List<Item>? items;
   List<StatusHistory> statusHistory;
   User user;
+  User? vendor;
   Delivery delivery;
 
   Order({
@@ -72,6 +73,7 @@ class Order {
     required this.items,
     required this.statusHistory,
     required this.user,
+    this.vendor,
     required this.delivery,
     this.latitude,
     this.longitude,
@@ -98,6 +100,7 @@ class Order {
     items: json["items"] == null ? [] : List<Item>.from(json["items"]!.map((x) => Item.fromJson(x))),
     statusHistory: List<StatusHistory>.from(json["statusHistory"].map((x) => StatusHistory.fromJson(x))),
     user: User.fromJson(json["user"]),
+    vendor: json["vendor"] == null ? null : User.fromJson(json["vendor"]),
     delivery: Delivery.fromJson(json["delivery"]),
   );
 
@@ -122,6 +125,7 @@ class Order {
     "items": items == null ? [] : List<dynamic>.from(items!.map((x) => x.toJson())),
     "statusHistory": List<dynamic>.from(statusHistory.map((x) => x.toJson())),
     "user": user.toJson(),
+    "vendor": vendor?.toJson(),
     "delivery": delivery.toJson(),
   };
 }

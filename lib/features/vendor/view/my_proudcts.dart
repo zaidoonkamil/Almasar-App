@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../core/ navigation/navigation.dart';
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/styles/themes.dart';
-import '../../../core/widgets/circular_progress.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/circular_progress.dart';
+import 'package:delivery_app/features/vendor/cubit/cubit.dart';
+import 'package:delivery_app/features/vendor/cubit/states.dart';
 
 class MyProducts extends StatelessWidget {
   const MyProducts({super.key});

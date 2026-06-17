@@ -5,23 +5,35 @@ import 'package:delivery_app/features/delivery/navigation_bar_Delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/ navigation/navigation.dart';
-import '../../../core/network/local/cache_helper.dart';
-import '../../../core/styles/themes.dart';
-import '../../../core/widgets/constant.dart';
-import '../../../core/widgets/custom_text_field.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/network/local/cache_helper.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/constant.dart';
+import 'package:delivery_app/core/widgets/custom_text_field.dart';
 import '../../user/navigation_bar_user.dart';
 import '../../vendor/view/home.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
+import 'package:delivery_app/features/auth/cubit/cubit.dart';
+import 'package:delivery_app/features/auth/cubit/states.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
-  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  static TextEditingController userNameController = TextEditingController();
-  static TextEditingController passwordController = TextEditingController();
-  static bool isValidationPassed = false;
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isValidationPassed = false;
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

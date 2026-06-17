@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/styles/themes.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
+import 'package:delivery_app/core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import '../../user/view/chat_screen.dart';
+import 'package:delivery_app/features/vendor/cubit/cubit.dart';
+import 'package:delivery_app/features/vendor/cubit/states.dart';
 
 class OrdersVendor extends StatelessWidget {
   const OrdersVendor({super.key});
@@ -614,6 +616,82 @@ class OrdersVendor extends StatelessWidget {
                                               ],
                                             )
                                             : const SizedBox(height: 12),
+                                        const SizedBox(height: 12),
+                                        Row(
+                                          children: [
+                                            if (cubit.orderModel!.orders[index].assignedDeliveryId != null) ...[
+                                              Expanded(
+                                                child: OutlinedButton.icon(
+                                                  onPressed: () {
+                                                    navigateTo(
+                                                      context,
+                                                      ChatScreen(
+                                                        orderId: cubit.orderModel!.orders[index].id,
+                                                        otherUserId: cubit.orderModel!.orders[index].assignedDeliveryId!,
+                                                        otherUserName: cubit.orderModel!.orders[index].delivery?.name ?? 'المندوب',
+                                                        otherUserRole: 'delivery',
+                                                        orderStatus: cubit.orderModel!.orders[index].status,
+                                                      ),
+                                                    );
+                                                  },
+                                                  icon: const Icon(Icons.chat_outlined, size: 16, color: primaryColor),
+                                                  label: const Text(
+                                                    'دردشة المندوب',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontFamily: 'cairo',
+                                                      fontWeight: FontWeight.bold,
+                                                      color: primaryColor,
+                                                    ),
+                                                  ),
+                                                  style: OutlinedButton.styleFrom(
+                                                    side: const BorderSide(color: primaryColor),
+                                                    padding: const EdgeInsets.symmetric(vertical: 8),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                            ],
+                                            Expanded(
+                                              child: ElevatedButton.icon(
+                                                onPressed: () {
+                                                  navigateTo(
+                                                    context,
+                                                    ChatScreen(
+                                                      orderId: cubit.orderModel!.orders[index].id,
+                                                      otherUserId: 1, // Default Admin ID
+                                                      otherUserName: 'الدعم الفني',
+                                                      otherUserRole: 'admin',
+                                                      orderStatus: cubit.orderModel!.orders[index].status,
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(Icons.support_agent_outlined, size: 16, color: Colors.white),
+                                                label: const Text(
+                                                  'تواصل مع الإدارة',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontFamily: 'cairo',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.blueAccent,
+                                                  elevation: 0,
+                                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),

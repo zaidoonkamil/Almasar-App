@@ -10,6 +10,7 @@ import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/custom_text_field.dart';
+import '../../user/view/chat_screen.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
@@ -467,6 +468,116 @@ class ChangingOrdersDelivery extends StatelessWidget {
                                                 Text( cubit.getActiveOrdersModel![index].user.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                                                 const SizedBox(width: 6),
                                                 const Icon(Icons.person_outline, color: Colors.grey),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: OutlinedButton.icon(
+                                                    onPressed: () {
+                                                      navigateTo(
+                                                        context,
+                                                        ChatScreen(
+                                                          orderId: cubit.getActiveOrdersModel![index].id,
+                                                          otherUserId: cubit.getActiveOrdersModel![index].userId,
+                                                          otherUserName: cubit.getActiveOrdersModel![index].user.name,
+                                                          otherUserRole: 'user',
+                                                          orderStatus: cubit.getActiveOrdersModel![index].status,
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: const Icon(Icons.chat_outlined, size: 16, color: primaryColor),
+                                                    label: const Text(
+                                                      'دردشة الزبون',
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontFamily: 'cairo',
+                                                        fontWeight: FontWeight.bold,
+                                                        color: primaryColor,
+                                                      ),
+                                                    ),
+                                                    style: OutlinedButton.styleFrom(
+                                                      side: const BorderSide(color: primaryColor),
+                                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 6),
+                                                if (cubit.getActiveOrdersModel![index].vendorId != null && cubit.getActiveOrdersModel![index].vendor != null) ...[
+                                                  Expanded(
+                                                    child: OutlinedButton.icon(
+                                                      onPressed: () {
+                                                        navigateTo(
+                                                          context,
+                                                          ChatScreen(
+                                                            orderId: cubit.getActiveOrdersModel![index].id,
+                                                            otherUserId: cubit.getActiveOrdersModel![index].vendorId!,
+                                                            otherUserName: cubit.getActiveOrdersModel![index].vendor!.name,
+                                                            otherUserRole: 'vendor',
+                                                            orderStatus: cubit.getActiveOrdersModel![index].status,
+                                                          ),
+                                                        );
+                                                      },
+                                                      icon: const Icon(Icons.store_mall_directory_outlined, size: 16, color: Colors.green),
+                                                      label: const Text(
+                                                        'دردشة المتجر',
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontFamily: 'cairo',
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.green,
+                                                        ),
+                                                      ),
+                                                      style: OutlinedButton.styleFrom(
+                                                        side: const BorderSide(color: Colors.green),
+                                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                ],
+                                                Expanded(
+                                                  child: ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      navigateTo(
+                                                        context,
+                                                        ChatScreen(
+                                                          orderId: cubit.getActiveOrdersModel![index].id,
+                                                          otherUserId: 1, // Default Admin ID
+                                                          otherUserName: 'الدعم الفني',
+                                                          otherUserRole: 'admin',
+                                                          orderStatus: cubit.getActiveOrdersModel![index].status,
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: const Icon(Icons.support_agent_outlined, size: 16, color: Colors.white),
+                                                    label: const Text(
+                                                      'تواصل مع الإدارة',
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontFamily: 'cairo',
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: Colors.blueAccent,
+                                                      elevation: 0,
+                                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                             // cubit.getActiveOrdersModel![index].items != null && cubit.getActiveOrdersModel![index].items!.isNotEmpty ?

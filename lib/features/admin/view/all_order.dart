@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/circular_progress.dart';
 import 'package:flutter/material.dart';
@@ -9,20 +10,135 @@ import '../../../core/ navigation/navigation.dart';
 import '../../../core/network/remote/dio_helper.dart';
 import '../../../core/styles/themes.dart';
 import '../../../core/widgets/show_toast.dart';
+import '../../user/view/chat_screen.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-class AllOrdersAdmin extends StatelessWidget {
+class AllOrdersAdmin extends StatefulWidget {
   const AllOrdersAdmin({super.key, required this.urll, required this.appBarText});
 
   final String urll;
   final String appBarText;
 
   @override
+  State<AllOrdersAdmin> createState() => _AllOrdersAdminState();
+}
+
+class _AllOrdersAdminState extends State<AllOrdersAdmin> {
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query, AdminCubit cubit) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      cubit.searchOrders(query, url: widget.urll, context: context);
+    });
+  }
+
+  Widget _buildFilterChips(AdminCubit cubit) {
+    final List<String> statuses = [
+      'الكل',
+      'تم الاستلام',
+      'تم التسليم',
+      'استرجاع الطلب',
+      'تبديل الطلب',
+    ];
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: statuses.length,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        itemBuilder: (context, index) {
+          final status = statuses[index];
+          final isSelected = cubit.selectedStatus == status;
+          return Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: ChoiceChip(
+              label: Text(
+                status,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black87,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              selected: isSelected,
+              selectedColor: primaryColor,
+              backgroundColor: Colors.white,
+              onSelected: (selected) {
+                if (selected) {
+                  cubit.filterByStatus(status, url: widget.urll, context: context);
+                }
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(
+                  color: isSelected ? primaryColor : Colors.grey.shade300,
+                ),
+              ),
+              showCheckmark: false,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSortButton(AdminCubit cubit) {
+    final Map<String, String> sortOptions = {
+      'date_desc': 'التاريخ: الأحدث أولاً',
+      'date_asc': 'التاريخ: الأقدم أولاً',
+      'amount_desc': 'المبلغ: الأعلى أولاً',
+      'amount_asc': 'المبلغ: الأقل أولاً',
+    };
+
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.sort_rounded, size: 28, color: Colors.black87),
+      onSelected: (value) {
+        cubit.sortOrders(value, url: widget.urll, context: context);
+      },
+      itemBuilder: (context) {
+        return sortOptions.entries.map((entry) {
+          final isSelected = cubit.selectedSort == entry.key;
+          return PopupMenuItem<String>(
+            value: entry.key,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (isSelected)
+                  const Icon(Icons.check, color: primaryColor, size: 18)
+                else
+                  const SizedBox(width: 18),
+                Text(
+                  entry.value,
+                  style: TextStyle(
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? primaryColor : Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList();
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AdminCubit()
-        ..allOrder(page: '1',context: context, url: urll,),
+        ..allOrder(page: '1',context: context, url: widget.urll,),
       child: BlocConsumer<AdminCubit,AdminStates>(
         listener: (context,state){},
         builder: (context,state){
@@ -32,7 +148,7 @@ class AllOrdersAdmin extends StatelessWidget {
               backgroundColor: const Color(0xFFF5F5F8),
               body: Column(
                 children: [
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Row(
@@ -42,11 +158,11 @@ class AllOrdersAdmin extends StatelessWidget {
                             onTap: (){
                               navigateBack(context);
                             },
-                            child: Icon(Icons.arrow_back_ios_new,size: 28,)),
+                            child: const Icon(Icons.arrow_back_ios_new,size: 28,)),
                         Text(
-                          appBarText,
+                          widget.appBarText,
                           textAlign: TextAlign.end,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
@@ -55,7 +171,60 @@ class AllOrdersAdmin extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
+                  // Search & Sort Row
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Row(
+                      children: [
+                        _buildSortButton(cubit),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: TextField(
+                              controller: _searchController,
+                              textAlign: TextAlign.end,
+                              decoration: InputDecoration(
+                                hintText: 'بحث برقم الطلب، العميل، التاجر...',
+                                hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                prefixIcon: _searchController.text.isNotEmpty
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _searchController.clear();
+                                          cubit.searchOrders('', url: widget.urll, context: context);
+                                          setState(() {});
+                                        },
+                                        child: const Icon(Icons.clear_rounded, color: Colors.grey),
+                                      )
+                                    : const Icon(Icons.search_rounded, color: Colors.grey),
+                              ),
+                              onChanged: (val) {
+                                _onSearchChanged(val, cubit);
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Filter Chips
+                  _buildFilterChips(cubit),
+                  const SizedBox(height: 10),
                   ConditionalBuilder(
                     condition: cubit.allOrderModel != null,
                     builder: (c){
@@ -64,14 +233,14 @@ class AllOrdersAdmin extends StatelessWidget {
                           builder: (c){
                             return Expanded(
                               child: ListView.builder(
-                                  physics: AlwaysScrollableScrollPhysics(),
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   itemCount: cubit.orders.length,
                                   itemBuilder: (context,index){
                                     DateTime dateTime = DateTime.parse(cubit.orders[index].createdAt.toString());
                                     String formattedDate = DateFormat('yyyy/M/d').format(dateTime);
                                     String formattedTime = DateFormat('h:mm a').format(dateTime);
                                     if (index == cubit.orders.length - 1 && !cubit.isLastPage) {
-                                      cubit.allOrder(page: (cubit.currentPage + 1).toString(),context:context, url: urll);
+                                      cubit.allOrder(page: (cubit.currentPage + 1).toString(),context:context, url: widget.urll);
                                     }
                                     return  Container(
                                       margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
@@ -604,6 +773,119 @@ class AllOrdersAdmin extends StatelessWidget {
                                                 ),
                                               ],
                                             ):const SizedBox(height: 12),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: OutlinedButton.icon(
+                                                    onPressed: () {
+                                                      navigateTo(
+                                                        context,
+                                                        ChatScreen(
+                                                          orderId: cubit.orders[index].id,
+                                                          otherUserId: cubit.orders[index].userId,
+                                                          otherUserName: cubit.orders[index].user.name,
+                                                          otherUserRole: 'user',
+                                                          orderStatus: cubit.orders[index].status,
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: const Icon(Icons.chat_outlined, size: 14, color: primaryColor),
+                                                    label: const Text(
+                                                      'دردشة الزبون',
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontFamily: 'cairo',
+                                                        fontWeight: FontWeight.bold,
+                                                        color: primaryColor,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                    style: OutlinedButton.styleFrom(
+                                                      side: const BorderSide(color: primaryColor),
+                                                      padding: const EdgeInsets.symmetric(vertical: 6),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(6),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                if (cubit.orders[index].vendorId != null && cubit.orders[index].vendor != null) ...[
+                                                  const SizedBox(width: 4),
+                                                  Expanded(
+                                                    child: OutlinedButton.icon(
+                                                      onPressed: () {
+                                                        navigateTo(
+                                                          context,
+                                                          ChatScreen(
+                                                            orderId: cubit.orders[index].id,
+                                                            otherUserId: cubit.orders[index].vendorId!,
+                                                            otherUserName: cubit.orders[index].vendor!.name,
+                                                            otherUserRole: 'vendor',
+                                                            orderStatus: cubit.orders[index].status,
+                                                          ),
+                                                        );
+                                                      },
+                                                      icon: const Icon(Icons.store_mall_directory_outlined, size: 14, color: Colors.green),
+                                                      label: const Text(
+                                                        'دردشة المتجر',
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontFamily: 'cairo',
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.green,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                      style: OutlinedButton.styleFrom(
+                                                        side: const BorderSide(color: Colors.green),
+                                                        padding: const EdgeInsets.symmetric(vertical: 6),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(6),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                                if (cubit.orders[index].assignedDeliveryId != null && cubit.orders[index].delivery != null) ...[
+                                                  const SizedBox(width: 4),
+                                                  Expanded(
+                                                    child: OutlinedButton.icon(
+                                                      onPressed: () {
+                                                        navigateTo(
+                                                          context,
+                                                          ChatScreen(
+                                                            orderId: cubit.orders[index].id,
+                                                            otherUserId: cubit.orders[index].assignedDeliveryId!,
+                                                            otherUserName: cubit.orders[index].delivery!.name,
+                                                            otherUserRole: 'delivery',
+                                                            orderStatus: cubit.orders[index].status,
+                                                          ),
+                                                        );
+                                                      },
+                                                      icon: const Icon(Icons.delivery_dining_outlined, size: 14, color: Colors.blueAccent),
+                                                      label: const Text(
+                                                        'دردشة المندوب',
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontFamily: 'cairo',
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.blueAccent,
+                                                        ),
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                      style: OutlinedButton.styleFrom(
+                                                        side: const BorderSide(color: Colors.blueAccent),
+                                                        padding: const EdgeInsets.symmetric(vertical: 6),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(6),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       ),

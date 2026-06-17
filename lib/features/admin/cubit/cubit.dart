@@ -332,13 +332,28 @@ class AdminCubit extends Cubit<AdminStates> {
   int currentPage = 1;
   bool isLastPage = false;
   AllOrder? allOrderModel;
+
+  String searchQuery = '';
+  String selectedStatus = 'الكل';
+  String selectedSort = 'date_desc';
+
   void allOrder({
     required String page,
     required String url,
     required BuildContext context,
   }) {
     emit(GetAllOrderLoadingState());
-    DioHelper.getData(url: '$url?$page')
+    
+    String finalUrl = '$url?page=$page';
+    if (searchQuery.isNotEmpty) {
+      finalUrl += '&search=${Uri.encodeComponent(searchQuery)}';
+    }
+    if (selectedStatus != 'الكل') {
+      finalUrl += '&status=${Uri.encodeComponent(selectedStatus)}';
+    }
+    finalUrl += '&sortBy=$selectedSort';
+
+    DioHelper.getData(url: finalUrl)
         .then((value) {
           allOrderModel = AllOrder.fromJson(value.data);
           orders.addAll(allOrderModel!.orders);
@@ -358,6 +373,33 @@ class AdminCubit extends Cubit<AdminStates> {
             print("Unknown Error: $error");
           }
         });
+  }
+
+  void searchOrders(String query, {required String url, required BuildContext context}) {
+    searchQuery = query;
+    orders = [];
+    currentPage = 1;
+    isLastPage = false;
+    allOrderModel = null;
+    allOrder(page: '1', url: url, context: context);
+  }
+
+  void filterByStatus(String status, {required String url, required BuildContext context}) {
+    selectedStatus = status;
+    orders = [];
+    currentPage = 1;
+    isLastPage = false;
+    allOrderModel = null;
+    allOrder(page: '1', url: url, context: context);
+  }
+
+  void sortOrders(String sortType, {required String url, required BuildContext context}) {
+    selectedSort = sortType;
+    orders = [];
+    currentPage = 1;
+    isLastPage = false;
+    allOrderModel = null;
+    allOrder(page: '1', url: url, context: context);
   }
 
   void startAutoRefresh({required BuildContext context}) {

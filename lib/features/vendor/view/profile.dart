@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/ navigation/navigation.dart';
-import '../../../../core/styles/themes.dart';
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/widgets/custom_appbar.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/widgets/custom_appbar.dart';
 import '../../user/view/how_as.dart';
 import '../../user/view/edit_profile.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
+import 'package:delivery_app/features/vendor/cubit/cubit.dart';
+import 'package:delivery_app/features/vendor/cubit/states.dart';
 
 class ProfileVendor extends StatelessWidget {
   const ProfileVendor({super.key});

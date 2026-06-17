@@ -5,20 +5,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/ navigation/navigation.dart';
-import '../../../core/network/remote/dio_helper.dart';
-import '../../../core/styles/themes.dart';
-import '../../../core/widgets/custom_appbar.dart';
-import '../../auth/view/login.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
-import '../model/GetOrder.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/custom_appbar.dart';
+import 'package:delivery_app/features/auth/view/login.dart';
+import 'package:delivery_app/features/user/cubit/cubit.dart';
+import 'package:delivery_app/features/user/cubit/states.dart';
+import 'package:delivery_app/features/user/model/GetOrder.dart';
+import 'package:delivery_app/features/user/view/chat_screen.dart';
 
 class Orders extends StatelessWidget {
   const Orders({super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (token == '') {
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF5F5F8),
+          body: Column(
+            children: [
+              CustomAppbar(),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        navigateTo(context, Login());
+                      },
+                      child: Container(
+                        width: 180,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: const Offset(5, 5),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(30),
+                          color: primaryColor,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'تسجيل الدخول',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return BlocProvider(
       create:
           (BuildContext context) =>
@@ -616,6 +667,82 @@ class Orders extends StatelessWidget {
                                                         : const SizedBox(
                                                           height: 12,
                                                         ),
+                                                     const SizedBox(height: 12),
+                                                     Row(
+                                                       children: [
+                                                         if (order.assignedDeliveryId != null) ...[
+                                                           Expanded(
+                                                             child: OutlinedButton.icon(
+                                                               onPressed: () {
+                                                                 navigateTo(
+                                                                   context,
+                                                                   ChatScreen(
+                                                                     orderId: order.id,
+                                                                     otherUserId: order.assignedDeliveryId!,
+                                                                     otherUserName: order.delivery?.name ?? 'المندوب',
+                                                                     otherUserRole: 'delivery',
+                                                                     orderStatus: order.status,
+                                                                   ),
+                                                                 );
+                                                               },
+                                                               icon: const Icon(Icons.chat_outlined, size: 16, color: primaryColor),
+                                                               label: const Text(
+                                                                 'دردشة المندوب',
+                                                                 style: TextStyle(
+                                                                   fontSize: 12,
+                                                                   fontFamily: 'cairo',
+                                                                   fontWeight: FontWeight.bold,
+                                                                   color: primaryColor,
+                                                                 ),
+                                                               ),
+                                                               style: OutlinedButton.styleFrom(
+                                                                 side: const BorderSide(color: primaryColor),
+                                                                 padding: const EdgeInsets.symmetric(vertical: 8),
+                                                                 shape: RoundedRectangleBorder(
+                                                                   borderRadius: BorderRadius.circular(8),
+                                                                 ),
+                                                               ),
+                                                             ),
+                                                           ),
+                                                           const SizedBox(width: 8),
+                                                         ],
+                                                         Expanded(
+                                                           child: ElevatedButton.icon(
+                                                             onPressed: () {
+                                                               navigateTo(
+                                                                 context,
+                                                                 ChatScreen(
+                                                                   orderId: order.id,
+                                                                   otherUserId: 1, // Default Admin ID
+                                                                   otherUserName: 'الدعم الفني',
+                                                                   otherUserRole: 'admin',
+                                                                   orderStatus: order.status,
+                                                                 ),
+                                                               );
+                                                             },
+                                                             icon: const Icon(Icons.support_agent_outlined, size: 16, color: Colors.white),
+                                                             label: const Text(
+                                                               'تواصل مع الإدارة',
+                                                               style: TextStyle(
+                                                                 fontSize: 12,
+                                                                 fontFamily: 'cairo',
+                                                                 fontWeight: FontWeight.bold,
+                                                                 color: Colors.white,
+                                                               ),
+                                                               overflow: TextOverflow.ellipsis,
+                                                             ),
+                                                             style: ElevatedButton.styleFrom(
+                                                               backgroundColor: Colors.blueAccent,
+                                                               elevation: 0,
+                                                               padding: const EdgeInsets.symmetric(vertical: 8),
+                                                               shape: RoundedRectangleBorder(
+                                                                 borderRadius: BorderRadius.circular(8),
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                       ],
+                                                     ),
                                                     if (order.status ==
                                                             'تم التسليم' &&
                                                         order.assignedDeliveryId !=

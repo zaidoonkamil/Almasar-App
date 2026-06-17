@@ -6,12 +6,12 @@ import 'package:delivery_app/features/user/view/request_delivery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/ navigation/navigation.dart';
-import '../../../../core/styles/themes.dart';
-import '../../../core/widgets/circular_progress.dart';
-import '../../../core/widgets/show_toast.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
+import 'package:delivery_app/core/ navigation/navigation.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/circular_progress.dart';
+import 'package:delivery_app/core/widgets/show_toast.dart';
+import 'package:delivery_app/features/vendor/cubit/cubit.dart';
+import 'package:delivery_app/features/vendor/cubit/states.dart';
 import 'my_proudcts.dart';
 import 'orders.dart';
 

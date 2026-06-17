@@ -433,13 +433,23 @@ class UserCubit extends Cubit<UserStates> {
         })
         .catchError((error) {
           if (error is DioException) {
+            String errorMessage = "حدث خطأ أثناء جلب السلة";
+            if (error.response?.data != null) {
+              final data = error.response!.data;
+              if (data is Map && data.containsKey("error")) {
+                errorMessage = data["error"]?.toString() ?? errorMessage;
+              } else if (data is String) {
+                errorMessage = data;
+              }
+            }
             showToastError(
-              text: error.response?.data["error"],
+              text: errorMessage,
               context: context,
             );
             emit(GetCartErrorStates());
           } else {
             print("Unknown Error: $error");
+            emit(GetCartErrorStates());
           }
         });
   }

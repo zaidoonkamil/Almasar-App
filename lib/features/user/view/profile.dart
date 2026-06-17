@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/styles/themes.dart';
-import '../../../core/widgets/constant.dart';
-import '../../../core/widgets/show_toast.dart';
-import '../cubit/cubit.dart';
-import '../cubit/states.dart';
-import '../../user/view/edit_profile.dart';
-import '../../../core/network/remote/dio_helper.dart';
+import 'package:delivery_app/core/styles/themes.dart';
+import 'package:delivery_app/core/widgets/constant.dart';
+import 'package:delivery_app/core/widgets/show_toast.dart';
+import 'package:delivery_app/features/user/cubit/cubit.dart';
+import 'package:delivery_app/features/user/cubit/states.dart';
+import 'package:delivery_app/features/user/view/edit_profile.dart';
+import 'package:delivery_app/core/network/remote/dio_helper.dart';
 
 
 class ProfileUser extends StatelessWidget {
@@ -22,7 +22,13 @@ class ProfileUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => UserCubit()..getProfile(context: context),
+      create: (BuildContext context) {
+        final cubit = UserCubit();
+        if (token != '') {
+          cubit.getProfile(context: context);
+        }
+        return cubit;
+      },
       child: BlocConsumer<UserCubit,UserStates>(
         listener: (context,state){},
         builder: (context,state){
@@ -36,8 +42,42 @@ class ProfileUser extends StatelessWidget {
                     CustomAppbar(),
                     SizedBox(height: 64,),
                     ConditionalBuilder(
-                        condition: cubit.profileModel != null,
+                        condition: cubit.profileModel != null || token == '',
                         builder: (context){
+                          if (token == '') {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: const [
+                                      Text(
+                                        'حساب زائر',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4,),
+                                      Text(
+                                        'الرجاء تسجيل الدخول',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Image.asset('assets/images/Group 1171275632 (1).png'),
+                                ],
+                              ),
+                            );
+                          }
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18.0),
                             child: Row(
