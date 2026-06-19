@@ -74,6 +74,33 @@ class AdminCubit extends Cubit<AdminStates> {
         });
   }
 
+  int? adminsCount;
+  int? usersCount;
+  int? deliveryCount;
+  int? vendorsCount;
+
+  void getUsersCounts({required BuildContext context}) {
+    emit(GetUsersCountsLoadingState());
+    Future.wait([
+      DioHelper.getData(url: '/usersAdmin'),
+      DioHelper.getData(url: '/usersOnly'),
+      DioHelper.getData(url: '/usersDelivery'),
+      DioHelper.getData(url: '/usersvendor'),
+    ]).then((results) {
+      adminsCount = (results[0].data as List).length;
+      usersCount = (results[1].data as List).length;
+      deliveryCount = (results[2].data as List).length;
+      vendorsCount = (results[3].data as List).length;
+      emit(GetUsersCountsSuccessState());
+    }).catchError((error) {
+      if (error is DioException) {
+        showToastError(text: error.toString(), context: context);
+      }
+      print("Error fetching user counts: $error");
+      emit(GetUsersCountsErrorState());
+    });
+  }
+
   ProfileModel? profileModel;
   void getProfile({required BuildContext context}) {
     emit(GetProfileLoadingState());

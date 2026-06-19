@@ -78,3 +78,8 @@ class SponsorshipVendorLoadingState extends AdminStates {}
 class SponsorshipVendorSuccessState extends AdminStates {}
 class SponsorshipVendorErrorState extends AdminStates {}
 
+class GetUsersCountsLoadingState extends AdminStates {}
+class GetUsersCountsSuccessState extends AdminStates {}
+class GetUsersCountsErrorState extends AdminStates {}
+
+

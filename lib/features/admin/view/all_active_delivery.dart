@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:delivery_app/core/widgets/circular_progress.dart';
+import 'package:delivery_app/core/widgets/CustomSearchField.dart';
 import 'package:delivery_app/features/admin/view/changing_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +10,24 @@ import '../../../../core/styles/themes.dart';
 import '../cubit/cubit.dart';
 import '../cubit/states.dart';
 
-class AllActiveDelivery extends StatelessWidget {
+class AllActiveDelivery extends StatefulWidget {
   const AllActiveDelivery({super.key, required this.idOrder});
 
   final String idOrder;
+
+  @override
+  State<AllActiveDelivery> createState() => _AllActiveDeliveryState();
+}
+
+class _AllActiveDeliveryState extends State<AllActiveDelivery> {
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,18 +110,42 @@ class AllActiveDelivery extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: 26),
+                      SizedBox(height: 20),
+                      CustomSearchField(
+                        controller: searchController,
+                        hintText: 'ابحث عن مندوب بالاسم أو الهاتف...',
+                        onClear: () {
+                          searchController.clear();
+                          setState(() {
+                            searchQuery = '';
+                          });
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            searchQuery = value;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 16),
                       ConditionalBuilder(
                         condition: cubit.getActiveDeliveryModel != null,
                         builder: (c) {
+                          final filteredList = searchQuery.isEmpty
+                              ? cubit.getActiveDeliveryModel!
+                              : cubit.getActiveDeliveryModel!
+                                  .where((element) =>
+                                      element.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
+                                      element.phone.contains(searchQuery))
+                                  .toList();
                           return ConditionalBuilder(
-                            condition: cubit.getActiveDeliveryModel!.isNotEmpty,
+                            condition: filteredList.isNotEmpty,
                             builder: (c) {
                               return ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: cubit.getActiveDeliveryModel!.length,
+                                itemCount: filteredList.length,
                                 itemBuilder: (context, index) {
+                                  final delegate = filteredList[index];
                                   return Column(
                                     children: [
                                       GestureDetector(
@@ -131,7 +170,7 @@ class AllActiveDelivery extends StatelessWidget {
                                                           TextAlign.center,
                                                     ),
                                                     Text(
-                                                      "(${cubit.getActiveDeliveryModel![index].name})",
+                                                      "(${delegate.name})",
                                                       style: TextStyle(
                                                         fontSize: 18,
                                                       ),
@@ -172,11 +211,9 @@ class AllActiveDelivery extends StatelessWidget {
                                                         cubit.deliveriesAssignOrder(
                                                           context: context,
                                                           deliveryId:
-                                                              cubit
-                                                                  .getActiveDeliveryModel![index]
-                                                                  .id
+                                                              delegate.id
                                                                   .toString(),
-                                                          idOrder: idOrder,
+                                                          idOrder: widget.idOrder,
                                                         );
                                                       },
                                                       child: Text(
@@ -223,9 +260,7 @@ class AllActiveDelivery extends StatelessWidget {
                                                 'assets/images/fluent_person-16-filled.png',
                                               ),
                                               Text(
-                                                cubit
-                                                    .getActiveDeliveryModel![index]
-                                                    .name,
+                                                delegate.name,
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
@@ -256,7 +291,9 @@ class AllActiveDelivery extends StatelessWidget {
                                     SizedBox(height: 200),
                                     Center(
                                       child: Text(
-                                        'لا يوجد بيانات ليتم عرضها',
+                                        searchQuery.isEmpty
+                                            ? 'لا يوجد بيانات ليتم عرضها'
+                                            : 'لا يوجد مناديب يطابقون البحث',
                                         style: TextStyle(fontSize: 16),
                                       ),
                                     ),
